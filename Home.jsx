@@ -2,6 +2,7 @@ import React from 'react';
 
 class Home extends React.Component {
    render() {
+       console.log('render home');
       return (
          <div>
             <h3>

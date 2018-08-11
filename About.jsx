@@ -2,6 +2,7 @@ import React from 'react';
 
 class About extends React.Component {
    render() {
+       console.log("render about");
       return (
          <div>
             <img src="picture.png"></img>

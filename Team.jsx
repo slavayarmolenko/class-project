@@ -1,50 +1,51 @@
 import React from 'react';
 import ReactTable from 'react-table';
-import 'whatwg-fetch'; 
+import 'whatwg-fetch';
 
 class Team extends React.Component {
     constructor() {
-      super();
-      var self = this;
-      this.state = {
-         data:[]
-      };
-          fetch('/team')
-            .then(res => res.json())
-            .then(team => this.setState({ data: team.data }));
-        /*var xhttp = new XMLHttpRequest();
-       xhttp.onreadystatechange = function() {
-           console.log(xhttp.responseText.length);
-           console.log('Team members:');
-           console.log(JSON.parse(xhttp.responseText));
-        if (xhttp.readyState == 4 && xhttp.status == 200) {
-            var data = JSON.parse(xhttp.responseText);
-          self.setState({ data: data });
-        }
-      };
-      xhttp.open("GET", "http://localhost:3000/team", true);
-      xhttp.send();*/
+        super();
+
+        this.state = {
+            data: [],
+            dataLoaded: false
+        };
+
     }
     render() {
-        
-const columns = [{
-    Header: 'Name',
-    accessor: 'name' // String-based value accessors!
-  }, {
-    Header: 'Role',
-    accessor: 'role',
-    Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
-  }]
+        console.log('render team');
+        const columns = [{
+                Header: 'Name',
+                accessor: 'name' // String-based value accessors!
+            }, {
+                Header: 'Role',
+                accessor: 'role',
+                Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
+            }];
+        var self = this;
+        fetch('/api/team')
+                .then(function (res) {
+                    console.log('Getting response');
+                    console.log(res);
+                    return res.json();
+                })
+                .then(function (team) {
+                    console.log('Getting json');
+                    console.log(team);
+                    if(!self.state.dataLoaded){
+                        self.setState({data : team.data, dataLoaded: true });
+                    }
+                });
         return (
-            <div>
-                <ReactTable
-                data={this.state.data}
-                columns={columns}
-                pageSize="10"
-                />
-            </div>
-        )
+                <div>
+                    <ReactTable
+                        data={this.state.data}
+                        columns={columns}
+                        pageSize="10"
+                        />
+                </div>
+                )
     }
- 
+
 }
 export default Team;

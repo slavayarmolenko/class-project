@@ -2,6 +2,7 @@ import React from 'react';
 import Home from './Home.jsx';
 import Contact from './Contact.jsx';
 import Team from './Team.jsx';
+import Lawyers from './Lawyers.jsx';
 import About from './About.jsx';
 import Donate from './Donate.jsx';
 
@@ -19,7 +20,7 @@ class App extends React.Component {
       
       window.setInterval(function() {
            var newHash = window.location.hash ? window.location.hash.slice(1): 'Home';
-           if (newHash != self.state.data.pageLoadedName) {
+           if (newHash !== self.state.data.pageLoadedName) {
                
                var tag;
                switch (newHash) {
@@ -34,6 +35,12 @@ class App extends React.Component {
                         break;
                     case 'About':
                         tag = (<About/>);
+                        break;
+                    case 'Lawyers':
+                        tag = (<Lawyers/>);
+                        break;
+                    case 'Lawyers':
+                        tag = (<Lawyers/>);
                         break;
                     default: 
                         tag = (<Home/>);
@@ -69,6 +76,7 @@ class App extends React.Component {
                         <li><a href="#Donate" style={aStyle}>Donate</a></li>
                         <li><a href="#Contact" style={aStyle}>Contact Us</a></li>
                         <li><a href="#About" style={aStyle}>About</a></li>
+                        <li><a href="#Lawyers" style={aStyle}>Lawyers</a></li>
                     </ul>
                     </div>
                     <h2>{this.state.data.pageLoadedName}</h2> 
