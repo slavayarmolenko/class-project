@@ -4,7 +4,8 @@
   "description": "Student project.",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --hot"
+     "start": "webpack-dev-server --open --config webpack.dev.js",
+     "build": "webpack --config webpack.prod.js"
   },
   "proxy": "http://localhost:8081",
   "author": "",
