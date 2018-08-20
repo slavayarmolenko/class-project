@@ -34,7 +34,7 @@ exports.create = function (app) {
     });
 
     app.post('/api/lawyers', function (req, res) {
-        var name = req.param("description");
+        var name = req.param("name");
 
         console.log("Post on lawyers");
         console.log(name);

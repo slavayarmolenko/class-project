@@ -5,7 +5,7 @@ import Team from './Team.jsx';
 import Lawyers from './Lawyers.jsx';
 import About from './About.jsx';
 import Donate from './Donate.jsx';
-import Login from './Login.jsx';
+//import Login from './Login.jsx';
 
 class App extends React.Component {
    constructor() {
@@ -40,9 +40,9 @@ class App extends React.Component {
                     case 'Lawyers':
                         tag = (<Lawyers/>);
                         break;
-                    case 'Login':
-                        tag = (<Login/>);
-                        break;
+                    //case 'Login':
+                    //    tag = (<Login/>);
+                    //    break;
                     default: 
                         tag = (<Home/>);
                         break;
