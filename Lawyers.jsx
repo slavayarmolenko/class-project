@@ -38,7 +38,7 @@ class Lawyers extends React.Component {
     }
     componentDidMount() {
         var self = this;
-
+        
         axios.get('/api/lawyers')
                 .then(result => {
                     this.setState({

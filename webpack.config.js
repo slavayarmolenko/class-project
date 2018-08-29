@@ -10,7 +10,7 @@ var config = {
         port: 8080,
         proxy: {
             '/api': 'http://localhost:8081'
-          }
+        }
     },
     module: {
         rules: [

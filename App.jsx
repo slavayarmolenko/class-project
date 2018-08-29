@@ -63,7 +63,7 @@ class App extends React.Component {
       var aStyle = {
           fontSize: 20,
           marginRight: 20,
-      }
+      };
       return (
         
          <div class="map-header">
