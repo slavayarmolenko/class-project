@@ -4,6 +4,7 @@ var teamService = require('./team');
 var lawyersService = require('./lawyers');
 var loginService = require('./login');
 var mysql = require('mysql');
+var bodyParser = require('body-parser');
 var connection = mysql.createConnection({
     host: "classdb.c1fc1qmtlpg9.us-west-1.rds.amazonaws.com",
     user: "master",
@@ -19,6 +20,9 @@ connection.connect(function (err) {
     if (err)
         throw err;
 })
+
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
             //})
 teamService.create(app);
 lawyersService.create(app);

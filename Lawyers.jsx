@@ -2,6 +2,7 @@ import React from 'react';
 import ReactTable from 'react-table';
 import 'whatwg-fetch';
 import axios from 'axios';
+var zipcodes = require('zipcodes');
 class Lawyers extends React.Component {
     constructor() {
         super();
@@ -10,70 +11,87 @@ class Lawyers extends React.Component {
             dataLoaded: false,
             error: null
         };
-        this.handleSubmit = function (event) {
-            event.preventDefault();
-            let data = {
-                name: document.formNewLawyer.name,
-                email: document.formNewLawyer.email,
-                description: document.formNewLawyer.description
-            };
-            if (data.name !== '' && data.email !== '' && data.description !== '') {
-                console.log('name', data.name, 'email ', data.email, 'description ', data.description);
-                fetch("/api/lawyers", {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                    mode: "cors",
-                    body: JSON.stringify(data)
-                })
-                        .then(response => response.json())
-                        .then(data => console.log(data))
-                        .catch(error => console.log(error));
-            } else {
-                alert('Some data is not filled');
-            }
-        };
+        //this.handleSubmit = this.handleSubmit.bind(this);
+
+
     }
     componentDidMount() {
         var self = this;
-        
+
         axios.get('/api/lawyers')
+            .then(result => {
+                this.setState({
+                    data: result.data.data,
+                    dataLoaded: true
+                });
+            })
+            .catch(error => {
+                console.log('error::');
+                console.log('bebebe:' + error);
+                this.setState({
+                    error: error.Error,
+                    dataLoaded: false
+                });
+
+            });
+
+
+
+    }
+    handleSubmit(event) {
+        console.log("here");
+        event.preventDefault();
+
+        let data = {
+            usersZip: parseInt(document.searchLawyersNear.usersZip.value),
+            distance: parseInt(document.searchLawyersNear.distance.value),
+            description: document.searchLawyersNear.description.value
+        };
+        console.log(data.usersZip);
+        if (data.usersZip !== '' && data.distance !== '' && data.description !== '') {
+            console.log('zip ', data.usersZip, 'distance ', data.distance, 'description ', data.description);
+        
+            axios.post('/api/lawyers', data)
                 .then(result => {
+                    console.log('Submitted laywer');
+                    console.log(result.data);
                     this.setState({
                         data: result.data.data,
                         dataLoaded: true
                     });
+                    
                 })
-                .catch(error => { 
+                .catch(error => {
                     console.log('error::');
                     console.log('bebebe:' + error);
                     this.setState({
                         error: error.Error,
                         dataLoaded: false
                     });
-                    
+
                 });
-                    
 
 
+
+        } else {
+            alert('Some data is not filled');
+        }
     }
     render() {
 
         console.log('render lawyers');
 
         const columns = [{
-                Header: 'Name',
-                accessor: 'name' // String-based value accessors!
-            }, {
-                Header: 'email',
-                accessor: 'email',
-            }, {
-                Header: 'description',
-                accessor: 'description'
-            }];
-        
+            Header: 'Name',
+            accessor: 'name' // String-based value accessors!
+        }, {
+            Header: 'email',
+            accessor: 'email',
+        }, {
+            Header: 'description',
+            accessor: 'description'
+        }];
+
         const { data, dataLoaded, error } = this.state;
         if (error) {
             return <p>{error}</p>;
@@ -83,23 +101,23 @@ class Lawyers extends React.Component {
 
 
             return (
-                    <div>
-                        <ReactTable
-                            data={data}
-                            columns={columns}
-                            pageSize="10"
-                            />
-                        <form action="/api/lawyers" method="POST" name="formNewLawyer">
-                            Name:
-                            <input type="text" name="name"/><br/>
-                            Email:
-                            <input type="text" name="email" /><br/>
-                            Write about yourself:
-                            <input type="text" name="description"/><br/>
-                            <input type="button" value="Submit" onClick="{this.handleSubmit}"/>
-                        </form>
-                    </div>
-                    );
+                <div>
+                    <ReactTable
+                        data={data}
+                        columns={columns}
+                        pageSize="10"
+                    />
+                    <form action="/api/lawyers" method="POST" name="searchLawyersNear">
+                        Enter your zip:
+                            <input type="text" name="usersZip" /><br />
+                        Distance:
+                            <input type="text" name="distance" /><br />
+                        Something else:
+                            <input type="text" name="description" /><br />
+                        <button onClick={(e) => this.handleSubmit(e)}> Apply filter </button>
+                    </form>
+                </div>
+            );
         }
     }
 

@@ -10,7 +10,10 @@ class Login extends React.Component {
             dataLoaded: false,
             error: null,
             login: '',
-            password: ''
+            password: '',
+            ssid: '',
+            success: false,
+            admin: true
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -29,7 +32,7 @@ class Login extends React.Component {
     handleSubmit(event) {
             event.preventDefault();
             
-            axios.post('/api/login', JSON.stringify({login: 'Vasya', password: 'aaa123'}))
+            axios.post('/api/login', {login: 'Vasya', password: 'aaa123'})
                 .then(result => {
                     /*this.setState({
                         data: result.data.data,
@@ -55,13 +58,30 @@ class Login extends React.Component {
         console.log('render lawyers');
 
         const { data, dataLoaded, error } = this.state;
-        if (error) {
+        var self = this;
+        axios.post('/api/login', {login: 'Vasya', password: 'aaa123'})
+                .then(function (res) {
+                    console.log('Getting response');
+                    console.log(res);
+                    return res.json();
+                })
+                .then(function (login) {
+                    console.log('Getting json');
+                    console.log(login);
+                    if(!self.state.dataLoaded){
+                        
+                        self.setState({success: login.success, login:login.login, ssid:login.ssid });
+                    }
+                });
+        if (error) {          
             return <p>{error}</p>;
+        } else if(self.state.success){
+            return (
+                    <div>
+                       Youre logged in!
+                    </div>
+                    );
         } else {
-
-
-
-
             return (
                     <div>
                         <form onSubmit={this.handleSubmit}>

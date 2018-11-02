@@ -5,7 +5,7 @@ import React from 'react';
         console.log('render home');
                 return (
                         <h3 className = 'statementOfPurpose'>STATEMENT OF PURPOSE</h3>
-
+                        
                 );
         }
         }

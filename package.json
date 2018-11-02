@@ -27,7 +27,8 @@
     "redux": "^4.0.0",
     "webpack": "^4.16.1",
     "webpack-dev-server": "^3.1.4",
-    "whatwg-fetch": "^2.0.4"
+    "whatwg-fetch": "^2.0.4",
+    "zipcodes": "^8.0.0"
   },
   "devDependencies": {
     "webpack-cli": "^3.1.0"

@@ -79,6 +79,7 @@ class App extends React.Component {
                         <li><a href="#About" style={aStyle}>About</a></li>
                         <li><a href="#Lawyers" style={aStyle}>Lawyers</a></li>
                         <li><a href="#Login" style={aStyle}>Login</a></li>
+                        
                     </ul>
                     </div>
                     <h2>{this.state.data.pageLoadedName}</h2> 
