@@ -11,7 +11,7 @@ var config = {
         port: 8080,
         proxy: {
             '/api': 'http://localhost:8081'
-          }
+        }
     },
     module: {
         rules: [
@@ -24,6 +24,8 @@ var config = {
                 }
             }
         ]
-    }
+        
+    },
+    devtool: 'inline-source-map'
 }
 module.exports = config;

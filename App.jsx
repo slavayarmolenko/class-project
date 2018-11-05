@@ -62,6 +62,7 @@ const AppRouter = () => (
                             <a href="https://demo.raratheme.com/benevolent/" rel="home" itemprop="url">CLASS App</a>
                         </h1>
                         <p class="site-description" itemprop="description">Get More Donors For Your Cause</p>
+
                     </div>
         		</div>
                 

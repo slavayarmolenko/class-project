@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactTable from 'react-table';
 import 'whatwg-fetch';
+import axios from 'axios';
 
 class Team extends React.Component {
     constructor() {
