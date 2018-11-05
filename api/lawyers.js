@@ -12,15 +12,35 @@ exports.create = function (app) {
         connection.query('SELECT * FROM lawyers', function (err, results) {
             if (err)
                 throw err;
+            var usersZip = parseInt(req.query.usersZip);
+            var usersDistance = parseInt(req.query.distance);
             var send = { data: [] };
-            console.log(results);
-            for (var i = 0; i < results.length; i++) {
-                var localemail = results[i].email;
-                var localname = results[i].name;
-                var localdescription = results[i].description;
-                var entry = { name: localname, email: localemail, description: localdescription };
+            console.log(req.query);
+            if (req.query.units == "km"){
+                usersDistance = ZipCodes.toMiles(usersDistance);
+            };
+            if ((usersDistance) && (usersZip)) {
+                for (var i = 0; i < results.length; i++) {
+                    console.log("Dist " +ZipCodes.distance(usersZip, results[i].zip));
+                    console.log("users " + typeof(usersZip) + " " + usersZip);
+                    console.log("adv "+typeof(results[i].zip) + " " + results[i].zip);
+                    if (ZipCodes.distance(usersZip, results[i].zip) < usersDistance) {
+                        var localemail = results[i].email;
+                        var localname = results[i].name;
+                        var localdescription = results[i].description;
+                        var entry = { name: localname, email: localemail, description: localdescription };
+                        send.data.push(entry);
+                    }
+                }
+            } else {
+                for (var i = 0; i < results.length; i++) {
+                    var localemail = results[i].email;
+                    var localname = results[i].name;
+                    var localdescription = results[i].description;
+                    var entry = { name: localname, email: localemail, description: localdescription };
 
-                send.data.push(entry);
+                    send.data.push(entry);
+                }
             }
             res.json(send);
         });
@@ -42,22 +62,14 @@ exports.create = function (app) {
             //console.log(results);
             var usersZip = req.body.usersZip;
             var usersDistance = req.body.distance;
-            
-            for (var i = 0; i < results.length; i++) {
-                if (ZipCodes.distance(usersZip, results[i].zip) < usersDistance) {
-                    var localemail = results[i].email;
-                    var localname = results[i].name;
-                    var localdescription = results[i].description;
-                    var entry = { name: localname, email: localemail, description: localdescription };
-                    send.data.push(entry);
-                }
-            }
+
+
             console.log("send");
             console.log(send);
             res.json(send);
         });
-        
-        
+
+
 
 
 

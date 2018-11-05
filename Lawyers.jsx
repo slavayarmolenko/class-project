@@ -43,15 +43,17 @@ class Lawyers extends React.Component {
         event.preventDefault();
 
         let data = {
-            usersZip: parseInt(document.searchLawyersNear.usersZip.value),
-            distance: parseInt(document.searchLawyersNear.distance.value),
-            description: document.searchLawyersNear.description.value
+            params: {
+                usersZip: parseInt(document.searchLawyersNear.usersZip.value),
+                distance: parseInt(document.searchLawyersNear.distance.value),
+                units: document.searchLawyersNear.units.value
+            }
         };
         console.log(data.usersZip);
         if (data.usersZip !== '' && data.distance !== '' && data.description !== '') {
             console.log('zip ', data.usersZip, 'distance ', data.distance, 'description ', data.description);
-        
-            axios.post('/api/lawyers', data)
+
+            axios.get('/api/lawyers', data)
                 .then(result => {
                     console.log('Submitted laywer');
                     console.log(result.data);
@@ -59,7 +61,7 @@ class Lawyers extends React.Component {
                         data: result.data.data,
                         dataLoaded: true
                     });
-                    
+
                 })
                 .catch(error => {
                     console.log('error::');
@@ -107,19 +109,25 @@ class Lawyers extends React.Component {
                         columns={columns}
                         pageSize="10"
                     />
-                    <form action="/api/lawyers" method="POST" name="searchLawyersNear">
+                    <form action="/api/lawyers" method="GET" name="searchLawyersNear" onSubmit={this.handleSubmit.bind(this)} >
+                        <div>
                         Enter your zip:
-                            <input type="text" name="usersZip" /><br />
+                            <input type="text" name="usersZip" />
+                            </div>
+                            <div>
                         Distance:
-                            <input type="text" name="distance" /><br />
-                        Something else:
-                            <input type="text" name="description" /><br />
-                        <button onClick={(e) => this.handleSubmit(e)}> Apply filter </button>
+                            <input type="text" name="distance" />
+                            </div>
+                        <input type="radio" name="units" value="km" checked/> Kilometers
+                        <input type="radio" name="units" value="mil"/>Miles
+                        <div>
+                        <input type="submit" value="Submit"/>
+                        </div>
                     </form>
                 </div>
-            );
-        }
-    }
-
-}
+                        );
+                    }
+                }
+            
+            }
 export default Lawyers;
