@@ -103,27 +103,33 @@ class Lawyers extends React.Component {
 
 
             return (
-                <div>
-                    <ReactTable
-                        data={data}
-                        columns={columns}
-                        pageSize="10"
-                    />
-                    <form action="/api/lawyers" method="GET" name="searchLawyersNear" onSubmit={this.handleSubmit.bind(this)} >
-                        <div>
-                            Enter your zip:
-<input type="text" name="usersZip" />
+                <div className="container">
+                    <div className="filtered-layout">
+                        <div className="filter">
+                            <form method="GET" name="searchLawyersNear" onSubmit={this.handleSubmit.bind(this)} >
+                                <div>
+                                    Enter your zip:
+                                <input type="text" name="usersZip" />
+                                </div>
+                                <div>
+                                    Distance:
+                                <input type="text" name="distance" />
+                                </div>
+                                <input type="radio" name="units" value="km" defaultChecked /> Kilometers
+                            <input type="radio" name="units" value="mil" />Miles
+                            <div>
+                                    <input type="submit" value="Submit" />
+                                </div>
+                            </form>
                         </div>
-                        <div>
-                            Distance:
-<input type="text" name="distance" />
+                        <div className="result">
+                            <ReactTable
+                                data={data}
+                                columns={columns}
+                                pageSize="10"
+                            />
                         </div>
-                        <input type="radio" name="units" value="km" checked /> Kilometers
-                        <input type="radio" name="units" value="mil" />Miles
-                        <div>
-                            <input type="submit" value="Submit" />
-                        </div>
-                    </form>
+                    </div>
                 </div>
             );
         }
