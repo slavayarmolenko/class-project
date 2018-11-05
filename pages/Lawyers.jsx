@@ -1,8 +1,3 @@
-/*
-Vladislav Iarmolenko
-slava.yarmolenko@gmail.com
-Created: August 2018
-*/
 import React from 'react';
 import ReactTable from 'react-table';
 import axios from 'axios';

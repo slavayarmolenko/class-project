@@ -1,3 +1,8 @@
+/*
+Vladislav Iarmolenko
+slava.yarmolenko@gmail.com
+Created: August 2018
+*/
 
 var mysql = require('mysql');
 var connection = mysql.createConnection({

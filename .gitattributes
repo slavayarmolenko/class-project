@@ -2,3 +2,4 @@
 * text=auto
 
 node_modules/ export-ignore
+.DS_Store

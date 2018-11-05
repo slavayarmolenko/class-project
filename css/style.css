@@ -1,0 +1,229 @@
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+
+body {
+    color: #777;
+    font: 18px/28px 'Raleway', sans-serif;
+    background: #fff;
+    overflow-y: scroll;
+    -webkit-text-size-adjust: 100%;
+	-ms-text-size-adjust: none;
+	margin: 0;
+}
+
+
+body, button, input, select, textarea {
+    color: #777;
+    font-family: 'Raleway', sans-serif;
+    font-size: 18px;
+    line-height: 28px;
+}
+
+#app {
+    background: #fff;
+    position: relative;
+}
+
+.site-header .site-branding {
+    float: left;
+    margin: 4px 0 0;
+    max-width: 300px;
+}
+.site-header .site-branding .site-title {
+    margin: 0;
+    font-size: 2em;
+    font-weight: bold;
+}
+.site-header .site-branding .site-title a {
+    color: #F8B016;
+}
+.site-header .btn-donate {
+    float: right;
+    font-size: 18px;
+    line-height: 44px;
+    font-weight: 600;
+    color: #fcb216;
+    border: 1px solid #fcb216;
+    height: 46px;
+    width: 184px;
+    text-align: center;
+    -webkit-transition: all 0.2s;
+    -moz-transition: all 0.2s;
+    transition: all 0.2s;
+}
+
+.site-header .site-branding .site-description {
+    font: 12px/20px Arial, Helvetica, sans-serif;
+    color: #fff;
+    margin-bottom: 0;
+}
+
+.main-navigation {
+    float: right;
+}
+
+.main-navigation ul {
+    display: block;
+}
+.main-navigation ul {
+    list-style: none;
+    margin: 12px 33px 0 0;
+    padding-left: 0;
+    font-size: 18px;
+    line-height: 22px;
+    font-weight: 600;
+}
+.main-navigation li:first-child {
+    margin-left: 0;
+}
+.main-navigation li {
+    float: left;
+    position: relative;
+    margin-left: 41px;
+}
+.main-navigation a {
+    display: block;
+    text-decoration: none;
+    color: #fff;
+    padding: 0 0 17px;
+}
+
+.home.has-slider .site-header {
+    background: none;
+    position: absolute;
+}
+.blog .site-header, .category .site-header, .archive .site-header, .search .site-header, #app .site-header, .single-post .site-header, .error404 .site-header {
+    position: relative;
+    background: #202020;
+    border-bottom: 1px solid #e4e4e4;
+}
+.home .site-header, .home.blog.has-slider .site-header {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    z-index: 3;
+    border-bottom: 0 !important;
+    /* background: rgba(0, 0, 0, 0.5); */
+}
+article, aside, details, figcaption, figure, footer, header, main, menu, nav, section, summary {
+    display: block;
+}
+
+.clear:before, .clear:after, .entry-content:before, .entry-content:after, .comment-content:before, .comment-content:after, .site-header:before, .site-header:after, .site-content:before, .site-content:after, .site-footer:before, .site-footer:after {
+    content: "";
+    display: table;
+    table-layout: fixed;
+}
+
+.site-header .header-top {
+    background: #000;
+    color: #fff;
+    padding: 15px 0 0;
+    position: relative;
+    z-index: 1;
+}
+
+.home.has-slider .site-header .header-bottom, .site-header .header-bottom {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 25px 0 10px;
+}
+
+.container {
+    width: 1200px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin: 0 auto;
+}
+
+.container:after {
+    content: '';
+    display: block;
+    clear: both;
+}
+
+.site-header .header-top .secondary-navigation {
+    float: left;
+}
+.site-header .header-top .secondary-navigation ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 13px;
+    line-height: 17px;
+    font-weight: 600;
+}
+.site-header .header-top .secondary-navigation ul li {
+    float: left;
+    margin-right: 25px;
+    position: relative;
+}
+
+.site-header .header-top .secondary-navigation ul li a {
+    color: #acacac;
+    display: block;
+    padding: 0 0 20px;
+}
+a {
+    color: #45c267;
+    text-decoration: none;
+    outline: none;
+}
+
+.site-header .header-top .social-networks {
+    float: right;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 13px;
+}
+
+.site-header .header-top .social-networks li {
+    float: right;
+    margin-right: 20px;
+}
+
+.site-header .header-top .social-networks li a {
+    color: #acacac;
+}
+
+svg:not(:root).svg-inline--fa {
+    overflow: visible;
+}
+
+.svg-inline--fa.fa-w-9 {
+    width: .5625em;
+}
+svg:not(:root) {
+    overflow: hidden;
+}
+
+.svg-inline--fa {
+    display: inline-block;
+    font-size: inherit;
+    height: 1em;
+    overflow: visible;
+    vertical-align: -.125em;
+}
+.site-header .header-bottom {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 25px 0 10px;
+}
+
+.voloteer-img {
+	background-image: url('images/volonteer.png');
+	background-repeat: none;
+	min-width: 585px;
+	height: 416px;
+	display: block;
+}
