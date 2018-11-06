@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactTable from 'react-table';
-import 'whatwg-fetch';
 import axios from 'axios';
 
 class Team extends React.Component {
@@ -13,6 +12,24 @@ class Team extends React.Component {
         };
 
     }
+    componentDidMount() {
+        axios.get('/api/team')
+            .then(result => {
+                this.setState({
+                    data: result.data.data,
+                    dataLoaded: true
+                });
+            })
+            .catch(error => {
+                console.log('error::');
+                console.log('bebebe:' + error);
+                this.setState({
+                    error: error.Error,
+                    dataLoaded: false
+                });
+
+            });
+    }
     render() {
         console.log('render team');
         const columns = [{
@@ -24,21 +41,11 @@ class Team extends React.Component {
                 Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
             }];
         var self = this;
-        fetch('/api/team')
-                .then(function (res) {
-                    console.log('Getting response');
-                    console.log(res);
-                    return res.json();
-                })
-                .then(function (team) {
-                    console.log('Getting json');
-                    console.log(team);
-                    if(!self.state.dataLoaded){
-                        self.setState({data : team.data, dataLoaded: true });
-                    }
-                });
+        
+ 
         return (
                 <div className="container">
+                    <h1>Team</h1>
                     <ReactTable
                         data={this.state.data}
                         columns={columns}

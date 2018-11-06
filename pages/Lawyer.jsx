@@ -70,7 +70,8 @@ class Lawyer extends React.Component {
         //    return <p>{error}</p>;
         //} else {
 
-            return (
+            return (   
+                <div className="container">
                     <form onSubmit={this.handleSubmit}>
                         <label>Name</label><input type="text" name="name" value={this.state.name} onChange={this.handleInputChange} />
                         <label>E-mail</label><input type="text" name="email" value={this.state.email} onChange={this.handleInputChange} />
@@ -80,6 +81,7 @@ class Lawyer extends React.Component {
                             <button type="submit">Submit</button>
                         </div>
                       </form>
+                </div>
                     );
         }
     //}

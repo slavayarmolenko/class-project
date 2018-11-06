@@ -4,7 +4,8 @@ class About extends React.Component {
    render() {
        console.log("render about");
       return (
-         <div>
+         <div className="container">
+             <h1>About</h1>
             <div className="voloteer-img"></div>
             <div className="aboutText">
                 Since the Trump Administration repealed the DACA program in September 2017, we have been concerned for our friends and classmates whose safety, academic opportunities, and DREAMs for a bright future in the country they grew up in have been compromised.  

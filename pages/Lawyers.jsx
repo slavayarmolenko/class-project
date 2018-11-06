@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactTable from 'react-table';
-import 'whatwg-fetch';
 import axios from 'axios';
 
 class Lawyers extends React.Component {
@@ -94,16 +93,17 @@ class Lawyers extends React.Component {
             accessor: 'description'
         }];
 
-        const { data, dataLoaded, error } = this.state;
+        /* const { data, dataLoaded, error } = this.state;
         if (error) {
             return <p>{error}</p>;
         } else {
-
+*/
 
 
 
             return (
                 <div className="container">
+                    <h1>Laywers</h1>
                     <div className="filtered-layout">
                         <div className="filter">
                             <form method="GET" name="searchLawyersNear" onSubmit={this.handleSubmit.bind(this)} >
@@ -124,7 +124,7 @@ class Lawyers extends React.Component {
                         </div>
                         <div className="result">
                             <ReactTable
-                                data={data}
+                                data={this.state.data}
                                 columns={columns}
                                 pageSize="10"
                             />
@@ -132,7 +132,7 @@ class Lawyers extends React.Component {
                     </div>
                 </div>
             );
-        }
+        //}
     }
 
 }

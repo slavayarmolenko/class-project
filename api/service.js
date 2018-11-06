@@ -23,6 +23,15 @@ connection.connect(function (err) {
 
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+
+/* app.get('/*', function(req, res) {
+    res.sendFile(path.join(__dirname, 'index.html'), function(err) {
+      if (err) {
+        res.status(500).send(err)
+      }
+    })
+  })
+*/
             //})
 teamService.create(app);
 lawyersService.create(app);
