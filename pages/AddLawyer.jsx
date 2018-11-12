@@ -9,25 +9,24 @@ class AddLawyer extends React.Component {
     constructor(props) {
         super(props);
         this.state ={
+            lawyer: {
                 name: '',
                 email: '',
                 int: 2
+            }
         };
         this.logged = true;
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
     }
     handleChange(event) {
-        var value = event.target.value;
-        const name = event.target.name;
-        console.log('Set ' + name + ' with value ' + value);
-        this.setState({
-            [name]: value
-          });
+        const { lawyer } = this.state;
+        lawyer[event.target.name] = event.target.value;
+        this.setState({ lawyer });
     }
  
     handleSubmit() {
-        axios.post('/api/lawyers', this.state)
+        axios.post('/api/lawyers', this.state.lawyer)
                 .then(result => {
                     console.log('Submitted laywer');
                     console.log(result.data);
@@ -49,7 +48,7 @@ class AddLawyer extends React.Component {
     }
     
     render() {
-        const { name, email } = this.state;
+        const { name, email } = this.state.lawyer;
         if (!this.logged) {
             return <Redirect to='/lawyers'  />;
         }
