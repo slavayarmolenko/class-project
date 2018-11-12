@@ -58,11 +58,23 @@ exports.create = function (app) {
     });
 
     app.post('/api/lawyers', function (req, res) {
-        var addNewLawyerLine = 'INSERT INTO lawyers (uzvername, password, email, description, name, shortname, russian, spanish, english, zip, daca, family, deportationProtection, address) VALUES (';
-        addNewLawyerLine = addNewLawyerLine + request.body.uzvername + "," + request.body.password + "," + request.body.email  + "," + request.body.description  + "," + request.body.name + "," + request.body.shortname + "," + request.body.russian + "," + request.body.spanish + "," + request.body.english + "," + request.body.zip + "," + request.body.daca + "," + request.body.family + "," + request.body.deportationProtection + "," + request.body.address + ");";
-
-        connection.query(addNewLawyerLine, function (err, results) {
-   
+        
+       // var addNewLawyerLine = 'INSERT INTO lawyers (uzvername, password, email, description, name, shortname, russian, spanish, english, zip, daca, family, deportationProtection, address) VALUES (';
+       // addNewLawyerLine = addNewLawyerLine + request.body.uzvername + "," + request.body.password + "," + request.body.email  + "," + request.body.description  + "," + request.body.name + "," + request.body.shortname + "," + request.body.russian + "," + request.body.spanish + "," + request.body.english + "," + request.body.zip + "," + request.body.daca + "," + request.body.family + "," + request.body.deportationProtection + "," + request.body.address + ");";
+      
+       var addNewLawyerLine = 'INSERT INTO lawyers (name, email) VALUES (';
+       console.log("Here " + req.body);
+       addNewLawyerLine = addNewLawyerLine + "'" + req.body.name + "', '" + req.body.email + "')";
+       
+       console.log("addNewLawyerLine = " + addNewLawyerLine);
+       connection.query(addNewLawyerLine, function (err, results) {
+            if(err){
+                res.json({success: false, errMessage: err.sqlMessage});
+            } else {
+                res.json({success: true, results: results});
+            }
+            console.log(results);
+            
         });
     });
 
