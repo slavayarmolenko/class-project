@@ -24,6 +24,9 @@ const Header = () => (
                                     <li id="menu-item-270">
                                         <Link to="/donate/">Donate</Link>
                                     </li>
+                                    <li id="menu-item-271">
+                                        <Link to="/login/">Login</Link>
+                                    </li>
                                 </ul>
                             </div>
                         </nav>
