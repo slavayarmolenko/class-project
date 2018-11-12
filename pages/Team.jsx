@@ -31,7 +31,6 @@ class Team extends React.Component {
             });
     }
     render() {
-        console.log('render team');
         const columns = [{
                 Header: 'Name',
                 accessor: 'name' // String-based value accessors!
@@ -44,7 +43,7 @@ class Team extends React.Component {
         
  
         return (
-                <div className="container">
+                <div className="container pageContent">
                     <h1>Team</h1>
                     <ReactTable
                         data={this.state.data}

@@ -50,8 +50,12 @@ article, aside, details, figcaption, figure, footer, header, main, menu, nav, se
     width: 1200px;
     padding-left: 10px;
     padding-right: 10px;
-    margin: 0 auto 10px auto;
+    margin: 0 auto;
 }
+.pageContent {
+    margin-bottom: 10px;
+}
+
 @media only screen and (max-width: 1199px) {
     .container {
         width: 970px;

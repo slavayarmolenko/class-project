@@ -27,6 +27,9 @@ const Header = () => (
                                     <li id="menu-item-271">
                                         <Link to="/login/">Login</Link>
                                     </li>
+                                    <li id="menu-item-271">
+                                        <Link to="/login/">Create Lawyer</Link>
+                                    </li>
                                 </ul>
                             </div>
                         </nav>

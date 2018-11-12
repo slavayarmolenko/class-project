@@ -98,7 +98,7 @@ class AddLawyer extends React.Component {
             return <Redirect to='/lawyers'  />;
         }
         return (
-            <div className="container">
+            <div className="container pageContent">
             <h1>Create Lawyer</h1>
             <ValidatorForm 
                 onSubmit={this.handleSubmit}

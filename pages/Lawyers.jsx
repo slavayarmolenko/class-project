@@ -80,7 +80,6 @@ class Lawyers extends React.Component {
     }
     render() {
 
-        console.log('render lawyers');
 
         const columns = [{
             Header: 'Name',
@@ -93,16 +92,9 @@ class Lawyers extends React.Component {
             accessor: 'description'
         }];
 
-        /* const { data, dataLoaded, error } = this.state;
-        if (error) {
-            return <p>{error}</p>;
-        } else {
-*/
-
-
 
             return (
-                <div className="container">
+                <div className="container pageContent">
                     <h1>Laywers</h1>
                     <div className="filtered-layout">
                         <div className="filter">

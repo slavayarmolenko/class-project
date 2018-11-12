@@ -4,7 +4,7 @@ class About extends React.Component {
    render() {
        console.log("render about");
       return (
-         <div className="container">
+         <div className="container pageContent">
              <h1>About</h1>
             <div className="voloteer-img"></div>
             <div className="aboutText">
