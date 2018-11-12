@@ -58,21 +58,11 @@ exports.create = function (app) {
     });
 
     app.post('/api/lawyers', function (req, res) {
-        var send = { data: [] };
-        connection.query('SELECT * FROM lawyers', function (err, results) {
-            if (err)
-                throw err;
-            console.log("Req");
-            console.log(req.body.susersZip);
-            console.log("finish");
-            //console.log(results);
-            var usersZip = req.body.usersZip;
-            var usersDistance = req.body.distance;
+        var addNewLawyerLine = 'INSERT INTO lawyers (uzvername, password, email, description, name, shortname, russian, spanish, english, zip, daca, family, deportationProtection, address) VALUES (';
+        addNewLawyerLine = addNewLawyerLine + request.body.uzvername + "," + request.body.password + "," + request.body.email  + "," + request.body.description  + "," + request.body.name + "," + request.body.shortname + "," + request.body.russian + "," + request.body.spanish + "," + request.body.english + "," + request.body.zip + "," + request.body.daca + "," + request.body.family + "," + request.body.deportationProtection + "," + request.body.address + ");";
 
-
-            console.log("send");
-            console.log(send);
-            res.json(send);
+        connection.query(addNewLawyerLine, function (err, results) {
+   
         });
     });
 

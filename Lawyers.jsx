@@ -6,11 +6,8 @@ Created: August 2018
 import React from 'react';
 import ReactTable from 'react-table';
 import axios from 'axios';
-<<<<<<< HEAD
 import Lawyer from './Lawyer.jsx';
-=======
 var zipcodes = require('zipcodes');
->>>>>>> 55724c999e0a063416dc5d497707e363eced9201
 class Lawyers extends React.Component {
     constructor() {
         super();
@@ -19,13 +16,6 @@ class Lawyers extends React.Component {
             dataLoaded: false,
             error: null
         };
-<<<<<<< HEAD
-        
-=======
-        //this.handleSubmit = this.handleSubmit.bind(this);
-
-
->>>>>>> 55724c999e0a063416dc5d497707e363eced9201
     }
     componentDidMount() {
         var self = this;
@@ -75,13 +65,9 @@ class Lawyers extends React.Component {
                     });
 
                 })
-<<<<<<< HEAD
-                .catch(error => { 
-=======
                 .catch(error => {
                     console.log('error::');
                     console.log('bebebe:' + error);
->>>>>>> 55724c999e0a063416dc5d497707e363eced9201
                     this.setState({
                         error: error.Error,
                         dataLoaded: false
@@ -119,23 +105,6 @@ class Lawyers extends React.Component {
 
 
             return (
-<<<<<<< HEAD
-                    <div>
-                        <ReactTable
-                            data={data}
-                            columns={columns}
-                            pageSize="10"
-                        />
-                        <div className="classForm">    
-                            <Lawyer />
-                        </div>
-                    </div>
-                    );
-        }
-    }
-
-}
-=======
                 <div>
                     <ReactTable
                         data={data}
@@ -163,5 +132,4 @@ class Lawyers extends React.Component {
                 }
             
             }
->>>>>>> 55724c999e0a063416dc5d497707e363eced9201
 export default Lawyers;
