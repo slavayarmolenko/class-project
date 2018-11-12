@@ -13,6 +13,7 @@ import Team from './pages/Team.jsx';
 import Lawyers from './pages/Lawyers.jsx';
 import About from './pages/About.jsx';
 import Donate from './pages/Donate.jsx';
+import AddLawyer from './pages/AddLawyer.jsx';
 
 const home = () => <Home></Home>;
 const contact = () => <Contact></Contact>;
@@ -20,6 +21,7 @@ const about = () => <About></About>;
 const team = () => <Team></Team>;
 const lawyers = () => <Lawyers></Lawyers>;
 const donate = () => <Donate></Donate>;
+const addLawyer = () => <AddLawyer></AddLawyer>;
 
 
 const AppRouter = () => (
@@ -34,6 +36,7 @@ const AppRouter = () => (
                 <Route path="/donate/" component={donate} />
                 <Route path="/team/" component={team} />
                 <Route path="/contact/" component={contact} />
+                <Route path="/addlawyer/" component={addLawyer} />
             <Footer/>
         </div>
     </Router>

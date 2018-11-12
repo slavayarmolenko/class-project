@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "Student project.",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Iluhins/class-project.git"
+  },
   "scripts": {
     "start": "webpack-dev-server --hot"
   },
@@ -10,6 +14,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@material-ui/core": "^3.4.0",
+    "@material-ui/icons": "^3.0.1",
     "autoprefixer": "^9.3.1",
     "axios": "^0.18.0",
     "babel-core": "^6.26.3",
@@ -26,6 +32,7 @@
     "postcss-loader": "^3.0.0",
     "react": "^16.4.2",
     "react-dom": "^16.4.1",
+    "react-material-ui-form-validator": "^2.0.2",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.3.1",
     "react-table": "^6.8.6",
