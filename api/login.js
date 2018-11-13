@@ -1,17 +1,9 @@
 
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
-var array_flatten = require('array-flatten');
-var mysql = require('mysql');
-var connection = mysql.createConnection({
-    host: "classdb.c1fc1qmtlpg9.us-west-1.rds.amazonaws.com",
-    user: "master",
-    password: "dEbi07oOFHaAW1s",
-    database: "test1"
-});
 
 
-exports.create = function (app) {
+exports.create = function (app, connection) {
     console.log("we were in init session " + app);
     app.use(cookieParser());
     app.use(session({secret: "Shh, its a secret!"}));

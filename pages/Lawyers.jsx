@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactTable from 'react-table';
+import { Link } from "react-router-dom";
 import axios from 'axios';
 
 class Lawyers extends React.Component {
@@ -19,14 +20,14 @@ class Lawyers extends React.Component {
 
         axios.get('/api/lawyers')
             .then(result => {
+                console.log('All Lawyers');
+                console.log(result.data.data)
                 this.setState({
                     data: result.data.data,
                     dataLoaded: true
                 });
             })
             .catch(error => {
-                console.log('error::');
-                console.log('bebebe:' + error);
                 this.setState({
                     error: error.Error,
                     dataLoaded: false
@@ -81,9 +82,16 @@ class Lawyers extends React.Component {
     render() {
 
 
-        const columns = [{
+        const columns = [
+        {
+            Header: 'id',
+            accessor: 'id',
+            show: false
+        },
+        {
             Header: 'Name',
-            accessor: 'name' // String-based value accessors!
+            accessor: 'name', // String-based value accessors!
+            Cell: (props) => <Link to={"/lawyer/" + props.row.id}>{props.value}</Link>
         }, {
             Header: 'email',
             accessor: 'email',

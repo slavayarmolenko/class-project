@@ -15,6 +15,7 @@ import About from './pages/About.jsx';
 import Donate from './pages/Donate.jsx';
 import Login from './pages/Login.jsx';
 import AddLawyer from './pages/AddLawyer.jsx';
+import Lawyer from './pages/Lawyer.jsx';
 
 const home = () => <Home></Home>;
 const contact = () => <Contact></Contact>;
@@ -24,6 +25,7 @@ const lawyers = () => <Lawyers></Lawyers>;
 const donate = () => <Donate></Donate>;
 const login = () => <Login></Login>;
 const addLawyer = () => <AddLawyer></AddLawyer>;
+const lawyer = (input) => <Lawyer id={input.match.params.id}></Lawyer>;
 
 
 const AppRouter = () => (
@@ -40,6 +42,7 @@ const AppRouter = () => (
                 <Route path="/contact/" component={contact} />
                 <Route path="/login/" component={login} />
                 <Route path="/addlawyer/" component={addLawyer} />
+                <Route path="/lawyer/:id" component={lawyer} />
             <Footer/>
         </div>
     </Router>

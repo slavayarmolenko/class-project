@@ -6,44 +6,43 @@ Created: August 2018
 
 var ZipCodes = require('zipcodes');
 var mysql = require('mysql');
-var connection = mysql.createConnection({
-    host: "classdb.c1fc1qmtlpg9.us-west-1.rds.amazonaws.com",
-    user: "master",
-    password: "dEbi07oOFHaAW1s",
-    database: "test1"
-});
-exports.create = function (app) {
+
+exports.create = function (app, connection) {
 
     app.get('/api/lawyers', function (req, res) {
+        if (req.query.id) {
+            getLawyerById(req, res);
+            return;
+        }
+        console.log('We get all lawyers');
         connection.query('SELECT * FROM lawyers', function (err, results) {
             if (err)
                 throw err;
             var usersZip = parseInt(req.query.usersZip);
             var usersDistance = parseInt(req.query.distance);
-            var send = { data: [] };
+            var send = { data: [], success: true };
             console.log(req.query);
             if (req.query.units == "km") {
                 usersDistance = ZipCodes.toMiles(usersDistance);
             };
             if ((usersDistance) && (usersZip)) {
                 for (var i = 0; i < results.length; i++) {
-                    console.log("Dist " + ZipCodes.distance(usersZip, results[i].zip));
-                    console.log("users " + typeof (usersZip) + " " + usersZip);
-                    console.log("adv " + typeof (results[i].zip) + " " + results[i].zip);
                     if (ZipCodes.distance(usersZip, results[i].zip) < usersDistance) {
+                        var localid = results[i].id;
                         var localemail = results[i].email;
                         var localname = results[i].name;
                         var localdescription = results[i].description;
-                        var entry = { name: localname, email: localemail, description: localdescription };
+                        var entry = { id: localid, name: localname, email: localemail, description: localdescription };
                         send.data.push(entry);
                     }
                 }
             } else {
                 for (var i = 0; i < results.length; i++) {
+                    var localid = results[i].id;
                     var localemail = results[i].email;
                     var localname = results[i].name;
                     var localdescription = results[i].description;
-                    var entry = { name: localname, email: localemail, description: localdescription };
+                    var entry = { id: localid, name: localname, email: localemail, description: localdescription };
 
                     send.data.push(entry);
                 }
@@ -56,6 +55,8 @@ exports.create = function (app) {
 
         //res.send('Hello');
     });
+
+    
 
     app.post('/api/lawyers', function (req, res) {
 
@@ -167,6 +168,23 @@ exports.create = function (app) {
 
         });
     });
+
+    var getLawyerById = function (req, res) {
+        var userId = req.query.id;
+        console.log('We get one lawyer ' + userId);
+        connection.query('SELECT uzvername, name, email, ' +
+            'description, zip, english, spanish, russian, address, '+
+            'daca, family, deportationProtection FROM lawyers WHERE id=' + userId, function (err, results) {
+                if (err)
+                    throw err;
+                if (results.length === 1) {
+                    res.json({ data: results[0], success: true});
+                } else {
+                    res.json({ data: {}, success: false, errMessage: 'Error: We found ' + results.length + ' lawyers with id {' + userId + '}'});
+                }
+        });
+
+    };
 
 };
 

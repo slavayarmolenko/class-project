@@ -23,6 +23,9 @@ class AddLawyer extends React.Component {
                 spanish: false,
                 russian: false,
                 address: '',
+                daca: false, 
+                family: false, 
+                deportationProtection:false
             },
             errorText: '',
             redirectToList: false
@@ -61,11 +64,11 @@ class AddLawyer extends React.Component {
         this.setState({ errorText: '' });
         axios.post('/api/lawyers', this.state.lawyer)
                 .then(result => {
-                    if (result.success) {
+                    if (result.data.success) {
                         this.goToList();
                     } else {
                         this.setState({
-                            errorText: error.response.statusText,
+                            errorText: result.data.errMessage
                         });
                     }
                 })
@@ -83,7 +86,8 @@ class AddLawyer extends React.Component {
     
     render() {
         const { uzvername, name, email, password, repeatPassword, 
-            description, zip, english, spanish, russian, address} = this.state.lawyer;
+            description, zip, english, spanish, russian, address,
+            daca, family, deportationProtection} = this.state.lawyer;
         const errorText = this.state.errorText;
         const red300 = red['500'];
  
@@ -184,12 +188,12 @@ class AddLawyer extends React.Component {
                     fullWidth={true}
                 /></div>
                 <div>
-                <Checkbox 
-                        onChange={this.handleChange}
-                        name="english"
-                        value="1"
-                        checked={english}
-                /><InputLabel htmlFor="english">English</InputLabel>
+                    <Checkbox 
+                            onChange={this.handleChange}
+                            name="english"
+                            value="1"
+                            checked={english}
+                    /><InputLabel htmlFor="english">English</InputLabel>
                 
                     <Checkbox 
                         label="Speak Spanish"
@@ -198,14 +202,35 @@ class AddLawyer extends React.Component {
                         name="spanish"
                         value="1"
 
-                /><InputLabel>Spanish</InputLabel>
+                /><InputLabel htmlFor="spanish">Spanish</InputLabel>
                     <Checkbox 
                         label="Speak Russian"
                         onChange={this.handleChange}
                         name="russian"
                         checked={russian}
                         value="1"
-                /><InputLabel>Russian</InputLabel></div>
+                /><InputLabel htmlFor="russian">Russian</InputLabel></div>
+                <div>
+                    <Checkbox 
+                            onChange={this.handleChange}
+                            name="daca"
+                            value="1"
+                            checked={daca}
+                    /><InputLabel htmlFor="daca">DACA</InputLabel>
+                
+                    <Checkbox 
+                        onChange={this.handleChange}
+                        checked={family}
+                        name="family"
+                        value="1"
+
+                /><InputLabel htmlFor="family">Family</InputLabel>
+                    <Checkbox 
+                        onChange={this.handleChange}
+                        name="deportationProtection"
+                        checked={deportationProtection}
+                        value="1"
+                /><InputLabel htmlFor="deportationProtection">Deportation protection</InputLabel></div>
 
                 <Button type="submit" color="primary" variant="contained">Submit</Button>
             </ValidatorForm>
