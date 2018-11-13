@@ -2,8 +2,10 @@ import React from 'react';
 import { Redirect } from "react-router-dom";
 import red from '@material-ui/core/colors/red';
 import Button from '@material-ui/core/Button';
-import Checkbox from '@material-ui/core/Checkbox';
 import InputLabel from '@material-ui/core/InputLabel';
+import Select from '@material-ui/core/Select';
+import Input from '@material-ui/core/Input';
+import MenuItem from '@material-ui/core/MenuItem';
 import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
 import axios from 'axios';
 
@@ -19,20 +21,24 @@ class AddLawyer extends React.Component {
                 password: '',
                 description: '',
                 zip: '',        
-                english: true,
-                spanish: false,
-                russian: false,
                 address: '',
-                daca: false, 
-                family: false, 
-                deportationProtection:false
+                languages: [],
+                areas: [],
             },
+            allLanguages: [{id: 0, name: 'English'},{id:1, name:'Spanish'}, {id:2, name: 'Russian'}],
+            allAreas: [{id: 0, name: 'DACA'},{id:1, name:'Family Reunion'}, {id:2, name: 'Deportation'}],
             errorText: '',
             redirectToList: false
         };
         this.logged = true;
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.handleChangeLang = this.handleChangeLang.bind(this);
+        this.handlePropChange = this.handlePropChange.bind(this);
+        this.handleAddLanguage = this.handleAddLanguage.bind(this);
+        this.handleChangeArea = this.handleChangeArea.bind(this);
+        this.handleAddArea = this.handleAddArea.bind(this);
+
     }
     componentDidMount() {
         // custom rule will have name 'isPasswordMatch'
@@ -59,7 +65,56 @@ class AddLawyer extends React.Component {
         }
         this.setState({ lawyer });
     }
- 
+    handleChangeLang(event) {
+        const { lawyer } = this.state;
+        var langSelected = event.target.value;
+        if (langSelected.findIndex(function(newlySelectedLang) { return newlySelectedLang === null }) === -1) {
+            lawyer.languages = event.target.value;
+            this.setState({ lawyer });
+        } else {
+            event.preventDefault();
+        }
+    }
+    handlePropChange(event) {
+        var propname = event.target.name;
+        this.setState({ [propname]: event.target.value });
+    }
+    handleAddLanguage(event) {
+        event.preventDefault();
+        var newLangName = this.state.newLangName;
+        var langs = this.state.allLanguages;
+        const { lawyer } = this.state;
+        
+        if (langs.findIndex(function(lang) { lang.name === newLangName; }) === -1) {
+            langs.push({ id: newLangName, name: newLangName});
+            lawyer.languages.push(newLangName);
+            this.setState({ allLanguages: langs, newLangName: '', lawyer: lawyer });
+        }
+    }
+
+    handleChangeArea(event) {
+        const { lawyer } = this.state;
+        var areaSelected = event.target.value;
+        if (areaSelected.findIndex(function(newlySelectedArea) { return newlySelectedArea === null }) === -1) {
+            lawyer.areas = event.target.value;
+            this.setState({ lawyer });
+        } else {
+            event.preventDefault();
+        }
+    }
+    
+    handleAddArea() {
+        event.preventDefault();
+        var newAreaName = this.state.newAreaName;
+        var areas = this.state.allAreas;
+        const { lawyer } = this.state;
+        
+        if (areas.findIndex(function(area) { area.name === newAreaName; }) === -1) {
+            areas.push({ id: newAreaName, name: newAreaName});
+            lawyer.areas.push(newAreaName);
+            this.setState({ allAreas: areas, newAreaName: '', lawyer: lawyer });
+        }
+    }
     handleSubmit() {
         this.setState({ errorText: '' });
         axios.post('/api/lawyers', this.state.lawyer)
@@ -86,8 +141,8 @@ class AddLawyer extends React.Component {
     
     render() {
         const { uzvername, name, email, password, repeatPassword, 
-            description, zip, english, spanish, russian, address,
-            daca, family, deportationProtection} = this.state.lawyer;
+            description, zip, address,
+            languages, areas} = this.state.lawyer;
         const errorText = this.state.errorText;
         const red300 = red['500'];
  
@@ -188,49 +243,71 @@ class AddLawyer extends React.Component {
                     fullWidth={true}
                 /></div>
                 <div>
-                    <Checkbox 
-                            onChange={this.handleChange}
-                            name="english"
-                            value="1"
-                            checked={english}
-                    /><InputLabel htmlFor="english">English</InputLabel>
-                
-                    <Checkbox 
-                        label="Speak Spanish"
-                        onChange={this.handleChange}
-                        checked={spanish}
-                        name="spanish"
-                        value="1"
-
-                /><InputLabel htmlFor="spanish">Spanish</InputLabel>
-                    <Checkbox 
-                        label="Speak Russian"
-                        onChange={this.handleChange}
-                        name="russian"
-                        checked={russian}
-                        value="1"
-                /><InputLabel htmlFor="russian">Russian</InputLabel></div>
+                    <div><InputLabel htmlFor="select-language">Languages speaking</InputLabel></div>
+                    <Select
+                        multiple
+                        value={languages}
+                        onChange={this.handleChangeLang}
+                        input={<Input id="select-language" />}
+                        fullWidth={true}
+                    >
+                        <MenuItem key={null} value={null}>
+                            <ValidatorForm 
+                                onSubmit={this.handleAddLanguage}
+                                onError={errors => console.log(errors)}
+                            >   
+                                <TextValidator
+                                    label="New Language"
+                                    onChange={this.handlePropChange}
+                                    name="newLangName"
+                                    type="text"
+                                    validators={['required']}
+                                    errorMessages={['this field is required']}
+                                    value={this.state.newLangName}
+                                    autocomplete={false}
+                                />
+                            </ValidatorForm>
+                        </MenuItem>
+                        {this.state.allLanguages.map(lang => (
+                        <MenuItem key={lang.id} value={lang.id}>
+                            {lang.name}
+                        </MenuItem>
+                        ))}
+                    </Select>
+                </div>
                 <div>
-                    <Checkbox 
-                            onChange={this.handleChange}
-                            name="daca"
-                            value="1"
-                            checked={daca}
-                    /><InputLabel htmlFor="daca">DACA</InputLabel>
-                
-                    <Checkbox 
-                        onChange={this.handleChange}
-                        checked={family}
-                        name="family"
-                        value="1"
-
-                /><InputLabel htmlFor="family">Family</InputLabel>
-                    <Checkbox 
-                        onChange={this.handleChange}
-                        name="deportationProtection"
-                        checked={deportationProtection}
-                        value="1"
-                /><InputLabel htmlFor="deportationProtection">Deportation protection</InputLabel></div>
+                    <div><InputLabel htmlFor="select-area">Attorney areas</InputLabel></div>
+                    <Select
+                        multiple
+                        value={areas}
+                        onChange={this.handleChangeArea}
+                        input={<Input id="select-prof" />}
+                        fullWidth={true}
+                    >
+                        <MenuItem key={null} value={null}>
+                            <ValidatorForm 
+                                onSubmit={this.handleAddArea}
+                                onError={errors => console.log(errors)}
+                            >   
+                                <TextValidator
+                                    label="New Area of Interests"
+                                    onChange={this.handlePropChange}
+                                    name="newAreaName"
+                                    type="text"
+                                    validators={['required']}
+                                    errorMessages={['this field is required']}
+                                    value={this.state.newAreaName}
+                                    autocomplete={false}
+                                />
+                            </ValidatorForm>
+                        </MenuItem>
+                        {this.state.allAreas.map(lang => (
+                        <MenuItem key={lang.id} value={lang.id}>
+                            {lang.name}
+                        </MenuItem>
+                        ))}
+                    </Select>
+                </div>
 
                 <Button type="submit" color="primary" variant="contained">Submit</Button>
             </ValidatorForm>

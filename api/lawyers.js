@@ -14,14 +14,12 @@ exports.create = function (app, connection) {
             getLawyerById(req, res);
             return;
         }
-        console.log('We get all lawyers');
         connection.query('SELECT * FROM lawyers', function (err, results) {
             if (err)
                 throw err;
             var usersZip = parseInt(req.query.usersZip);
             var usersDistance = parseInt(req.query.distance);
             var send = { data: [], success: true };
-            console.log(req.query);
             if (req.query.units == "km") {
                 usersDistance = ZipCodes.toMiles(usersDistance);
             };
@@ -153,11 +151,7 @@ exports.create = function (app, connection) {
         }
         addNewLawyerLine1 = addNewLawyerLine1.substring(0, addNewLawyerLine1.length - 2);
         addNewLawyerLine2 = addNewLawyerLine2.substring(0, addNewLawyerLine2.length - 1) + ');';
-        console.log("Here " + req.body);
 
-
-        console.log(addNewLawyerLine1);
-        console.log(addNewLawyerLine2);
         connection.query(addNewLawyerLine1 + addNewLawyerLine2, function (err, results) {
             if (err) {
                 res.json({ success: false, errMessage: err.sqlMessage });
@@ -171,14 +165,16 @@ exports.create = function (app, connection) {
 
     var getLawyerById = function (req, res) {
         var userId = req.query.id;
-        console.log('We get one lawyer ' + userId);
         connection.query('SELECT uzvername, name, email, ' +
             'description, zip, english, spanish, russian, address, '+
             'daca, family, deportationProtection FROM lawyers WHERE id=' + userId, function (err, results) {
                 if (err)
                     throw err;
                 if (results.length === 1) {
-                    res.json({ data: results[0], success: true});
+                    var lawyer = results[0];
+                    lawyer.languages = [];
+                    lawyer.areas = [];
+                    res.json({ data: lawyer, success: true});
                 } else {
                     res.json({ data: {}, success: false, errMessage: 'Error: We found ' + results.length + ' lawyers with id {' + userId + '}'});
                 }
