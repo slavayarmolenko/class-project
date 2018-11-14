@@ -11,12 +11,6 @@ var connection = mysql.createConnection({
     password: "dEbi07oOFHaAW1s",
     database: "test1"
 });
-/*var connection = mysql.createConnection({
-  host: "classdb.c1fc1qmtlpg9.us-west-1.rds.amazonaws.com",
-  user: "master",
-  password: "dEbi07oOFHaAW1s",
-  database: "test1"
-});*/
 console.log('Trying to create connection');
 connection.connect(function (err) {
     if (err)
@@ -29,15 +23,6 @@ connection.connect(function (err) {
 
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
-
-/* app.get('/*', function(req, res) {
-    res.sendFile(path.join(__dirname, 'index.html'), function(err) {
-      if (err) {
-        res.status(500).send(err)
-      }
-    })
-  })
-*/
             //})
 teamService.create(app, connection);
 lawyersService.create(app, connection);

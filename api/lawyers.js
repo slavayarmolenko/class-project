@@ -13,7 +13,7 @@ exports.create = function (app, connection) {
         if (req.query.id) {
             getLawyerById(req, res);
             return;
-        }
+        }       
         connection.query('SELECT * FROM lawyers', function (err, results) {
             if (err)
                 throw err;
@@ -64,93 +64,117 @@ exports.create = function (app, connection) {
         var addNewLawyerLine1 = 'INSERT INTO lawyers (';
         var addNewLawyerLine2 = ') VALUES (';
         var i = 0;
-        var columnNames = ["uzvername", "password", "email", "description", "name", "shortname", "russian", "spanish", "english", "zip", "daca", "family", "deportationProtection", "address"];
-        /*for (var propname in req.body) {
-            var propvalue = req.body[propname];
-            if ((propname == "uzvername")||(propname == "password")||(propname == "email")||(propname == "description")||(propname == "name")||(propname == "shortname")||(propname == "address")){
-                if(propvalue != ""){
-                    addNewLawyerLine1 = addNewLawyerLine1 + columnNames[i];
-                    addNewLawyerLine2 = addNewLawyerLine2 + '"' + req.body[propname] + '"';
-                    if (columnNames[i] != "address") {
-                        addNewLawyerLine1 = addNewLawyerLine1 + ", ";
-                        addNewLawyerLine2 = addNewLawyerLine2 + ", ";
-                        console.log(columnNames[i]);
-                    } else {
-                        addNewLawyerLine2 = addNewLawyerLine2 + ");";
-                        
-                    } 
-                }
-            } else if ((propname == "russian")||(propname == "spanish")||(propname == "english")||(propname == "daca")||(propname == "family")||(propname == "deportationProtection")){
-                if(propvalue != ""){
-                    addNewLawyerLine1 = addNewLawyerLine1 + columnNames[i] + ", ";
-                    addNewLawyerLine2 = addNewLawyerLine2 + req.body[propname] + ", ";
-                }
-            }  else if (propname == "zip"){
-                if(propvalue != "00000"){
-                    addNewLawyerLine1 = addNewLawyerLine1 + columnNames[i] + ", ";
-                    addNewLawyerLine2 = addNewLawyerLine2 + req.body[propname] + ", ";
-                }
-            }
-            i++;
-        }*/
-        if(req.body.uzvername){
-            addNewLawyerLine1 = addNewLawyerLine1 + 'uzvername, ';
-            addNewLawyerLine2 = addNewLawyerLine2 + '"' + req.body.uzvername + '",';
+        var ending = ");"
+        if(req.body.id){
+            addNewLawyerLine1 = 'UPDATE lawyers ';
+            ending = "WHERE ID="+req.body.id+";";
+            addNewLawyerLine2 = ' ';
         }
-        if(req.body.password){
-            addNewLawyerLine1 = addNewLawyerLine1 + 'password, ';
+        var column;
+        if(req.body.uzvername){
+            column = "uzvername";
+            if(req.body.id){
+                addNewLawyerLine1 = addNewLawyerLine1 + column +'="'+req.body.uzvername+'", ';
+            } else {
+            addNewLawyerLine1 = addNewLawyerLine1 + column +', ';
+            addNewLawyerLine2 = addNewLawyerLine2 + '"' + req.body.uzvername + '",';
+            }
+        }
+        if(req.body.password){       
+            column = "password";
+            if(req.body.id){
+                addNewLawyerLine1 = addNewLawyerLine1 + column +'="'+req.body.password+'", ';
+            } else {
+            addNewLawyerLine1 = addNewLawyerLine1 + column +', ';
             addNewLawyerLine2 = addNewLawyerLine2 + '"' + req.body.password + '",';
+            }
         }
         if(req.body.email){
-            addNewLawyerLine1 = addNewLawyerLine1 + 'email, ';
+            column = "email";
+            if(req.body.id){
+                addNewLawyerLine1 = addNewLawyerLine1 + column +'="'+req.body.email+'", ';
+            } else {
+            addNewLawyerLine1 = addNewLawyerLine1 + column +', ';
             addNewLawyerLine2 = addNewLawyerLine2 + '"' + req.body.email + '",';
+            }
         } 
         if(req.body.description){
-            addNewLawyerLine1 = addNewLawyerLine1 + 'description, ';
+            column = "description";
+            if(req.body.id){
+                addNewLawyerLine1 = addNewLawyerLine1 + column +'="'+req.body.description+'", ';
+            } else {
+            addNewLawyerLine1 = addNewLawyerLine1 + column +', ';
             addNewLawyerLine2 = addNewLawyerLine2 + '"' + req.body.description + '",';
+            }
         }
         if(req.body.name){
-            addNewLawyerLine1 = addNewLawyerLine1 + 'name, ';
+            column = "name";
+            if(req.body.id){
+                addNewLawyerLine1 = addNewLawyerLine1 + column +'="'+req.body.name+'", ';
+            } else {
+            addNewLawyerLine1 = addNewLawyerLine1 + column +', ';
             addNewLawyerLine2 = addNewLawyerLine2 + '"' + req.body.name + '",';
+            }
         }       
         if(req.body.shortname){
-            addNewLawyerLine1 = addNewLawyerLine1 + 'shortname, ';
+            column = "shortname";
+            if(req.body.id){
+                addNewLawyerLine1 = addNewLawyerLine1 + column +'="'+req.body.shortname+'", ';
+            } else {
+            addNewLawyerLine1 = addNewLawyerLine1 + column +', ';
             addNewLawyerLine2 = addNewLawyerLine2 + '"' + req.body.shortname + '",';
-        }
-        if(req.body.russian){
-            addNewLawyerLine1 = addNewLawyerLine1 + 'russian, ';
-            addNewLawyerLine2 = addNewLawyerLine2 + req.body.russian + ',';
-        }
-        if(req.body.spanish){
-            addNewLawyerLine1 = addNewLawyerLine1 + 'spanish, ';
-            addNewLawyerLine2 = addNewLawyerLine2 + req.body.spanish + ',';
-        }
-        if(req.body.english){
-            addNewLawyerLine1 = addNewLawyerLine1 + 'english, ';
-            addNewLawyerLine2 = addNewLawyerLine2 + req.body.english + ',';
+            }
         }
         if(req.body.zip){
-            addNewLawyerLine1 = addNewLawyerLine1 + 'zip, ';
+            column = "zip";
+            if(req.body.id){
+                addNewLawyerLine1 = addNewLawyerLine1 + column +'="'+req.body.zip+'", ';
+            } else {
+            addNewLawyerLine1 = addNewLawyerLine1 + column +', ';
             addNewLawyerLine2 = addNewLawyerLine2 + req.body.zip + ',';
+            }
         }
         if(req.body.daca){
-            addNewLawyerLine1 = addNewLawyerLine1 + 'daca, ';
+            column = "daca";
+            if(req.body.id){
+                addNewLawyerLine1 = addNewLawyerLine1 + column +'="'+req.body.daca+'", ';
+            } else {
+            addNewLawyerLine1 = addNewLawyerLine1 + column +', ';
             addNewLawyerLine2 = addNewLawyerLine2 + req.body.daca + ',';
+            }
         }
         if(req.body.family){
-            addNewLawyerLine1 = addNewLawyerLine1 + 'family, ';
+            column = "family";
+            if(req.body.id){
+                addNewLawyerLine1 = addNewLawyerLine1 + column +'="'+req.body.family+'", ';
+            } else {
+            addNewLawyerLine1 = addNewLawyerLine1 + column +', ';
             addNewLawyerLine2 = addNewLawyerLine2 + req.body.family + ',';
+            }
         }
         if(req.body.deportationProtection){
-            addNewLawyerLine1 = addNewLawyerLine1 + 'deportationProtection, ';
+            column = "deportationProtection";
+            if(req.body.id){
+                addNewLawyerLine1 = addNewLawyerLine1 + column +'="'+req.body.deportationProtection+'", ';
+            } else {
+            addNewLawyerLine1 = addNewLawyerLine1 + column +', ';
             addNewLawyerLine2 = addNewLawyerLine2 + req.body.deportationProtection + ',';
+            }
         }
         if(req.body.address){
-            addNewLawyerLine1 = addNewLawyerLine1 + 'address, ';
+            column = "address";
+            if(req.body.id){
+                addNewLawyerLine1 = addNewLawyerLine1 + column +'="'+req.body.address+'", ';
+            } else {
+            addNewLawyerLine1 = addNewLawyerLine1 + column +', ';
             addNewLawyerLine2 = addNewLawyerLine2 + '"' + req.body.address + '",';
+            }
         }
         addNewLawyerLine1 = addNewLawyerLine1.substring(0, addNewLawyerLine1.length - 2);
-        addNewLawyerLine2 = addNewLawyerLine2.substring(0, addNewLawyerLine2.length - 1) + ');';
+        addNewLawyerLine2 = addNewLawyerLine2.substring(0, addNewLawyerLine2.length - 1) + ending;
+        console.log("Here " + req.body);
+
+
 
         connection.query(addNewLawyerLine1 + addNewLawyerLine2, function (err, results) {
             if (err) {
@@ -162,11 +186,10 @@ exports.create = function (app, connection) {
 
         });
     });
-
     var getLawyerById = function (req, res) {
         var userId = req.query.id;
         connection.query('SELECT uzvername, name, email, ' +
-            'description, zip, english, spanish, russian, address, '+
+            'description, zip, address, '+
             'daca, family, deportationProtection FROM lawyers WHERE id=' + userId, function (err, results) {
                 if (err)
                     throw err;
@@ -183,4 +206,11 @@ exports.create = function (app, connection) {
     };
 
 };
+
+/*
+Vladislav Iarmolenko
+slava.yarmolenko@gmail.com
+Created: August 2018
+*/
+
 
