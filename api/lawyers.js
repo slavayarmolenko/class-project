@@ -187,8 +187,8 @@ exports.create = function (app, connection) {
     var getLawyerById = function (req, res) {
         var userId = req.query.id;
         connection.query('SELECT id, uzvername, name, email, ' +
-            'description, zip, address, '+
-            'daca, family, deportationProtection FROM lawyers WHERE id=' + userId, function (err, results) {
+            'description, zip, address '+
+            'FROM lawyers WHERE id=' + userId, function (err, results) {
                 if (err)
                     throw err;
                 if (results.length === 1) {
@@ -202,6 +202,10 @@ exports.create = function (app, connection) {
         });
 
     };
+
+    app.delete('/api/lawyers', function (req, res) {
+        console.log('Delete lawyer...');
+    });
 
 };
 

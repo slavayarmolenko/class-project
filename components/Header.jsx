@@ -19,7 +19,7 @@ const Header = () => (
                             <div>
                                 <ul id="secondary-menu">
                                     <li id="menu-item-269">
-                                        <Link to="/lawyers/">Lawyers</Link>
+                                        <Link to="/attorneys/">Attorneys</Link>
                                     </li>
                                     <li id="menu-item-270">
                                         <Link to="/donate/">Donate</Link>
@@ -28,7 +28,7 @@ const Header = () => (
                                         <Link to="/login/">Login</Link>
                                     </li>
                                     <li id="menu-item-271">
-                                        <Link to="/addlawyer/">Create Lawyer</Link>
+                                        <Link to="/addattorney/">Create Attorney</Link>
                                     </li>
                                 </ul>
                             </div>
@@ -53,9 +53,9 @@ const Header = () => (
                         <div className={styles.siteBranding} itemScope="" itemType="http://schema.org/Organization">
                             <div>
                                 <h1 className={styles.siteTitle} itemProp="name">
-                                    <a href="/" rel="home" itemProp="url">CLASS App</a>
+                                    <a href="/" rel="home" itemProp="url">CLASS</a>
                                 </h1>
-                                <p className={styles.siteDescription} itemProp="description">Get More Donors For Your Cause</p>
+                                <p className={styles.siteDescription} itemProp="description">California Legal Aid Student Society</p>
 
                             </div>
                         </div>
@@ -71,7 +71,7 @@ const Header = () => (
                                         <Link to="/about/">About</Link>
                                     </li>
                                     <li>
-                                        <Link to="/lawyers/">Lawyers</Link>
+                                        <Link to="/attorneys/">Attorneys</Link>
                                     </li>
                                     <li>
                                         <Link to="/team/">Team</Link>

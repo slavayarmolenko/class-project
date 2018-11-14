@@ -2,9 +2,12 @@ import React from 'react';
 import { Redirect } from "react-router-dom";
 import red from '@material-ui/core/colors/red';
 import Button from '@material-ui/core/Button';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
 import ExtendableMultiSelect from './../components/ExtendableMultiSelect.jsx';
 import axios from 'axios';
+//import DownshiftMultiple from '../components/DownshiftMultiple.jsx';
 
 class Lawyer extends React.Component {
     constructor(props) {
@@ -23,12 +26,11 @@ class Lawyer extends React.Component {
                 services: [],
             },
             allLanguages: [{id: 0, name: 'English'},{id:1, name:'Spanish'}, {id:2, name: 'Russian'}],
-            allAreas: [{id: 0, name: 'DACA'},{id:1, name:'Family Reunion'}, {id:2, name: 'Deportation'}],
+            allServices: [{id: 0, name: 'DACA'},{id:1, name:'Family Reunion'}, {id:2, name: 'Deportation'}],
             errorText: '',
             redirectToList: false,
-            logged: true
+            logged: false
         };
-        this.logged = true;
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handlePropChange = this.handlePropChange.bind(this);
@@ -124,18 +126,16 @@ class Lawyer extends React.Component {
             color: red300,
         };
 
-        if (!this.logged) {
-            return <Redirect to='/login'  />;
-        }
         if (this.state.redirectToList) {
-            return <Redirect to='/lawyers'  />;
+            return <Redirect to='/attorneys'  />;
         }
         return (
           <div className="container pageContent">
-            <h1>Lawyer</h1>
+            <h1>Attorney</h1>
             <ValidatorForm 
                 onSubmit={this.handleSubmit}
                 onError={errors => console.log(errors)}
+                readOnly={true}
             >   
                 <div>
                 <TextValidator
@@ -147,7 +147,8 @@ class Lawyer extends React.Component {
                     validators={['required']}
                     errorMessages={['this field is required']}
                     value={uzvername}
-                /></div>
+                />
+                </div>
                 
                 <div><TextValidator
                     label="Full Name"
@@ -182,7 +183,7 @@ class Lawyer extends React.Component {
                     label="Zip Code"
                     onChange={this.handleChange}
                     name="zip"
-                    type="number"
+                    type="text"
                     value={zip}
                     validators={['required', 'isZip']}
                     errorMessages={['this field is required', 'Zip Code is not valid']}
@@ -199,6 +200,7 @@ class Lawyer extends React.Component {
                 /></div>
                 <div>
                     <ExtendableMultiSelect
+                        id="select-languages"
                         label="Languages speaking"
                         items={this.state.allLanguages}
                         value={languages}
@@ -209,6 +211,7 @@ class Lawyer extends React.Component {
                 </div>    
                 <div>
                     <ExtendableMultiSelect
+                        id="select-services"
                         label="Offer Services"
                         items={this.state.allServices}
                         value={services}
@@ -217,6 +220,7 @@ class Lawyer extends React.Component {
                         getItemsUrl=""
                     ></ExtendableMultiSelect>
                 </div>
+
                 <div style={errStyle}>{errorText}</div>
                 <Button type="submit" color="primary" variant="contained">Submit</Button>
             </ValidatorForm>

@@ -156,3 +156,8 @@ svg:not(:root) {
 .filtered-layout .result {
     flex: 2 auto;
 }
+
+.fieldValue {
+    font-size:1rem;
+    margin-right: 10px;
+}

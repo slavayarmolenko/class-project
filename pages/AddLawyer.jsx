@@ -103,11 +103,11 @@ class AddLawyer extends React.Component {
             return <Redirect to='/login'  />;
         }
         if (this.state.redirectToList) {
-            return <Redirect to='/lawyers'  />;
+            return <Redirect to='/attorneys'  />;
         }
         return (
             <div className="container pageContent">
-            <h1>Create Lawyer</h1>
+            <h1>Create Attorney</h1>
             <ValidatorForm 
                 onSubmit={this.handleSubmit}
                 onError={errors => console.log(errors)}
@@ -175,7 +175,7 @@ class AddLawyer extends React.Component {
                     label="Zip Code"
                     onChange={this.handleChange}
                     name="zip"
-                    type="number"
+                    type="text"
                     value={zip}
                     validators={['required', 'isZip']}
                     errorMessages={['this field is required', 'Zip Code is not valid']}
@@ -192,6 +192,7 @@ class AddLawyer extends React.Component {
                 /></div>
                 <div>
                     <ExtendableMultiSelect
+                        id="select-language"
                         label="Languages speaking"
                         items={this.state.allLanguages}
                         value={languages}
@@ -202,6 +203,7 @@ class AddLawyer extends React.Component {
                 </div>    
                 <div>
                     <ExtendableMultiSelect
+                        id="select-service"
                         label="Offer Services"
                         items={this.state.allServices}
                         value={services}

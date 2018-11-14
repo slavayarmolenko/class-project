@@ -36,13 +36,13 @@ const AppRouter = () => (
 
                 <Route path="/" exact component={home} />
                 <Route path="/about/" component={about} />
-                <Route path="/lawyers/" component={lawyers} />
+                <Route path="/attorneys/" component={lawyers} />
                 <Route path="/donate/" component={donate} />
                 <Route path="/team/" component={team} />
                 <Route path="/contact/" component={contact} />
                 <Route path="/login/" component={login} />
-                <Route path="/addlawyer/" component={addLawyer} />
-                <Route path="/lawyer/:id" component={lawyer} />
+                <Route path="/addattorney/" component={addLawyer} />
+                <Route path="/attorney/:id" component={lawyer} />
             <Footer/>
         </div>
     </Router>

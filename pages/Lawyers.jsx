@@ -19,8 +19,8 @@ class Lawyers extends React.Component {
             dataLoaded: false,
             errorText: '',
             filter: {
-                distance: null,
-                usersZip: null,
+                distance: 10,
+                usersZip: '',
                 units: 'mil',
             },
             pageSize: 10
@@ -47,7 +47,7 @@ class Lawyers extends React.Component {
             })
             .catch(error => {
                 this.setState({
-                    error: error.Error,
+                    errorText: error.response.statusText,
                     dataLoaded: false
                 });
 
@@ -60,7 +60,21 @@ class Lawyers extends React.Component {
         this.setState({pageSize: pageSize});
     }
     deleteLawyer(lawyerId) {
-        console.log('Here we will delete an attorney with id=' + lawyerId);
+        axios.delete('/api/lawyers', {id: lawyerId})
+                .then(result => {
+                    this.setState({
+                        data: result.data.data,
+                        dataLoaded: true
+                    });
+
+                })
+                .catch(error => {
+                    this.setState({
+                        errorText: error.response.statusText,
+                        dataLoaded: false
+                    });
+
+                });
     }
     handleChangeFilter(event) {
         const { filter } = this.state;
@@ -73,20 +87,16 @@ class Lawyers extends React.Component {
         this.setState({ filter });
     }
     handleSubmit(event) {
-        console.log("here");
         event.preventDefault();
-
+        this.setState({ errorText: '' });
         let data = {
             params: this.state.filter
         };
-        console.log(data.usersZip);
         if (data.usersZip !== '' && data.distance !== '' && data.description !== '') {
             console.log('zip ', data.usersZip, 'distance ', data.distance, 'description ', data.description);
 
             axios.get('/api/lawyers', data)
                 .then(result => {
-                    console.log('Submitted laywer');
-                    console.log(result.data);
                     this.setState({
                         data: result.data.data,
                         dataLoaded: true
@@ -94,10 +104,8 @@ class Lawyers extends React.Component {
 
                 })
                 .catch(error => {
-                    console.log('error::');
-                    console.log('bebebe:' + error);
                     this.setState({
-                        error: error.Error,
+                        errorText: error.response.statusText,
                         dataLoaded: false
                     });
 
@@ -123,7 +131,7 @@ class Lawyers extends React.Component {
             {
                 Header: 'Name',
                 accessor: 'name', // String-based value accessors!
-                Cell: (props) => <Link to={"/lawyer/" + props.row.id}>{props.value}</Link>
+                Cell: (props) => <Link to={"/attorney/" + props.row.id}>{props.value}</Link>
             }, {
                 Header: 'E-mail',
                 accessor: 'email',
@@ -142,7 +150,7 @@ class Lawyers extends React.Component {
 
             return (
                 <div className="container pageContent">
-                    <h1>Laywers</h1>
+                    <h1>Attorneys</h1>
                     <div className="filtered-layout">
                         <div className="filter">
                             <ValidatorForm 
@@ -154,7 +162,7 @@ class Lawyers extends React.Component {
                                     label="Zip Code"
                                     onChange={this.handleChangeFilter}
                                     name="usersZip"
-                                    type="number"
+                                    type="text"
                                     value={usersZip}
                                     validators={['required', 'isZip']}
                                     errorMessages={['this field is required', 'Zip Code is not valid']}
