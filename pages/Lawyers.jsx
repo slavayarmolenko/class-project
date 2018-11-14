@@ -1,7 +1,15 @@
 import React from 'react';
 import ReactTable from 'react-table';
+import red from '@material-ui/core/colors/red';
 import { Link } from "react-router-dom";
 import axios from 'axios';
+import Button from '@material-ui/core/Button';
+import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
 
 class Lawyers extends React.Component {
     constructor() {
@@ -9,19 +17,29 @@ class Lawyers extends React.Component {
         this.state = {
             data: [],
             dataLoaded: false,
-            error: null
+            errorText: '',
+            filter: {
+                distance: null,
+                usersZip: null,
+                units: 'mil',
+            },
+            pageSize: 10
         };
-        //this.handleSubmit = this.handleSubmit.bind(this);
-
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChangeFilter = this.handleChangeFilter.bind(this);
+        this.changePageSize = this.changePageSize.bind(this);
 
     }
     componentDidMount() {
-        var self = this;
+        ValidatorForm.addValidationRule('isZip', (value) => {
+            if (/(^\d{5}$)|(^\d{5}-\d{4}$)/.test(value)) {
+                return true;
+            }
+            return false;
+        });
 
         axios.get('/api/lawyers')
             .then(result => {
-                console.log('All Lawyers');
-                console.log(result.data.data)
                 this.setState({
                     data: result.data.data,
                     dataLoaded: true
@@ -38,16 +56,28 @@ class Lawyers extends React.Component {
 
 
     }
+    changePageSize(pageSize, pageIndex) {
+        this.setState({pageSize: pageSize});
+    }
+    deleteLawyer(lawyerId) {
+        console.log('Here we will delete an attorney with id=' + lawyerId);
+    }
+    handleChangeFilter(event) {
+        const { filter } = this.state;
+        
+        if (event.target.type === 'checkbox') {
+            filter[event.target.name] = event.target.checked;
+        } else {
+            filter[event.target.name] = event.target.value;
+        }
+        this.setState({ filter });
+    }
     handleSubmit(event) {
         console.log("here");
         event.preventDefault();
 
         let data = {
-            params: {
-                usersZip: parseInt(document.searchLawyersNear.usersZip.value),
-                distance: parseInt(document.searchLawyersNear.distance.value),
-                units: document.searchLawyersNear.units.value
-            }
+            params: this.state.filter
         };
         console.log(data.usersZip);
         if (data.usersZip !== '' && data.distance !== '' && data.description !== '') {
@@ -80,25 +110,34 @@ class Lawyers extends React.Component {
         }
     }
     render() {
+        const errorText = this.state.errorText;
+        const red300 = red['500'];
+ 
+        const errStyle = {
+            color: red300,
+        };
 
+        const {distance, usersZip, units } = this.state.filter;
 
         const columns = [
-        {
-            Header: 'id',
-            accessor: 'id',
-            show: false
-        },
-        {
-            Header: 'Name',
-            accessor: 'name', // String-based value accessors!
-            Cell: (props) => <Link to={"/lawyer/" + props.row.id}>{props.value}</Link>
-        }, {
-            Header: 'email',
-            accessor: 'email',
-        }, {
-            Header: 'description',
-            accessor: 'description'
-        }];
+            {
+                Header: 'Name',
+                accessor: 'name', // String-based value accessors!
+                Cell: (props) => <Link to={"/lawyer/" + props.row.id}>{props.value}</Link>
+            }, {
+                Header: 'E-mail',
+                accessor: 'email',
+            }, {
+                Header: 'Description',
+                accessor: 'description'
+            },
+            {
+                Header: 'Delete',
+                accessor: 'id',
+                className: 'center',
+                Cell: (props) => <Button onClick={() => this.deleteLawyer.bind(this, props.row.id)}>x</Button>
+            },
+        ];
 
 
             return (
@@ -106,27 +145,55 @@ class Lawyers extends React.Component {
                     <h1>Laywers</h1>
                     <div className="filtered-layout">
                         <div className="filter">
-                            <form method="GET" name="searchLawyersNear" onSubmit={this.handleSubmit.bind(this)} >
+                            <ValidatorForm 
+                                onSubmit={this.handleSubmit}
+                                onError={errors => console.log(errors)}
+                            >   
+                                <div style={errStyle}>{errorText}</div>
+                                <div><TextValidator
+                                    label="Zip Code"
+                                    onChange={this.handleChangeFilter}
+                                    name="usersZip"
+                                    type="number"
+                                    value={usersZip}
+                                    validators={['required', 'isZip']}
+                                    errorMessages={['this field is required', 'Zip Code is not valid']}
+                                /></div>
                                 <div>
-                                    Enter your zip:
-                                <input type="text" name="usersZip" />
+                                    <TextValidator
+                                    label="Distance"
+                                    onChange={this.handleChangeFilter}
+                                    name="distance"
+                                    type="number"
+                                    validators={['required', 'isNumber']}
+                                    errorMessages={['this field is required', 'distance should be numeric']}
+                                    value={distance}/>
                                 </div>
                                 <div>
-                                    Distance:
-                                <input type="text" name="distance" />
+                                    <FormControl component="fieldset">
+                                        <FormLabel component="legend">Units</FormLabel>
+                                        <RadioGroup
+                                            aria-label="Units"
+                                            name="units"
+                                            value={units}
+                                            onChange={this.handleChangeFilter}
+                                            row
+                                        >
+                                            <FormControlLabel value="mil" control={<Radio />} label="Miles" />
+                                            <FormControlLabel value="km" control={<Radio />} label="Km" />
+                                        </RadioGroup>
+                                    </FormControl>
                                 </div>
-                                <input type="radio" name="units" value="km" defaultChecked /> Kilometers
-                            <input type="radio" name="units" value="mil" />Miles
-                            <div>
-                                    <input type="submit" value="Submit" />
-                                </div>
-                            </form>
+                                <Button type="submit" color="primary" variant="contained">Filter</Button>
+                            </ValidatorForm>
+                            
                         </div>
                         <div className="result">
                             <ReactTable
                                 data={this.state.data}
                                 columns={columns}
-                                pageSize="10"
+                                pageSize={this.state.pageSize}
+                                onPageSizeChange={this.changePageSize}
                             />
                         </div>
                     </div>

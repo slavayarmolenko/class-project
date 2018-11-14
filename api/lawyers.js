@@ -5,7 +5,6 @@ Created: August 2018
 */
 
 var ZipCodes = require('zipcodes');
-var mysql = require('mysql');
 
 exports.create = function (app, connection) {
 
@@ -66,8 +65,8 @@ exports.create = function (app, connection) {
         var i = 0;
         var ending = ");"
         if(req.body.id){
-            addNewLawyerLine1 = 'UPDATE lawyers ';
-            ending = "WHERE ID="+req.body.id+";";
+            addNewLawyerLine1 = 'UPDATE lawyers SET ';
+            ending = " WHERE ID="+req.body.id+";";
             addNewLawyerLine2 = ' ';
         }
         var column;
@@ -172,10 +171,9 @@ exports.create = function (app, connection) {
         }
         addNewLawyerLine1 = addNewLawyerLine1.substring(0, addNewLawyerLine1.length - 2);
         addNewLawyerLine2 = addNewLawyerLine2.substring(0, addNewLawyerLine2.length - 1) + ending;
-        console.log("Here " + req.body);
 
 
-
+        console.log('SQL: ' + addNewLawyerLine1 + addNewLawyerLine2);
         connection.query(addNewLawyerLine1 + addNewLawyerLine2, function (err, results) {
             if (err) {
                 res.json({ success: false, errMessage: err.sqlMessage });
@@ -188,7 +186,7 @@ exports.create = function (app, connection) {
     });
     var getLawyerById = function (req, res) {
         var userId = req.query.id;
-        connection.query('SELECT uzvername, name, email, ' +
+        connection.query('SELECT id, uzvername, name, email, ' +
             'description, zip, address, '+
             'daca, family, deportationProtection FROM lawyers WHERE id=' + userId, function (err, results) {
                 if (err)
@@ -196,7 +194,7 @@ exports.create = function (app, connection) {
                 if (results.length === 1) {
                     var lawyer = results[0];
                     lawyer.languages = [];
-                    lawyer.areas = [];
+                    lawyer.services = [];
                     res.json({ data: lawyer, success: true});
                 } else {
                     res.json({ data: {}, success: false, errMessage: 'Error: We found ' + results.length + ' lawyers with id {' + userId + '}'});

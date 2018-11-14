@@ -4,7 +4,7 @@ var session = require('express-session');
 
 
 exports.create = function (app, connection) {
-    console.log("we were in init session " + app);
+    console.log("we were in init session ");
     app.use(cookieParser());
     app.use(session({secret: "Shh, its a secret!"}));
     app.post('/api/login', function (req, res) {

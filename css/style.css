@@ -148,7 +148,7 @@ svg:not(:root) {
     }
 }
 
-
+.center { text-align: center; }
 
 .filtered-layout .filter {
     flex: 1 auto;
