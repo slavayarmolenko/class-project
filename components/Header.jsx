@@ -6,10 +6,10 @@ Created: August 2018
 import React from "react";
 import { Link } from "react-router-dom";
 import styles from './Header.module.scss';
-
-
+import { URLs } from '../utils/URLs.js';
 
 const Header = () => (
+            
             <header id="masthead" className={styles.siteHeader} role="banner" itemScope="" itemType="http://schema.org/WPHeader">
 
                 <div className={styles.headerTop}>
@@ -19,16 +19,16 @@ const Header = () => (
                             <div>
                                 <ul id="secondary-menu">
                                     <li id="menu-item-269">
-                                        <Link to="/attorneys/">Attorneys</Link>
+                                        <Link to={URLs.pages.ATTORNEYS}>Attorneys</Link>
                                     </li>
                                     <li id="menu-item-270">
-                                        <Link to="/donate/">Donate</Link>
+                                        <Link to={URLs.pages.DONATE}>Donate</Link>
                                     </li>
                                     <li id="menu-item-271">
-                                        <Link to="/login/">Login</Link>
+                                        <Link to={URLs.pages.LOGIN}>Login</Link>
                                     </li>
                                     <li id="menu-item-271">
-                                        <Link to="/addattorney/">Create Attorney</Link>
+                                        <Link to={URLs.pages.ADD_ATTORNEY}>Create Attorney</Link>
                                     </li>
                                 </ul>
                             </div>
@@ -67,17 +67,27 @@ const Header = () => (
                                     <li>
                                         <Link to="/">Home</Link>
                                     </li>
-                                    <li>
-                                        <Link to="/about/">About</Link>
+                                    <li className={styles.dropDownMenu}>
+                                            <span>People</span>
+                                            <ul>
+                                                <li><Link to={URLs.pages.TEAM}>Our Team</Link></li>
+                                                <li><Link to={URLs.pages.VOLONTEERS}>Our Volunteers</Link></li>
+                                                <li><Link to={URLs.pages.PARTNERS}>Our Partners</Link></li>
+                                                <li><Link to={URLs.pages.SPONSORS}>Our Sponsors</Link></li>
+                                            </ul>
                                     </li>
-                                    <li>
-                                        <Link to="/attorneys/">Attorneys</Link>
+                                    <li className={styles.dropDownMenu}>
+                                            <span>Projects</span>
+                                            <ul>
+                                                <li><Link to={URLs.pages.ATTORNEYS}>Attorney Database</Link></li>
+                                                <li><Link to={URLs.pages.ATTORNEYS}>Legal Fund</Link></li>
+                                                <li><Link to={URLs.pages.ATTORNEYS}>HIEROGLYPHS</Link></li>
+                                                <li><Link to={URLs.pages.ATTORNEYS}>Scholarship Fund</Link></li>
+                                            </ul>
                                     </li>
+                                    
                                     <li>
-                                        <Link to="/team/">Team</Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/contact/">Contact</Link>
+                                        <Link to={URLs.pages.TEAM}>Post</Link>
                                     </li>
                                 </ul>
                             </div>

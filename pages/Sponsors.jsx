@@ -3,7 +3,7 @@ import ReactTable from 'react-table';
 import axios from 'axios';
 import {URLs} from './../utils/URLs.js';
 
-class Team extends React.Component {
+class Sponsors extends React.Component {
     constructor() {
         super();
 
@@ -15,7 +15,7 @@ class Team extends React.Component {
 
     }
     componentDidMount() {
-        axios.get(URLs.services.USER)
+        axios.get(URLs.services.SPONSOR)
             .then(result => {
                 this.setState({
                     data: result.data.data,
@@ -44,7 +44,7 @@ class Team extends React.Component {
  
         return (
                 <div className="container pageContent">
-                    <h1>Team</h1>
+                    <h1>Sponsors</h1>
                     <div className="error">{this.state.errorText}</div>
                     <ReactTable
                         data={this.state.data}
@@ -56,4 +56,4 @@ class Team extends React.Component {
     }
 
 }
-export default Team;
+export default Sponsors;

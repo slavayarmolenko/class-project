@@ -1,3 +1,4 @@
+$submenu-side-margin: 20px;
 .siteHeader {
     
 }
@@ -191,5 +192,33 @@
 
 .siteHeader .headerTop .socialNetworks li a {
     color: #acacac;
+}
+
+.dropDownMenu {
+    position: relative;
+    & > li {
+        color: white;
+    }
+        ul {
+            margin-top: 0px;
+            padding-top: 20px;
+            left: -$submenu-side-margin;
+            background-color:rgba(0, 0, 0, 0.5);
+            display: none;
+            position: absolute;
+            top: 100%;
+            li, li:first-child {
+                margin-left: $submenu-side-margin;
+                margin-right: $submenu-side-margin;
+                font-style: italic;
+            }
+        }
+        &:hover {
+            ul {
+                display: block;
+            }
+        }
+        
+    
 }
 

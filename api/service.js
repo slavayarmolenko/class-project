@@ -2,7 +2,11 @@ var express = require('express');
 var app = express();
 var teamService = require('./team');
 var lawyersService = require('./lawyers');
+var partnersService = require('./partners');
+var sponsorsService = require('./sponsors');
+var volonteersService = require('./volonteers');
 var loginService = require('./login');
+var utilsService = require('./utils');
 var mysql = require('mysql');
 var bodyParser = require('body-parser');
 var connection = mysql.createConnection({
@@ -23,9 +27,13 @@ connection.connect(function (err) {
 
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
-            //})
+
+utilsService.create(app, connection);
 teamService.create(app, connection);
 lawyersService.create(app, connection);
+sponsorsService.create(app, connection);
+partnersService.create(app, connection);
+volonteersService.create(app, connection);
 loginService.create(app, connection);
 var server = app.listen(8081, function () {
     var host = server.address().address;

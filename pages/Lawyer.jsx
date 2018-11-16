@@ -7,6 +7,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
 import ExtendableMultiSelect from './../components/ExtendableMultiSelect.jsx';
 import axios from 'axios';
+import {URLs} from './../utils/URLs.js';
 //import DownshiftMultiple from '../components/DownshiftMultiple.jsx';
 
 class Lawyer extends React.Component {
@@ -70,7 +71,7 @@ class Lawyer extends React.Component {
     }
     handleSubmit() {
         this.setState({ errorText: '' });
-        axios.post('/api/lawyers', this.state.lawyer)
+        axios.post(URLs.services.LAWYER, this.state.lawyer)
                 .then(result => {
                     if (result.data.success) {
                         this.goToList();
@@ -88,7 +89,7 @@ class Lawyer extends React.Component {
                 });
     }
     getLawyerById() {
-        axios.get('/api/lawyers', { params: { id: this.props.id } })
+        axios.get(URLs.services.LAWYER, { params: { id: this.props.id } })
                 .then(result => {
                     if (result.data.success) {
                         this.setState({ lawyer: result.data.data });
@@ -202,11 +203,10 @@ class Lawyer extends React.Component {
                     <ExtendableMultiSelect
                         id="select-languages"
                         label="Languages speaking"
-                        items={this.state.allLanguages}
                         value={languages}
                         name="languages"
                         onChange={this.handleChange}
-                        getItemsUrl=""
+                        getItemsUrl={URLs.services.LANGUAGES}
                     />
                 </div>    
                 <div>

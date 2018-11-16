@@ -8,12 +8,12 @@ var ZipCodes = require('zipcodes');
 
 exports.create = function (app, connection) {
 
-    app.get('/api/lawyers', function (req, res) {
+    app.get('/api/lawyer', function (req, res) {
         if (req.query.id) {
             getLawyerById(req, res);
             return;
         }       
-        connection.query('SELECT * FROM lawyers', function (err, results) {
+        connection.query('SELECT id, email, name, description FROM lawyers', function (err, results) {
             if (err)
                 throw err;
             var usersZip = parseInt(req.query.usersZip);
@@ -22,27 +22,16 @@ exports.create = function (app, connection) {
             if (req.query.units == "km") {
                 usersDistance = ZipCodes.toMiles(usersDistance);
             };
+
             if ((usersDistance) && (usersZip)) {
                 for (var i = 0; i < results.length; i++) {
-                    if (ZipCodes.distance(usersZip, results[i].zip) < usersDistance) {
-                        var localid = results[i].id;
-                        var localemail = results[i].email;
-                        var localname = results[i].name;
-                        var localdescription = results[i].description;
-                        var entry = { id: localid, name: localname, email: localemail, description: localdescription };
-                        send.data.push(entry);
+                    var curResult = results[i];
+                    if (ZipCodes.distance(usersZip, curResult.zip) < usersDistance) {
+                        send.data.push(curResult);
                     }
                 }
             } else {
-                for (var i = 0; i < results.length; i++) {
-                    var localid = results[i].id;
-                    var localemail = results[i].email;
-                    var localname = results[i].name;
-                    var localdescription = results[i].description;
-                    var entry = { id: localid, name: localname, email: localemail, description: localdescription };
-
-                    send.data.push(entry);
-                }
+                send.data = results;
             }
             res.json(send);
         });
@@ -55,7 +44,7 @@ exports.create = function (app, connection) {
 
     
 
-    app.post('/api/lawyers', function (req, res) {
+    app.post('/api/lawyer', function (req, res) {
 
         // var addNewLawyerLine = 'INSERT INTO lawyers (uzvername, password, email, description, name, shortname, russian, spanish, english, zip, daca, family, deportationProtection, address) VALUES (';
         // addNewLawyerLine = addNewLawyerLine + request.body.uzvername + "," + request.body.password + "," + request.body.email  + "," + request.body.description  + "," + request.body.name + "," + request.body.shortname + "," + request.body.russian + "," + request.body.spanish + "," + request.body.english + "," + request.body.zip + "," + request.body.daca + "," + request.body.family + "," + request.body.deportationProtection + "," + request.body.address + ");";
@@ -203,16 +192,24 @@ exports.create = function (app, connection) {
 
     };
 
-    app.delete('/api/lawyers', function (req, res) {
-        console.log('Delete lawyer...');
+    app.delete('/api/lawyer', function (req, res) {
+        var userId = req.query.id;
+        if (!userId) {
+            return;
+        }
+        connection.query('DELETE FROM lawyers WHERE id=' + userId, function (delErr) {
+                if (delErr)
+                    throw delErr;
+                connection.query('SELECT id, email, name, description FROM lawyers', function (selectErr, results) {
+                    if (selectErr)
+                        throw selectErr;
+                    res.json({ data: results, success: true});
+                });
+        });
+
     });
 
 };
 
-/*
-Vladislav Iarmolenko
-slava.yarmolenko@gmail.com
-Created: August 2018
-*/
 
 

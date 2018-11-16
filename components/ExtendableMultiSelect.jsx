@@ -46,7 +46,7 @@ class ExtendableMultiSelect extends React.Component {
         axios.get(itemsUrl)
                 .then(result => {
                     if (result.data.success) {
-                        this.setState({ lawyer: result.data.data });
+                        this.setState({ items: result.data.data });
                     } else {
                         this.setState({
                             errorText: 'Error: ' + result.errMessage
@@ -58,21 +58,7 @@ class ExtendableMultiSelect extends React.Component {
                         errorText: 'Error: ' + error.response.statusText,
                     });
                 });
-        axios.get('/api/lawyers', { params: { id: this.props.id } })
-                .then(result => {
-                    if (result.data.success) {
-                        this.setState({ lawyer: result.data.data });
-                    } else {
-                        this.setState({
-                            errorText: 'Error: ' + result.errMessage
-                        });
-                    }
-                })
-                .catch(error => {
-                    this.setState({
-                        errorText: 'Error: ' + error.response.statusText,
-                    });
-                });
+        
     }
     handleSelectionChange(event) {
         var itemSelected = event.target.value;

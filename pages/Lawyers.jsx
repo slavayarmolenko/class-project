@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactTable from 'react-table';
-import red from '@material-ui/core/colors/red';
 import { Link } from "react-router-dom";
 import axios from 'axios';
 import Button from '@material-ui/core/Button';
@@ -10,6 +9,9 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
+import { URLs } from '../utils/URLs.js';
+import ConfirmationDialog from './../components/ConfirmDialog.jsx';
+
 
 class Lawyers extends React.Component {
     constructor() {
@@ -23,12 +25,16 @@ class Lawyers extends React.Component {
                 usersZip: '',
                 units: 'mil',
             },
-            pageSize: 10
+            pageSize: 10,
+            confirmDeleteDialogOpen: false,
+            
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChangeFilter = this.handleChangeFilter.bind(this);
         this.changePageSize = this.changePageSize.bind(this);
-
+        this.handleConfirmDelete = this.handleConfirmDelete.bind(this);
+        this.handleOpenConfirmDialog = this.handleOpenConfirmDialog.bind(this);
+        this.deleteLawyerId = 0;
     }
     componentDidMount() {
         ValidatorForm.addValidationRule('isZip', (value) => {
@@ -38,7 +44,7 @@ class Lawyers extends React.Component {
             return false;
         });
 
-        axios.get('/api/lawyers')
+        axios.get(URLs.services.LAWYER)
             .then(result => {
                 this.setState({
                     data: result.data.data,
@@ -47,7 +53,7 @@ class Lawyers extends React.Component {
             })
             .catch(error => {
                 this.setState({
-                    errorText: error.response.statusText,
+                    errorText: 'Error: ' + error.response.statusText,
                     dataLoaded: false
                 });
 
@@ -59,8 +65,19 @@ class Lawyers extends React.Component {
     changePageSize(pageSize, pageIndex) {
         this.setState({pageSize: pageSize});
     }
-    deleteLawyer(lawyerId) {
-        axios.delete('/api/lawyers', {id: lawyerId})
+
+    handleOpenConfirmDialog(deleteLawyerId) {
+        this.deleteLawyerId = deleteLawyerId;
+        this.setState({ confirmDeleteDialogOpen: true });
+    }
+    handleConfirmDelete(confirmed) {
+        this.setState({ confirmDeleteDialogOpen: false});
+        if (confirmed && this.deleteLawyerId) {
+            this.deleteLawyer(this.deleteLawyerId);
+        }
+    }
+    deleteLawyer() {
+        axios.delete(URLs.services.LAWYER, {params: {id: this.deleteLawyerId}})
                 .then(result => {
                     this.setState({
                         data: result.data.data,
@@ -95,7 +112,7 @@ class Lawyers extends React.Component {
         if (data.usersZip !== '' && data.distance !== '' && data.description !== '') {
             console.log('zip ', data.usersZip, 'distance ', data.distance, 'description ', data.description);
 
-            axios.get('/api/lawyers', data)
+            axios.get(URLs.services.LAWYER, data)
                 .then(result => {
                     this.setState({
                         data: result.data.data,
@@ -119,11 +136,6 @@ class Lawyers extends React.Component {
     }
     render() {
         const errorText = this.state.errorText;
-        const red300 = red['500'];
- 
-        const errStyle = {
-            color: red300,
-        };
 
         const {distance, usersZip, units } = this.state.filter;
 
@@ -131,7 +143,7 @@ class Lawyers extends React.Component {
             {
                 Header: 'Name',
                 accessor: 'name', // String-based value accessors!
-                Cell: (props) => <Link to={"/attorney/" + props.row.id}>{props.value}</Link>
+                Cell: (props) => <Link to={URLs.pages.ATTORNEY + props.row.id}>{props.value}</Link>
             }, {
                 Header: 'E-mail',
                 accessor: 'email',
@@ -143,7 +155,9 @@ class Lawyers extends React.Component {
                 Header: 'Delete',
                 accessor: 'id',
                 className: 'center',
-                Cell: (props) => <Button onClick={() => this.deleteLawyer.bind(this, props.row.id)}>x</Button>
+                Cell: (props) => <Button onClick={() => {
+                    this.handleOpenConfirmDialog(props.row.id);
+                }}>x</Button>
             },
         ];
 
@@ -157,7 +171,7 @@ class Lawyers extends React.Component {
                                 onSubmit={this.handleSubmit}
                                 onError={errors => console.log(errors)}
                             >   
-                                <div style={errStyle}>{errorText}</div>
+                                <div className="error">{errorText}</div>
                                 <div><TextValidator
                                     label="Zip Code"
                                     onChange={this.handleChangeFilter}
@@ -204,6 +218,12 @@ class Lawyers extends React.Component {
                                 onPageSizeChange={this.changePageSize}
                             />
                         </div>
+                        <ConfirmationDialog
+                            open={this.state.confirmDeleteDialogOpen}
+                            onClose={this.handleConfirmDelete}
+                            title="Confirm delete"
+                            text="Do you want to delete the attorney?"
+                        />
                     </div>
                 </div>
             );

@@ -161,3 +161,7 @@ svg:not(:root) {
     font-size:1rem;
     margin-right: 10px;
 }
+
+.error {
+    color: #ff0000;
+}

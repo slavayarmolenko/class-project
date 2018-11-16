@@ -4,6 +4,7 @@ import red from '@material-ui/core/colors/red';
 import Button from '@material-ui/core/Button';
 import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
 import axios from 'axios';
+import {URLs} from './../utils/URLs.js';
 
 import ExtendableMultiSelect from './../components/ExtendableMultiSelect.jsx';
 
@@ -23,7 +24,6 @@ class AddLawyer extends React.Component {
                 languages: [],
                 services: [],
             },
-            allLanguages: [{id: 0, name: 'English'},{id:1, name:'Spanish'}, {id:2, name: 'Russian'}],
             allServices: [{id: 0, name: 'DACA'},{id:1, name:'Family Reunion'}, {id:2, name: 'Deportation'}],
             errorText: '',
             redirectToList: false,
@@ -66,7 +66,7 @@ class AddLawyer extends React.Component {
     
     handleSubmit() {
         this.setState({ errorText: '' });
-        axios.post('/api/lawyers', this.state.lawyer)
+        axios.post(URLs.services.LAWYER, this.state.lawyer)
                 .then(result => {
                     if (result.data.success) {
                         this.goToList();
@@ -194,11 +194,10 @@ class AddLawyer extends React.Component {
                     <ExtendableMultiSelect
                         id="select-language"
                         label="Languages speaking"
-                        items={this.state.allLanguages}
                         value={languages}
                         name="languages"
                         onChange={this.handleChange}
-                        getItemsUrl=""
+                        getItemsUrl={URLs.services.LANGUAGES}
                     />
                 </div>    
                 <div>
@@ -212,7 +211,7 @@ class AddLawyer extends React.Component {
                         getItemsUrl=""
                     ></ExtendableMultiSelect>
                 </div>
-                <div style={errStyle}>{errorText}</div>
+                <div className="error">{errorText}</div>
                 <Button type="submit" color="primary" variant="contained">Submit</Button>
             </ValidatorForm>
             </div>
