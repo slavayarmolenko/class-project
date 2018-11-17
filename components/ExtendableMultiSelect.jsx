@@ -4,6 +4,7 @@ import Select from '@material-ui/core/Select';
 import Input from '@material-ui/core/Input';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 import { TextValidator} from 'react-material-ui-form-validator';
 import axios from 'axios';
 
@@ -98,14 +99,21 @@ class ExtendableMultiSelect extends React.Component {
 
     render() {
         return (
-                <span>
-                    <div><InputLabel htmlFor={this.props.id}>{this.props.label}</InputLabel></div>
-                    <Select
-                        multiple
+                    <TextField
+                        select
+                        label={this.props.label}
+                        fullWidth={true}
                         value={this.state.value}
                         onChange={this.handleSelectionChange}
-                        input={<Input id={this.props.id} />}
-                        fullWidth={true}
+                        SelectProps={{
+                            MenuProps: {
+                                style: {
+                                    width: 200,
+                                }
+                            },
+                        }}
+                        helperText={"Please select your " + this.props.label }
+                        margin="normal"
                     >
                         <MenuItem key={null} value={null}>
                                 <TextValidator
@@ -125,8 +133,7 @@ class ExtendableMultiSelect extends React.Component {
                             {item.name}
                         </MenuItem>
                         ))}
-                    </Select>
-                </span>
+                    </TextField>
                    );
     }
 }
