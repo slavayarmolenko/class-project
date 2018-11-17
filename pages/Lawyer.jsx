@@ -50,7 +50,7 @@ class Lawyer extends React.Component {
             }
             return false;
         });
-        if (this.state.isNew) {
+        if (!this.state.isNew) {
             this.getLawyerById(this.props.id);
         }
     }
