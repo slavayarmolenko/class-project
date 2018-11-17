@@ -1,6 +1,5 @@
 import React from 'react';
 import { Redirect } from "react-router-dom";
-import red from '@material-ui/core/colors/red';
 import Button from '@material-ui/core/Button';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -51,7 +50,7 @@ class Lawyer extends React.Component {
             }
             return false;
         });
-        if (this.isNew) {
+        if (this.state.isNew) {
             this.getLawyerById(this.props.id);
         }
     }
@@ -114,6 +113,7 @@ class Lawyer extends React.Component {
             description, zip, languages, address,
             services} = this.state.lawyer;
         const errorText = this.state.errorText;
+        const isNew = this.state.isNew;
         
 
         if (this.state.redirectToList) {
@@ -121,7 +121,7 @@ class Lawyer extends React.Component {
         }
         return (
           <div className="container pageContent">
-            <h1>Attorney</h1>
+            <h1>{ isNew ? 'Create Attorney' : 'Attorney'}</h1>
             <ValidatorForm 
                 onSubmit={this.handleSubmit}
                 onError={errors => console.log(errors)}
@@ -137,6 +137,12 @@ class Lawyer extends React.Component {
                     validators={['required']}
                     errorMessages={['this field is required']}
                     value={uzvername}
+                    InputProps={{
+                        inputComponent: () => <span>{uzvername}</span>,
+                        inputProps: {
+                          style: { backgroundColor: 'yellow'},
+                        },
+                      }}
                 />
                 </div><div>   
                 <TextValidator
@@ -210,6 +216,7 @@ class Lawyer extends React.Component {
                     <ExtendableMultiSelect
                         id="select-languages"
                         label="Languages speaking"
+                        helperText="Please, select/add languages you speak"
                         value={languages}
                         name="languages"
                         onChange={this.handleChange}
@@ -220,6 +227,7 @@ class Lawyer extends React.Component {
                     <ExtendableMultiSelect
                         id="select-services"
                         label="Offer Services"
+                        helperText="Please, select/add services you offer"
                         items={this.state.allServices}
                         value={services}
                         name="services"

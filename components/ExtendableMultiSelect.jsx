@@ -18,6 +18,7 @@ class ExtendableMultiSelect extends React.Component {
             items:[<id:string, name: string>]
             value:[<string>]
             name: string
+            helperText: string
             enterNewLabel: string
             getItemsUrl: string
          */
@@ -112,7 +113,7 @@ class ExtendableMultiSelect extends React.Component {
                                 }
                             },
                         }}
-                        helperText={"Please select your " + this.props.label }
+                        helperText={this.props.helperText }
                         margin="normal"
                     >
                         <MenuItem key={null} value={null}>
