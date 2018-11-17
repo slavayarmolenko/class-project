@@ -57,20 +57,7 @@ class Login extends React.Component {
 
         const { data, dataLoaded, error } = this.state;
         var self = this;
-        axios.post('/api/login', { login: 'Vasya', password: 'aaa123' })
-            .then(function (res) {
-                console.log('Getting response');
-                console.log(res);
-                return res.json();
-            })
-            .then(function (login) {
-                console.log('Getting json');
-                console.log(login);
-                if (!self.state.dataLoaded) {
-
-                    self.setState({ success: login.success, login: login.login, ssid: login.ssid });
-                }
-            });
+        
         if (error) {
             return <p>{error}</p>;
         } else if (self.state.success) {

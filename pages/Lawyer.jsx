@@ -26,11 +26,10 @@ class Lawyer extends React.Component {
                 languages: [],
                 services: [],
             },
-            allLanguages: [{id: 0, name: 'English'},{id:1, name:'Spanish'}, {id:2, name: 'Russian'}],
-            allServices: [{id: 0, name: 'DACA'},{id:1, name:'Family Reunion'}, {id:2, name: 'Deportation'}],
             errorText: '',
             redirectToList: false,
-            logged: false
+            logged: false,
+            isNew: this.props.id ? false : true
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -52,7 +51,9 @@ class Lawyer extends React.Component {
             }
             return false;
         });
-        this.getLawyerById(this.props.id);
+        if (this.isNew) {
+            this.getLawyerById(this.props.id);
+        }
     }
     handleChange(event) {
         const { lawyer } = this.state;
@@ -113,19 +114,7 @@ class Lawyer extends React.Component {
             description, zip, languages, address,
             services} = this.state.lawyer;
         const errorText = this.state.errorText;
-        const red300 = red['500'];
-        /*const MenuProps = {
-            PaperProps: {
-              style: {
-                maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-                width: 250,
-              },
-            },
-          };*/
- 
-        const errStyle = {
-            color: red300,
-        };
+        
 
         if (this.state.redirectToList) {
             return <Redirect to='/attorneys'  />;
@@ -149,8 +138,26 @@ class Lawyer extends React.Component {
                     errorMessages={['this field is required']}
                     value={uzvername}
                 />
-                </div>
-                
+                </div><div>   
+                <TextValidator
+                    label="Password"
+                    onChange={this.handleChange}
+                    name="password"
+                    type="password"
+                    validators={['required']}
+                    errorMessages={['this field is required']}
+                    value={password}
+                    
+                /><TextValidator
+                    label="Repeat password"
+                    onChange={this.handleChange}
+                    name="repeatPassword"
+                    type="password"
+                    validators={['isPasswordMatch', 'required']}
+                    errorMessages={['password mismatch', 'this field is required']}
+                    value={repeatPassword}
+                    style={{marginLeft: '15px'}}
+                /></div>
                 <div><TextValidator
                     label="Full Name"
                     onChange={this.handleChange}
@@ -221,7 +228,7 @@ class Lawyer extends React.Component {
                     ></ExtendableMultiSelect>
                 </div>
 
-                <div style={errStyle}>{errorText}</div>
+                <div className="error">{errorText}</div>
                 <Button type="submit" color="primary" variant="contained">Submit</Button>
             </ValidatorForm>
             </div>

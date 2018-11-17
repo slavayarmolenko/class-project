@@ -17,7 +17,7 @@ import Partners from './pages/Partners.jsx';
 import About from './pages/About.jsx';
 import Donate from './pages/Donate.jsx';
 import Login from './pages/Login.jsx';
-import AddLawyer from './pages/AddLawyer.jsx';
+import Company from './pages/Company.jsx';
 import Lawyer from './pages/Lawyer.jsx';
 import {URLs} from './utils/URLs.js';
 
@@ -28,8 +28,10 @@ const team = () => <Team></Team>;
 const lawyers = () => <Lawyers></Lawyers>;
 const donate = () => <Donate></Donate>;
 const login = () => <Login></Login>;
-const addLawyer = () => <AddLawyer></AddLawyer>;
+const create_company = () => <Company></Company>;
+const create_lawyer = () => <Lawyer></Lawyer>;
 const lawyer = (input) => <Lawyer id={input.match.params.id}></Lawyer>;
+const company = (input) => <Company id={input.match.params.id}></Company>;
 const sponsors = () => <Sponsors></Sponsors>;
 const partners = () => <Partners></Partners>;
 const volonteers = () => <Volonteers></Volonteers>;
@@ -42,17 +44,19 @@ const AppRouter = () => (
 
 
                 <Route path="/" exact component={home} />
-                <Route path="/about/" component={about} />
+                <Route path={URLs.pages.ABOUT} component={about} />
                 <Route path={URLs.pages.ATTORNEYS} component={lawyers} />
-                <Route path="/donate/" component={donate} />
-                <Route path="/team/" component={team} />
-                <Route path="/contact/" component={contact} />
-                <Route path="/login/" component={login} />
-                <Route path="/addattorney/" component={addLawyer} />
-                <Route path="/attorney/:id" component={lawyer} />
-                <Route path="/sponsors/" component={sponsors} />
-                <Route path="/partners/" component={partners} />
-                <Route path="/volonteers/" component={volonteers} />
+                <Route path={URLs.pages.DONATE} component={donate} />
+                <Route path={URLs.pages.TEAM} component={team} />
+                <Route path={URLs.pages.CONTACT} component={contact} />
+                <Route path={URLs.pages.LOGIN} component={login} />
+                <Route path={URLs.pages.COMPANY} component={create_company} />
+                <Route path={URLs.pages.COMPANY + ':id'} component={company} />
+                <Route path={URLs.pages.ATTORNEY} component={create_lawyer} />
+                <Route path={URLs.pages.ATTORNEY + ':id'} component={lawyer} />
+                <Route path={URLs.pages.SPONSORS} component={sponsors} />
+                <Route path={URLs.pages.PARTNERS} component={partners} />
+                <Route path={URLs.pages.VOLONTEERS} component={volonteers} />
             <Footer/>
         </div>
     </Router>

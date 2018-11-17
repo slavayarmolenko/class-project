@@ -13,7 +13,7 @@ exports.create = function (app, connection) {
             getLawyerById(req, res);
             return;
         }       
-        connection.query('SELECT id, email, name, description FROM lawyers', function (err, results) {
+        connection.query('SELECT id, email, name FROM lawyers', function (err, results) {
             if (err)
                 throw err;
             var usersZip = parseInt(req.query.usersZip);
@@ -200,7 +200,7 @@ exports.create = function (app, connection) {
         connection.query('DELETE FROM lawyers WHERE id=' + userId, function (delErr) {
                 if (delErr)
                     throw delErr;
-                connection.query('SELECT id, email, name, description FROM lawyers', function (selectErr, results) {
+                connection.query('SELECT id, email, name FROM lawyers', function (selectErr, results) {
                     if (selectErr)
                         throw selectErr;
                     res.json({ data: results, success: true});

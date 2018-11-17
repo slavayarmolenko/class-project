@@ -27,7 +27,7 @@ class Lawyers extends React.Component {
             },
             pageSize: 10,
             confirmDeleteDialogOpen: false,
-            
+            allServices: [{id: 0, name: 'DACA'},{id:1, name:'Family Reunion'}, {id:2, name: 'Deportation'}],
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChangeFilter = this.handleChangeFilter.bind(this);
@@ -77,7 +77,8 @@ class Lawyers extends React.Component {
         }
     }
     deleteLawyer() {
-        axios.delete(URLs.services.LAWYER, {params: {id: this.deleteLawyerId}})
+        var { filter } = this.state.filter;
+        axios.delete(URLs.services.LAWYER, {params: {id: this.deleteLawyerId, filter}})
                 .then(result => {
                     this.setState({
                         data: result.data.data,
@@ -110,8 +111,6 @@ class Lawyers extends React.Component {
             params: this.state.filter
         };
         if (data.usersZip !== '' && data.distance !== '' && data.description !== '') {
-            console.log('zip ', data.usersZip, 'distance ', data.distance, 'description ', data.description);
-
             axios.get(URLs.services.LAWYER, data)
                 .then(result => {
                     this.setState({

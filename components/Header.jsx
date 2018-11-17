@@ -28,7 +28,7 @@ const Header = () => (
                                         <Link to={URLs.pages.LOGIN}>Login</Link>
                                     </li>
                                     <li id="menu-item-271">
-                                        <Link to={URLs.pages.ADD_ATTORNEY}>Create Attorney</Link>
+                                        <Link to={URLs.pages.ATTORNEY}>Create Attorney</Link>
                                     </li>
                                 </ul>
                             </div>
