@@ -33,20 +33,22 @@ class ExtendableMultiSelect extends React.Component {
         this.handlePropChange = this.handlePropChange.bind(this);
         this.handleAdd = this.handleAdd.bind(this);
         this.onNewNameKeyPress = this.onNewNameKeyPress.bind(this);
+        this._isMounted = false;
     }
-    /*componentDidUpdate(nextProps) {
-        this.setState({
-            items: nextProps.items || [],
-            value: nextProps.value || []
-        });
-    }*/
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
     componentDidMount() {
+        this._isMounted = true;
         var itemsUrl = this.props.getItemsUrl;
         if (!itemsUrl) {
             return;
         }
         axios.get(itemsUrl)
                 .then(result => {
+                    if (!this._isMounted) {
+                        return;
+                    }
                     if (result.data.success) {
                         this.setState({ items: result.data.data });
                     } else {

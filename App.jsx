@@ -28,11 +28,7 @@ const team = () => <Team></Team>;
 const lawyers = () => <Lawyers></Lawyers>;
 const donate = () => <Donate></Donate>;
 const login = () => <Login></Login>;
-//const create_company = () => <Company></Company>;
-const create_lawyer = () => <Lawyer></Lawyer>;
-const lawyer = (input) => <Lawyer id={
-    input.match.params.id
-}></Lawyer>;
+const lawyer = (input) => <Lawyer id={input.match.params.id}></Lawyer>;
 const company = (input) => <Company id={input.match.params.id}></Company>;
 const sponsors = () => <Sponsors></Sponsors>;
 const partners = () => <Partners></Partners>;
@@ -52,7 +48,9 @@ const AppRouter = () => (
                 <Route path={URLs.pages.TEAM} component={team} />
                 <Route path={URLs.pages.CONTACT} component={contact} />
                 <Route path={URLs.pages.LOGIN} component={login} />
+                <Route path={URLs.pages.CREATE_COMPANY} component={company} />
                 <Route path={URLs.pages.COMPANY + ':id'} component={company} />
+                <Route path={URLs.pages.CREATE_ATTORNEY} component={lawyer} />
                 <Route path={URLs.pages.ATTORNEY + ':id'} component={lawyer} />
                 <Route path={URLs.pages.SPONSORS} component={sponsors} />
                 <Route path={URLs.pages.PARTNERS} component={partners} />

@@ -19,6 +19,7 @@ class Lawyer extends React.Component {
                 name: '',
                 email: '',
                 password: '',
+                repeatPassword: '',
                 description: '',
                 zip: '',        
                 address: '',
@@ -33,10 +34,14 @@ class Lawyer extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handlePropChange = this.handlePropChange.bind(this);
-        
+        this._isMounted = false;
+    }
+    componentWillUnmount() {
+        this._isMounted = false;
     }
     
     componentDidMount() {
+        this._isMounted = true;
         // custom rule will have name 'isPasswordMatch'
         ValidatorForm.addValidationRule('isPasswordMatch', (value) => {
             if (value !== this.state.lawyer.password) {
@@ -91,7 +96,12 @@ class Lawyer extends React.Component {
     getLawyerById() {
         axios.get(URLs.services.LAWYER, { params: { id: this.props.id } })
                 .then(result => {
+                    if (!this._isMounted) {
+                        return;
+                    }
                     if (result.data.success) {
+                        result.data.data.repeatPassword = '';
+                        result.data.data.password = '';
                         this.setState({ lawyer: result.data.data });
                     } else {
                         this.setState({
@@ -109,7 +119,7 @@ class Lawyer extends React.Component {
         this.setState({redirectToList: true});
     }
     render() {
-        const { uzvername, name, email, password, repeatPassword, 
+        const { uzvername, name, email, password, repeatPassword,
             description, zip, languages, address,
             services} = this.state.lawyer;
         const errorText = this.state.errorText;
@@ -127,43 +137,40 @@ class Lawyer extends React.Component {
                 onError={errors => console.log(errors)}
                 readOnly={true}
             >   
+                {this.logged ? 
                 <div>
-                <TextValidator
-                    label="Username"
-                    onChange={this.handleChange}
-                    readOnly={true}
-                    name="uzvername"
-                    type="text"
-                    validators={['required']}
-                    errorMessages={['this field is required']}
-                    value={uzvername}
-                    InputProps={{
-                        inputComponent: () => <span>{uzvername}</span>,
-                        inputProps: {
-                          style: { backgroundColor: 'yellow'},
-                        },
-                      }}
-                />
-                </div><div>   
-                <TextValidator
-                    label="Password"
-                    onChange={this.handleChange}
-                    name="password"
-                    type="password"
-                    validators={['required']}
-                    errorMessages={['this field is required']}
-                    value={password}
-                    
-                /><TextValidator
-                    label="Repeat password"
-                    onChange={this.handleChange}
-                    name="repeatPassword"
-                    type="password"
-                    validators={['isPasswordMatch', 'required']}
-                    errorMessages={['password mismatch', 'this field is required']}
-                    value={repeatPassword}
-                    style={{marginLeft: '15px'}}
-                /></div>
+                    <div>
+                    <TextValidator
+                        label="Username"
+                        onChange={this.handleChange}
+                        readOnly={true}
+                        name="uzvername"
+                        type="text"
+                        validators={['required']}
+                        errorMessages={['this field is required']}
+                        value={uzvername}
+                    />
+                    </div><div>   
+                    <TextValidator
+                        label="Password"
+                        onChange={this.handleChange}
+                        name="password"
+                        type="password"
+                        validators={['required']}
+                        errorMessages={['this field is required']}
+                        value={password}
+                        
+                    /><TextValidator
+                        label="Repeat password"
+                        onChange={this.handleChange}
+                        name="repeatPassword"
+                        type="password"
+                        validators={['isPasswordMatch', 'required']}
+                        errorMessages={['password mismatch', 'this field is required']}
+                        value={repeatPassword}
+                        style={{marginLeft: '15px'}}
+                    /></div>
+                </div> : '' }
                 <div><TextValidator
                     label="Full Name"
                     onChange={this.handleChange}
@@ -209,7 +216,7 @@ class Lawyer extends React.Component {
                     type="text"
                     validators={[]}
                     errorMessages={[]}
-                    value={address}
+                    value={address || ''}
                     fullWidth={true}
                 /></div>
                 <div>
@@ -228,16 +235,16 @@ class Lawyer extends React.Component {
                         id="select-services"
                         label="Offer Services"
                         helperText="Please, select/add services you offer"
-                        items={this.state.allServices}
                         value={services}
                         name="services"
                         onChange={this.handleChange}
-                        getItemsUrl=""
+                        getItemsUrl={URLs.services.SERVICES}
                     ></ExtendableMultiSelect>
                 </div>
-
                 <div className="error">{errorText}</div>
-                <Button type="submit" color="primary" variant="contained">Submit</Button>
+                {
+                    this.logged ? <Button type="submit" color="primary" variant="contained">Submit</Button> : ''
+                }
             </ValidatorForm>
             </div>
                    );
