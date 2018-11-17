@@ -175,15 +175,47 @@ exports.create = function (app, connection) {
     });
     var getLawyerById = function (req, res) {
         var userId = req.query.id;
-        connection.query('SELECT id, uzvername, name, email, ' +
-            'description, zip, address '+
-            'FROM lawyers WHERE id=' + userId, function (err, results) {
+        connection.query('SELECT * FROM lawyers LEFT JOIN lawyer_language ON lawyers.id = lawyer_language.lawyerID LEFT JOIN lawyer_service ON lawyers.id = lawyer_service.lawyerID WHERE lawyers.id = '+ userId, function (err, results) {
                 if (err)
                     throw err;
+                    var languages = [];
+                languages[0] = results[0].languageID;
+                var services = [];
+                services[0] = results[0].serviceID;
+                var isPresent;
+                for (var i = 1; i < results.length; i++){
+                    isPresent = true;
+                    for (var a = 0; a < languages.length; a++){
+                    if(results[i].languageID == languages[a]){
+                        isPresent = false;
+                        console.log("here " + results[i].languageID);
+                    }
+                    
+                    
+                    }
+                    if(isPresent){
+                    languages.push(results[i].languageID);
+                    }
+                }
+                for (var i = 1; i < results.length; i++){
+                    isPresent = true;
+                    for (var a = 0; a < services.length; a++){
+                    if(results[i].serviceID == services[a]){
+                        isPresent = false;
+                        console.log("here " + results[i].serviceID);
+                    }
+                    
+                    
+                    }
+                    if(isPresent){
+                    services.push(results[i].serviceID);
+                    }
+                }
+                console.log("services" + services + " languages:" + languages);
                 if (results.length === 1) {
                     var lawyer = results[0];
-                    lawyer.languages = [];
-                    lawyer.services = [];
+                    lawyer.languages = languages;
+                    lawyer.services = services;
                     res.json({ data: lawyer, success: true});
                 } else {
                     res.json({ data: {}, success: false, errMessage: 'Error: We found ' + results.length + ' lawyers with id {' + userId + '}'});
