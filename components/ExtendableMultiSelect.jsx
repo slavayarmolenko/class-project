@@ -4,7 +4,8 @@ import Select from '@material-ui/core/Select';
 import Input from '@material-ui/core/Input';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
+import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import { TextValidator} from 'react-material-ui-form-validator';
 import axios from 'axios';
 
@@ -64,6 +65,11 @@ class ExtendableMultiSelect extends React.Component {
                 });
         
     }
+    componentWillReceiveProps(nextProps){
+        if(nextProps.value!==this.props.value){
+          this.setState({value: nextProps.value });
+        }
+    }
     handleSelectionChange(event) {
         var itemSelected = event.target.value;
         if (itemSelected.findIndex(function(newlySelectedItem) { return newlySelectedItem === null }) === -1) {
@@ -101,22 +107,17 @@ class ExtendableMultiSelect extends React.Component {
     }
 
     render() {
+        const value = this.state.value;
+        const items = this.state.items;
         return (
-                    <TextField
-                        select
-                        label={this.props.label}
-                        fullWidth={true}
-                        value={this.state.value}
+                <FormControl style={{display: 'flex', flexWrap: 'wrap'}}>
+
+                    <InputLabel htmlFor={this.props.id}>{this.props.label}</InputLabel>
+                    <Select
+                        multiple
+                        value={value}
                         onChange={this.handleSelectionChange}
-                        SelectProps={{
-                            MenuProps: {
-                                style: {
-                                    width: 200,
-                                }
-                            },
-                        }}
-                        helperText={this.props.helperText }
-                        margin="normal"
+                        input={<Input id={this.props.id} />}
                     >
                         <MenuItem key={null} value={null}>
                                 <TextValidator
@@ -131,12 +132,14 @@ class ExtendableMultiSelect extends React.Component {
                                 />
                                 <Button onClick={this.handleAdd}>+</Button>
                         </MenuItem>
-                        {this.state.items.map(item => (
+                        {items.map(item => (
                         <MenuItem key={item.id} value={item.id}>
                             {item.name}
                         </MenuItem>
                         ))}
-                    </TextField>
+                    </Select>
+                    <FormHelperText>{this.props.helperText}</FormHelperText>
+                </FormControl>
                    );
     }
 }

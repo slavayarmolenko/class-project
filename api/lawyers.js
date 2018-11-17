@@ -212,14 +212,12 @@ exports.create = function (app, connection) {
                     }
                 }
                 console.log("services" + services + " languages:" + languages);
-                if (results.length === 1) {
+                
                     var lawyer = results[0];
                     lawyer.languages = languages;
                     lawyer.services = services;
                     res.json({ data: lawyer, success: true});
-                } else {
-                    res.json({ data: {}, success: false, errMessage: 'Error: We found ' + results.length + ' lawyers with id {' + userId + '}'});
-                }
+                
         });
 
     };

@@ -28,7 +28,7 @@ class Lawyer extends React.Component {
             },
             errorText: '',
             redirectToList: false,
-            logged: false,
+            logged: true,
             isNew: this.props.id ? false : true
         };
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -124,6 +124,7 @@ class Lawyer extends React.Component {
             services} = this.state.lawyer;
         const errorText = this.state.errorText;
         const isNew = this.state.isNew;
+        const logged = this.state.logged;
         
 
         if (this.state.redirectToList) {
@@ -137,7 +138,7 @@ class Lawyer extends React.Component {
                 onError={errors => console.log(errors)}
                 readOnly={true}
             >   
-                {this.logged ? 
+                {logged ? 
                 <div>
                     <div>
                     <TextValidator
@@ -243,7 +244,7 @@ class Lawyer extends React.Component {
                 </div>
                 <div className="error">{errorText}</div>
                 {
-                    this.logged ? <Button type="submit" color="primary" variant="contained">Submit</Button> : ''
+                    logged ? <Button type="submit" color="primary" variant="contained">Submit</Button> : ''
                 }
             </ValidatorForm>
             </div>
