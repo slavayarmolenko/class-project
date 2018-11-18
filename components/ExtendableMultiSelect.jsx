@@ -98,12 +98,69 @@ class ExtendableMultiSelect extends React.Component {
         var items = this.state.items;
         var value = this.state.value;
         
+        var newLangClientItem = this.putNewLanguageIntoClientList.bind(this, newItemName);
+        this.putNewLanguageIntoDBList.bind(this, newLangClientItem);
+            
+            
+    }
+    putNewLanguageIntoClientList(newItemName) {
+        var items = this.state.items;
+        var value = this.state.value;
+        
+        var newListItem = { id: newItemName, name: newItemName};
+
         if (items.findIndex(function(item) { item.name === newItemName; }) === -1) {
-            items.push({ id: newItemName, name: newItemName});
+            items.push(newListItem);
             value.push(newItemName);
             this.setState({ items: items, newItemName: '', value: value });
             this.props.onChange({ target: { name: this.props.name, value: value, type: 'select' }});
         }
+    }
+
+    putNewLanguageIntoDBList(newItemName) {
+            this._isMounted = true;
+            var itemsUrl = this.props.getItemsUrl;
+            if (!itemsUrl) {
+                return;
+            }
+            
+            axios.get(itemsUrl, { name: newItemName })
+                    .then(result => {
+                        if (!this._isMounted) {
+                            return;
+                        }
+                        var items = this.state.items;
+                        var value = this.state.value;
+                        var newItemIndex = items.findIndex(function(it) { it.name === newItemName });
+                        var newValueIndex = value.findIndex(function(val){ return val === newItemName });
+                        if (result.data.success) {
+                            if (newItemIndex !== 1) {
+                                items[newItemIndex].id = result.data.id;
+                            }
+                            if (newValueIndex) {
+                                value[newValueIndex] = result.data.id;
+                            }
+                            this.setState({ items, value});
+                        } else {
+                            this.onAddItemError.bind(this, newItemName, result.errMessage);
+                        }
+                    })
+                    .catch(error => {
+                        this.onAddItemError.bind(this, newItemName, error.response.statusText);
+                    });
+    }
+    onAddItemError(newItemName, errText) {
+        var items = this.state.items;
+        var value = this.state.value;
+        var newItemIndex = items.findIndex(function(it) { it.name === newItemName });
+        var newValueIndex = value.findIndex(function(val){ return val === newItemName });
+        if (newItemIndex !== 1) {
+            items.splice(newItemIndex, 1);
+        }
+        if (newValueIndex) {
+            value.splice(newValueIndex, 1);
+        }
+        this.setState({ items, value, errorText: 'Could not add new item. Error: ' + errText});
     }
 
     render() {

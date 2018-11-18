@@ -147,8 +147,8 @@ class Lawyer extends React.Component {
                         readOnly={true}
                         name="uzvername"
                         type="text"
-                        validators={['required']}
-                        errorMessages={['this field is required']}
+                        validators={['required', 'maxStringLength:50']}
+                        errorMessages={['this field is required', 'exceeds 50 symbols in length']}
                         value={uzvername}
                     />
                     </div><div>   
@@ -157,8 +157,8 @@ class Lawyer extends React.Component {
                         onChange={this.handleChange}
                         name="password"
                         type="password"
-                        validators={isNew ? ['required'] : []}
-                        errorMessages={['this field is required']}
+                        validators={isNew ? ['required', 'maxStringLength:50'] : []}
+                        errorMessages={['this field is required', 'exceeds 50 symbols in length']}
                         value={password}
                         
                     /><TextValidator
@@ -177,9 +177,10 @@ class Lawyer extends React.Component {
                     onChange={this.handleChange}
                     name="name"
                     type="text"
-                    validators={['required']}
-                    errorMessages={['this field is required']}
+                    validators={['required', 'maxStringLength:255']}
+                    errorMessages={['this field is required', 'exceeds 255 symbols in length']}
                     value={name}
+                    fullWidth={true}
                     inputProps={{readOnly: !logged }}
                     InputLabelProps={logged? {} :{shrink: !logged}}
                 /></div>
@@ -189,8 +190,9 @@ class Lawyer extends React.Component {
                     name="email"
                     type="email"
                     value={email}
-                    validators={['required', 'isEmail']}
-                    errorMessages={['this field is required', 'email is not valid']}
+                    fullWidth={true}
+                    validators={['required', 'isEmail', 'maxStringLength:100']}
+                    errorMessages={['this field is required', 'email is not valid', 'exceeds 100 symbols in length']}
                     inputProps={{readOnly: !logged }}
                     InputLabelProps={logged? {} :{shrink: !logged}}
                 /></div>
@@ -223,8 +225,8 @@ class Lawyer extends React.Component {
                     onChange={this.handleChange}
                     name="address"
                     type="text"
-                    validators={[]}
-                    errorMessages={[]}
+                    validators={['maxStringLength:255']}
+                    errorMessages={['exceeds 255 symbols in length']}
                     value={address || ''}
                     fullWidth={true}
                     inputProps={{readOnly: !logged }}

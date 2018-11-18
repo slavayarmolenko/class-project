@@ -48,7 +48,7 @@ exports.create = function (app, connection) {
 
         // var addNewLawyerLine = 'INSERT INTO lawyers (uzvername, password, email, description, name, shortname, russian, spanish, english, zip, daca, family, deportationProtection, address) VALUES (';
         // addNewLawyerLine = addNewLawyerLine + request.body.uzvername + "," + request.body.password + "," + request.body.email  + "," + request.body.description  + "," + request.body.name + "," + request.body.shortname + "," + request.body.russian + "," + request.body.spanish + "," + request.body.english + "," + request.body.zip + "," + request.body.daca + "," + request.body.family + "," + request.body.deportationProtection + "," + request.body.address + ");";
-
+        
         var addNewLawyerLine1 = 'INSERT INTO lawyers (';
         var addNewLawyerLine2 = ') VALUES (';
         var i = 0;
@@ -61,7 +61,7 @@ exports.create = function (app, connection) {
         var column;
         if(req.body.uzvername){
             column = "uzvername";
-            if(req.body.id){
+            if(req.body.id) {
                 addNewLawyerLine1 = addNewLawyerLine1 + column +'="'+req.body.uzvername+'", ';
             } else {
             addNewLawyerLine1 = addNewLawyerLine1 + column +', ';
@@ -141,7 +141,7 @@ exports.create = function (app, connection) {
             if (err) {
                 res.json({ success: false, errMessage: err.sqlMessage });
             } else {
-                res.json({ success: true, results: results });
+                res.json({ success: true, results: results, returnObj: results });
             }
             
 
