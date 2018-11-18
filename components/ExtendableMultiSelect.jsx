@@ -95,13 +95,8 @@ class ExtendableMultiSelect extends React.Component {
         if (!newItemName) {
             return;
         }
-        var items = this.state.items;
-        var value = this.state.value;
-        
-        var newLangClientItem = this.putNewLanguageIntoClientList.bind(this, newItemName);
-        this.putNewLanguageIntoDBList.bind(this, newLangClientItem);
-            
-            
+        this.putNewLanguageIntoClientList(newItemName);
+        this.putNewLanguageIntoDBList(newItemName);
     }
     putNewLanguageIntoClientList(newItemName) {
         var items = this.state.items;
@@ -113,46 +108,49 @@ class ExtendableMultiSelect extends React.Component {
             items.push(newListItem);
             value.push(newItemName);
             this.setState({ items: items, newItemName: '', value: value });
-            this.props.onChange({ target: { name: this.props.name, value: value, type: 'select' }});
         }
     }
 
     putNewLanguageIntoDBList(newItemName) {
-            this._isMounted = true;
             var itemsUrl = this.props.getItemsUrl;
             if (!itemsUrl) {
                 return;
             }
             
-            axios.get(itemsUrl, { name: newItemName })
+            axios.post(itemsUrl, { name: newItemName })
                     .then(result => {
                         if (!this._isMounted) {
                             return;
                         }
                         var items = this.state.items;
                         var value = this.state.value;
-                        var newItemIndex = items.findIndex(function(it) { it.name === newItemName });
-                        var newValueIndex = value.findIndex(function(val){ return val === newItemName });
+                        var newItemIndex = items.findIndex(function(it) { 
+                            return it.id === newItemName 
+                        });
+                        var newValueIndex = value.findIndex(function(val){ 
+                            return val === newItemName; 
+                        });
                         if (result.data.success) {
-                            if (newItemIndex !== 1) {
-                                items[newItemIndex].id = result.data.id;
+                            if (newItemIndex !== -1) {
+                                items[newItemIndex].id = result.data.data.id;
                             }
-                            if (newValueIndex) {
-                                value[newValueIndex] = result.data.id;
+                            if (newValueIndex !== -1) {
+                                value[newValueIndex] = result.data.data.id;
                             }
                             this.setState({ items, value});
+                            this.props.onChange({ target: { name: this.props.name, value: value, type: 'select' }});
                         } else {
-                            this.onAddItemError.bind(this, newItemName, result.errMessage);
+                            this.onAddItemError(newItemName, result.errMessage);
                         }
                     })
                     .catch(error => {
-                        this.onAddItemError.bind(this, newItemName, error.response.statusText);
+                        this.onAddItemError(newItemName, error.response.statusText);
                     });
     }
     onAddItemError(newItemName, errText) {
         var items = this.state.items;
         var value = this.state.value;
-        var newItemIndex = items.findIndex(function(it) { it.name === newItemName });
+        var newItemIndex = items.findIndex(function(it) { return it.name === newItemName });
         var newValueIndex = value.findIndex(function(val){ return val === newItemName });
         if (newItemIndex !== 1) {
             items.splice(newItemIndex, 1);
