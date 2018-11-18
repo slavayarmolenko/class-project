@@ -122,33 +122,7 @@ exports.create = function (app, connection) {
             addNewLawyerLine2 = addNewLawyerLine2 + req.body.zip + ',';
             }
         }
-        if(req.body.daca){
-            column = "daca";
-            if(req.body.id){
-                addNewLawyerLine1 = addNewLawyerLine1 + column +'="'+req.body.daca+'", ';
-            } else {
-            addNewLawyerLine1 = addNewLawyerLine1 + column +', ';
-            addNewLawyerLine2 = addNewLawyerLine2 + req.body.daca + ',';
-            }
-        }
-        if(req.body.family){
-            column = "family";
-            if(req.body.id){
-                addNewLawyerLine1 = addNewLawyerLine1 + column +'="'+req.body.family+'", ';
-            } else {
-            addNewLawyerLine1 = addNewLawyerLine1 + column +', ';
-            addNewLawyerLine2 = addNewLawyerLine2 + req.body.family + ',';
-            }
-        }
-        if(req.body.deportationProtection){
-            column = "deportationProtection";
-            if(req.body.id){
-                addNewLawyerLine1 = addNewLawyerLine1 + column +'="'+req.body.deportationProtection+'", ';
-            } else {
-            addNewLawyerLine1 = addNewLawyerLine1 + column +', ';
-            addNewLawyerLine2 = addNewLawyerLine2 + req.body.deportationProtection + ',';
-            }
-        }
+        
         if(req.body.address){
             column = "address";
             if(req.body.id){

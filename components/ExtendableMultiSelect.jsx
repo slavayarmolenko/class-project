@@ -109,6 +109,7 @@ class ExtendableMultiSelect extends React.Component {
     render() {
         const value = this.state.value;
         const items = this.state.items;
+        const readOnly = this.props.readOnly;
         return (
                 <FormControl style={{display: 'flex', flexWrap: 'wrap'}}>
 
@@ -116,8 +117,9 @@ class ExtendableMultiSelect extends React.Component {
                     <Select
                         multiple
                         value={value}
+                        displayEmpty={true}
                         onChange={this.handleSelectionChange}
-                        input={<Input id={this.props.id} />}
+                        input={<Input id={this.props.id} readOnly = {readOnly} />}
                     >
                         <MenuItem key={null} value={null}>
                                 <TextValidator

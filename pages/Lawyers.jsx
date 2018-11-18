@@ -35,8 +35,10 @@ class Lawyers extends React.Component {
         this.handleConfirmDelete = this.handleConfirmDelete.bind(this);
         this.handleOpenConfirmDialog = this.handleOpenConfirmDialog.bind(this);
         this.deleteLawyerId = 0;
+        this._isMounted = false;
     }
     componentDidMount() {
+        this._isMounted = true;
         ValidatorForm.addValidationRule('isZip', (value) => {
             if (/(^\d{5}$)|(^\d{5}-\d{4}$)/.test(value)) {
                 return true;
@@ -46,10 +48,12 @@ class Lawyers extends React.Component {
 
         axios.get(URLs.services.LAWYER)
             .then(result => {
-                this.setState({
-                    data: result.data.data,
-                    dataLoaded: true
-                });
+                if (this._isMounted) {
+                    this.setState({
+                        data: result.data.data,
+                        dataLoaded: true
+                    });
+                }
             })
             .catch(error => {
                 this.setState({
@@ -61,6 +65,9 @@ class Lawyers extends React.Component {
 
 
 
+    }
+    componentWillUnmount() {
+        this._isMounted = false;
     }
     changePageSize(pageSize, pageIndex) {
         this.setState({pageSize: pageSize});

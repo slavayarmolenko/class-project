@@ -1,8 +1,6 @@
 import React from 'react';
 import { Redirect } from "react-router-dom";
 import Button from '@material-ui/core/Button';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
 import ExtendableMultiSelect from './../components/ExtendableMultiSelect.jsx';
 import axios from 'axios';
@@ -124,9 +122,11 @@ class Lawyer extends React.Component {
             services} = this.state.lawyer;
         const errorText = this.state.errorText;
         const isNew = this.state.isNew;
-        const logged = this.state.logged;
-        
+        const logged = this.state.logged;        
 
+        if (!logged && isNew) {
+            return <Redirect to='/attorneys'  />;
+        }
         if (this.state.redirectToList) {
             return <Redirect to='/attorneys'  />;
         }
@@ -157,7 +157,7 @@ class Lawyer extends React.Component {
                         onChange={this.handleChange}
                         name="password"
                         type="password"
-                        validators={['required']}
+                        validators={isNew ? ['required'] : []}
                         errorMessages={['this field is required']}
                         value={password}
                         
@@ -166,8 +166,8 @@ class Lawyer extends React.Component {
                         onChange={this.handleChange}
                         name="repeatPassword"
                         type="password"
-                        validators={['isPasswordMatch', 'required']}
-                        errorMessages={['password mismatch', 'this field is required']}
+                        validators={isNew ? ['isPasswordMatch', 'required'] : ['isPasswordMatch']}
+                        errorMessages={isNew ? ['password mismatch', 'this field is required'] : ['password mismatch']}
                         value={repeatPassword}
                         style={{marginLeft: '15px'}}
                     /></div>
@@ -180,6 +180,8 @@ class Lawyer extends React.Component {
                     validators={['required']}
                     errorMessages={['this field is required']}
                     value={name}
+                    inputProps={{readOnly: !logged }}
+                    InputLabelProps={logged? {} :{shrink: !logged}}
                 /></div>
                 <div><TextValidator
                     label="E-Mail"
@@ -189,6 +191,8 @@ class Lawyer extends React.Component {
                     value={email}
                     validators={['required', 'isEmail']}
                     errorMessages={['this field is required', 'email is not valid']}
+                    inputProps={{readOnly: !logged }}
+                    InputLabelProps={logged? {} :{shrink: !logged}}
                 /></div>
                 <div><TextValidator
                     label="Description"
@@ -200,6 +204,8 @@ class Lawyer extends React.Component {
                     validators={['maxStringLength:255']}
                     errorMessages={['Description length exceeds 255 symbols']}
                     fullWidth={true}
+                    inputProps={{readOnly: !logged }}
+                    InputLabelProps={logged? {} :{shrink: !logged}}
                 /></div>
                 <div><TextValidator
                     label="Zip Code"
@@ -209,6 +215,8 @@ class Lawyer extends React.Component {
                     value={zip}
                     validators={['required', 'isZip']}
                     errorMessages={['this field is required', 'Zip Code is not valid']}
+                    inputProps={{readOnly: !logged }}
+                    InputLabelProps={logged? {} :{shrink: !logged}}
                 /></div>
                 <div><TextValidator
                     label="Address"
@@ -219,6 +227,8 @@ class Lawyer extends React.Component {
                     errorMessages={[]}
                     value={address || ''}
                     fullWidth={true}
+                    inputProps={{readOnly: !logged }}
+                    InputLabelProps={logged? {} :{shrink: !logged}}
                 /></div>
                 <div>
                     <ExtendableMultiSelect
@@ -229,6 +239,7 @@ class Lawyer extends React.Component {
                         name="languages"
                         onChange={this.handleChange}
                         getItemsUrl={URLs.services.LANGUAGES}
+                        readOnly={!logged}
                     />
                 </div>    
                 <div>
@@ -240,12 +251,17 @@ class Lawyer extends React.Component {
                         name="services"
                         onChange={this.handleChange}
                         getItemsUrl={URLs.services.SERVICES}
+                        readOnly={!logged}
                     ></ExtendableMultiSelect>
                 </div>
                 <div className="error">{errorText}</div>
-                {
-                    logged ? <Button type="submit" color="primary" variant="contained">Submit</Button> : ''
-                }
+                <div className="buttons">
+                    <Button type="button" variant="contained" onClick={this.goToList.bind(this)}>Back to the List</Button>
+                    {
+                        logged ? 
+                        <Button type="submit" color="primary" variant="contained">Submit</Button> : ''
+                    }
+                </div>
             </ValidatorForm>
             </div>
                    );
