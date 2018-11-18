@@ -30,3 +30,8 @@ exports.getInsertValueString = function(columnObject, columnValue){
         return "";
     }
 }
+
+exports.getErrorObject = function(err) {
+    return { success: false, errMessage: err.sqlMessage};
+
+}

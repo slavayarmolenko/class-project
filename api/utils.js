@@ -1,9 +1,11 @@
-
+var common = require('./common');
 exports.create = function(app, connection) {
     app.get('/api/utils/languages', function (req, res) {
         connection.query('SELECT * FROM languages', function (err, results) {
-            if (err)
-                throw err;
+            if (err) {
+                res.json(common.getErrorObject(err));
+                return;
+            } 
             res.json({data: results, success: true});
         });    
 
@@ -11,9 +13,13 @@ exports.create = function(app, connection) {
     
     app.get('/api/utils/services', function (req, res) {
         connection.query('SELECT * FROM service', function (err, results) {
-            if (err)
-                throw err;
+            if (err) {
+                res.json(common.getErrorObject(err));
+                return;
+            } 
+
             res.json({data: results, success: true});
+            
         });    
 
     });
@@ -24,8 +30,10 @@ exports.create = function(app, connection) {
             return { success: false, errMessage: 'New Language name is required.'};
         }
         connection.query('INSERT INTO languages(name) VALUES ("' + newName + '")', function (err, results) {
-            if (err)
-                throw err;
+            if (err) {
+                res.json(common.getErrorObject(err));
+                return;
+            } 
             res.json({data: {id: results.insertId}, success: true});
         });    
 
@@ -37,8 +45,10 @@ exports.create = function(app, connection) {
             return { success: false, errMessage: 'New Service name is required.'};
         }
         connection.query('INSERT INTO service(name) VALUES ("' + newName + '")', function (err, results) {
-            if (err)
-                throw err;
+            if (err) {
+                res.json(common.getErrorObject(err));
+                return;
+            } 
             res.json({data: {id: results.insertId}, success: true});
         });    
 
@@ -49,13 +59,18 @@ exports.create = function(app, connection) {
             return;
         }
         connection.query('DELETE FROM languages WHERE id=' + languageId, function (delErr) {
-            if (delErr)
-                throw delErr;
+            if (delErr) {
+                res.json(common.getErrorObject(delErr));
+                return;
+            }
             connection.query('SELECT * FROM languages', function (selectErr, results) {
-                if (selectErr)
-                    throw selectErr;
+                if (selectErr) {
+                    res.json(common.getErrorObject(selectErr));
+                    return;
+                } 
                 res.json({ data: results, success: true });
             });
+            
         });
 
     });

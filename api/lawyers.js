@@ -14,8 +14,10 @@ exports.create = function (app, connection) {
             return;
         }
         connection.query('SELECT id, email, name FROM lawyers', function (err, results) {
-            if (err)
-                throw err;
+            if (err) {
+                res.json(common.getErrorObject(err));
+                return;
+            }
             var usersZip = parseInt(req.query.usersZip);
             var usersDistance = parseInt(req.query.distance);
             var send = { data: [], success: true };
@@ -108,19 +110,19 @@ exports.create = function (app, connection) {
         console.log('SQL: ' + addNewLawyerLine1 + addNewLawyerLine2);
         connection.query(addNewLawyerLine1 + addNewLawyerLine2, function (err, results) {
             if (err) {
-                res.json({ success: false, errMessage: err.sqlMessage });
-            } else {
-                res.json({ success: true, results: results, returnObj: results });
+                res.json(common.getErrorObject(err));
+                return;
             }
-
-
+            res.json({ success: true, results: results, returnObj: results });
         });
     });
     var getLawyerById = function (req, res) {
         var userId = req.query.id;
         connection.query('SELECT * FROM lawyers LEFT JOIN lawyer_language ON lawyers.id = lawyer_language.lawyerID LEFT JOIN lawyer_service ON lawyers.id = lawyer_service.lawyerID WHERE lawyers.id = ' + userId, function (err, results) {
-            if (err)
-                throw err;
+            if (err) {
+                res.json(common.getErrorObject(err));
+                return;
+            }
             var languages = [];
             languages[0] = results[0].languageID;
             var services = [];
@@ -171,11 +173,15 @@ exports.create = function (app, connection) {
             return;
         }
         connection.query('DELETE FROM lawyers WHERE id=' + userId, function (delErr) {
-            if (delErr)
-                throw delErr;
+            if (delErr) {
+                res.json(common.getErrorObject(delErr));
+                return;
+            }
             connection.query('SELECT id, email, name FROM lawyers', function (selectErr, results) {
-                if (selectErr)
-                    throw selectErr;
+                if (selErr) {
+                    res.json(common.getErrorObject(selectErr));
+                    return;
+                }
                 res.json({ data: results, success: true });
             });
         });

@@ -55,7 +55,7 @@ class ExtendableMultiSelect extends React.Component {
                         this.setState({ items: result.data.data });
                     } else {
                         this.setState({
-                            errorText: 'Error: ' + result.errMessage
+                            errorText: 'Error: ' + result.data.errMessage
                         });
                     }
                 })
@@ -141,7 +141,7 @@ class ExtendableMultiSelect extends React.Component {
                             this.setState({ items, value});
                             this.props.onChange({ target: { name: this.props.name, value: value, type: 'select' }});
                         } else {
-                            this.onAddItemError(newItemName, result.errMessage);
+                            this.onAddItemError(newItemName, result.data.errMessage);
                         }
                     })
                     .catch(error => {
@@ -216,6 +216,7 @@ class ExtendableMultiSelect extends React.Component {
                         ))}
                     </Select>
                     <FormHelperText>{this.props.helperText}</FormHelperText>
+                    <FormHelperText error={ this.state.errorText ? true : false}>{this.state.errorText}</FormHelperText>
                 </FormControl>
                    );
     }
