@@ -67,6 +67,9 @@ article, aside, details, figcaption, figure, footer, header, main, menu, nav, se
 .pageContent .buttons button, a {
     margin-right: 10px;
 }
+.rightButton {
+    align-items: flex-end;
+}
 
 @media only screen and (max-width: 1199px) {
     .container {

@@ -34,6 +34,7 @@ class ExtendableMultiSelect extends React.Component {
         this.handlePropChange = this.handlePropChange.bind(this);
         this.handleAdd = this.handleAdd.bind(this);
         this.onNewNameKeyPress = this.onNewNameKeyPress.bind(this);
+        //this.deleteItem = this.deleteItem.bind(this);
         this._isMounted = false;
     }
     componentWillUnmount() {
@@ -161,6 +162,25 @@ class ExtendableMultiSelect extends React.Component {
         this.setState({ items, value, errorText: 'Could not add new item. Error: ' + errText});
     }
 
+    deleteItem(itemId) {
+        var deleteUrl = this.props.getItemsUrl;
+         axios.delete(deleteUrl, {params: {id: itemId }})
+            .then(result => {
+                this.setState({
+                    items: result.data.data,
+                    dataLoaded: true
+                });
+
+            })
+            .catch(error => {
+                this.setState({
+                    errorText: error.response.statusText,
+                    dataLoaded: false
+                });
+
+            });
+    }
+
     render() {
         const value = this.state.value;
         const items = this.state.items;
@@ -200,4 +220,5 @@ class ExtendableMultiSelect extends React.Component {
                    );
     }
 }
+/*{ <Button onClick={this.deleteItem.bind(this, item.id)}>x</Button>}*/
 export default ExtendableMultiSelect;

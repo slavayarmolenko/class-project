@@ -43,5 +43,21 @@ exports.create = function(app, connection) {
         });    
 
     });
+    app.delete('/api/utils/languages', function (req, res) {
+        var languageId = req.query.id;
+        if (!languageId) {
+            return;
+        }
+        connection.query('DELETE FROM languages WHERE id=' + languageId, function (delErr) {
+            if (delErr)
+                throw delErr;
+            connection.query('SELECT * FROM languages', function (selectErr, results) {
+                if (selectErr)
+                    throw selectErr;
+                res.json({ data: results, success: true });
+            });
+        });
+
+    });
 };
 
