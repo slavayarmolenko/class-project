@@ -48,6 +48,9 @@ class Lawyer extends React.Component {
             return true;
         });
         ValidatorForm.addValidationRule('isZip', (value) => {
+            if (!value) {
+                return true;
+            }
             if (/(^\d{5}$)|(^\d{5}-\d{4}$)/.test(value)) {
                 return true;
             }
@@ -242,6 +245,7 @@ class Lawyer extends React.Component {
                         onChange={this.handleChange}
                         getItemsUrl={URLs.services.LANGUAGES}
                         readOnly={!logged}
+                        allowAddNew={true}
                     />
                 </div>    
                 <div>
@@ -254,6 +258,7 @@ class Lawyer extends React.Component {
                         onChange={this.handleChange}
                         getItemsUrl={URLs.services.SERVICES}
                         readOnly={!logged}
+                        allowAddNew={true}
                     ></ExtendableMultiSelect>
                 </div>
                 <div className="error">{errorText}</div>
@@ -261,7 +266,7 @@ class Lawyer extends React.Component {
                     <Button type="button" variant="contained" onClick={this.goToList.bind(this)}>Back to the List</Button>
                     {
                         logged && 
-                        <Button type="submit" color="primary" variant="contained">Submit</Button>
+                        <Button type="submit" color="primary" variant="contained">{isNew ? 'Create': 'Save'}</Button>
                     }
                 </div>
             </ValidatorForm>

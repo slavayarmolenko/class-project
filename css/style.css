@@ -167,6 +167,7 @@ svg:not(:root) {
 
 .filtered-layout .filter {
     flex: 1 auto;
+    padding-right: 20px;
 }
 .filtered-layout .result {
     flex: 2 auto;

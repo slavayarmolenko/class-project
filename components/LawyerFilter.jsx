@@ -27,22 +27,27 @@ import ExtendableMultiSelect from './ExtendableMultiSelect.jsx';
 class LawyerFilter extends React.Component {
     constructor(props) {
         super();
-        this.state = {
-            filter: {
-                distance: 10,
-                usersZip: '',
-                units: 'mil',
-                languages: [],
-                services: []
-            },
+        this.defaultFilter = {
+            distance: 10,
+            usersZip: '',
+            units: 'mil',
+            languages: [],
+            services: []
         };
+        this.state = {
+            filter: Object.assign({}, this.defaultFilter)
+        };
+        
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChangeFilter = this.handleChangeFilter.bind(this);
-        
+        this.emptyFilter = this.emptyFilter.bind(this);
     }
   
     componentDidMount() {
         ValidatorForm.addValidationRule('isZip', (value) => {
+            if (!value) {
+                return true;
+            }
             if (/(^\d{5}$)|(^\d{5}-\d{4}$)/.test(value)) {
                 return true;
             }
@@ -61,9 +66,16 @@ class LawyerFilter extends React.Component {
         this.setState({ filter });
     }
     handleSubmit(event) {
-        if (this.props.onChange) {
-            this.props.onChange(event, this.state.filter);
+        if (event) {
+            event.preventDefault();
         }
+        if (this.props.onChange) {
+            this.props.onChange(this.state.filter);
+        }
+    }
+    emptyFilter() {
+        this.setState({ filter: Object.assign({}, this.defaultFilter) });
+        this.handleSubmit();
     }
     
   
@@ -133,7 +145,10 @@ class LawyerFilter extends React.Component {
                         getItemsUrl={URLs.services.SERVICES}
                     ></ExtendableMultiSelect>
             </div>
-            <Button type="submit" color="primary" variant="contained">Filter</Button>
+            <div className="buttons">
+                <Button type="submit" variant="contained" onClick={this.emptyFilter}>Reset</Button>
+                <Button type="submit" color="primary" variant="contained">Filter</Button>
+            </div>
         </ValidatorForm>
         
     </div>

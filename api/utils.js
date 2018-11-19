@@ -24,6 +24,19 @@ exports.create = function(app, connection) {
 
     });
 
+    app.get('/api/utils/companyTypes', function (req, res) {
+        connection.query('SELECT * FROM companyTypes', function (err, results) {
+            if (err) {
+                res.json(common.getErrorObject(err));
+                return;
+            } 
+
+            res.json({data: results, success: true});
+            
+        });    
+
+    });
+
     app.post('/api/utils/languages', function (req, res) {
         var newName = (req.body.name || '').trim();
         if (!newName) {

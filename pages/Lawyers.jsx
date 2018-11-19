@@ -32,19 +32,21 @@ class Lawyers extends React.Component {
         this._isMounted = true;
         axios.get(URLs.services.LAWYER)
             .then(result => {
-                if (this._isMounted) {
-                    if (result.data.success) {
-                        this.setState({
-                            data: result.data.data,
-                            dataLoaded: true
-                        });
-                    } else {
-                        this.setState({
-                            errorText: result.data.errMessage,
-                            dataLoaded: false
-                        });
-                    }
+                if (!this._isMounted) {
+                    return;
                 }
+                if (!result.data.success) {
+                    this.setState({
+                        errorText: result.data.errMessage,
+                        dataLoaded: false
+                    });
+                    return;
+                }
+                
+                this.setState({
+                    data: result.data.data,
+                    dataLoaded: true
+                });
             })
             .catch(error => {
                 this.setState({
@@ -53,9 +55,6 @@ class Lawyers extends React.Component {
                 });
 
             });
-
-
-
     }
     componentWillUnmount() {
         this._isMounted = false;
@@ -75,9 +74,19 @@ class Lawyers extends React.Component {
         }
     }
     deleteLawyer() {
-        var { filter } = this.state.filter;
+        var { filter } = this.state;
         axios.delete(URLs.services.LAWYER, {params: {id: this.deleteLawyerId, filter}})
                 .then(result => {
+                    if (!this._isMounted) {
+                        return;
+                    }
+                    if (!result.data.success) {
+                        this.setState({
+                            errorText: result.data.errMessage,
+                            dataLoaded: false
+                        });
+                        return;
+                    }
                     this.setState({
                         data: result.data.data,
                         dataLoaded: true
@@ -92,8 +101,7 @@ class Lawyers extends React.Component {
 
                 });
     }
-    handleChangeFilter(event, filter) {
-        event.preventDefault();
+    handleChangeFilter(filter) {
         this.handleSubmit(filter);
         this.setState(filter);
     }
