@@ -21,7 +21,8 @@ class ExtendableMultiSelect extends React.Component {
             name: string
             helperText: string
             enterNewLabel: string
-            getItemsUrl: string
+            getItemsUrl: string - URL of the service, which returns array of {id, name} objects
+            allowAddNew: boolean
          */
         this.state = {
             items: this.props.items || [],
@@ -34,6 +35,7 @@ class ExtendableMultiSelect extends React.Component {
         this.handlePropChange = this.handlePropChange.bind(this);
         this.handleAdd = this.handleAdd.bind(this);
         this.onNewNameKeyPress = this.onNewNameKeyPress.bind(this);
+        //this.deleteItem = this.deleteItem.bind(this);
         this._isMounted = false;
     }
     componentWillUnmount() {
@@ -54,7 +56,7 @@ class ExtendableMultiSelect extends React.Component {
                         this.setState({ items: result.data.data });
                     } else {
                         this.setState({
-                            errorText: 'Error: ' + result.errMessage
+                            errorText: 'Error: ' + result.data.errMessage
                         });
                     }
                 })
@@ -95,20 +97,95 @@ class ExtendableMultiSelect extends React.Component {
         if (!newItemName) {
             return;
         }
+        this.putNewLanguageIntoClientList(newItemName);
+        this.putNewLanguageIntoDBList(newItemName);
+    }
+    putNewLanguageIntoClientList(newItemName) {
         var items = this.state.items;
         var value = this.state.value;
         
+        var newListItem = { id: newItemName, name: newItemName};
+
         if (items.findIndex(function(item) { item.name === newItemName; }) === -1) {
-            items.push({ id: newItemName, name: newItemName});
+            items.push(newListItem);
             value.push(newItemName);
             this.setState({ items: items, newItemName: '', value: value });
-            this.props.onChange({ target: { name: this.props.name, value: value, type: 'select' }});
         }
+    }
+
+    putNewLanguageIntoDBList(newItemName) {
+            var itemsUrl = this.props.getItemsUrl;
+            if (!itemsUrl) {
+                return;
+            }
+            
+            axios.post(itemsUrl, { name: newItemName })
+                    .then(result => {
+                        if (!this._isMounted) {
+                            return;
+                        }
+                        var items = this.state.items;
+                        var value = this.state.value;
+                        var newItemIndex = items.findIndex(function(it) { 
+                            return it.id === newItemName 
+                        });
+                        var newValueIndex = value.findIndex(function(val){ 
+                            return val === newItemName; 
+                        });
+                        if (result.data.success) {
+                            if (newItemIndex !== -1) {
+                                items[newItemIndex].id = result.data.data.id;
+                            }
+                            if (newValueIndex !== -1) {
+                                value[newValueIndex] = result.data.data.id;
+                            }
+                            this.setState({ items, value});
+                            this.props.onChange({ target: { name: this.props.name, value: value, type: 'select' }});
+                        } else {
+                            this.onAddItemError(newItemName, result.data.errMessage);
+                        }
+                    })
+                    .catch(error => {
+                        this.onAddItemError(newItemName, error.response.statusText);
+                    });
+    }
+    onAddItemError(newItemName, errText) {
+        var items = this.state.items;
+        var value = this.state.value;
+        var newItemIndex = items.findIndex(function(it) { return it.name === newItemName });
+        var newValueIndex = value.findIndex(function(val){ return val === newItemName });
+        if (newItemIndex !== 1) {
+            items.splice(newItemIndex, 1);
+        }
+        if (newValueIndex) {
+            value.splice(newValueIndex, 1);
+        }
+        this.setState({ items, value, errorText: 'Could not add new item. Error: ' + errText});
+    }
+
+    deleteItem(itemId) {
+        var deleteUrl = this.props.getItemsUrl;
+         axios.delete(deleteUrl, {params: {id: itemId }})
+            .then(result => {
+                this.setState({
+                    items: result.data.data,
+                    dataLoaded: true
+                });
+
+            })
+            .catch(error => {
+                this.setState({
+                    errorText: error.response.statusText,
+                    dataLoaded: false
+                });
+
+            });
     }
 
     render() {
         const value = this.state.value;
         const items = this.state.items;
+        const readOnly = this.props.readOnly ? true : false;
         return (
                 <FormControl style={{display: 'flex', flexWrap: 'wrap'}}>
 
@@ -116,9 +193,11 @@ class ExtendableMultiSelect extends React.Component {
                     <Select
                         multiple
                         value={value}
+                        displayEmpty={true}
                         onChange={this.handleSelectionChange}
-                        input={<Input id={this.props.id} />}
+                        input={<Input id={this.props.id} readOnly={readOnly} placeholder={this.props.helperText} />}
                     >
+                        { this.props.allowAddNew &&
                         <MenuItem key={null} value={null}>
                                 <TextValidator
                                     label={'Enter new value'}
@@ -132,15 +211,17 @@ class ExtendableMultiSelect extends React.Component {
                                 />
                                 <Button onClick={this.handleAdd}>+</Button>
                         </MenuItem>
+                        }
                         {items.map(item => (
                         <MenuItem key={item.id} value={item.id}>
                             {item.name}
                         </MenuItem>
                         ))}
                     </Select>
-                    <FormHelperText>{this.props.helperText}</FormHelperText>
+                    <FormHelperText error={ this.state.errorText ? true : false}>{this.state.errorText}</FormHelperText>
                 </FormControl>
                    );
     }
 }
+/*{ <Button onClick={this.deleteItem.bind(this, item.id)}>x</Button>}*/
 export default ExtendableMultiSelect;

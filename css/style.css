@@ -55,6 +55,21 @@ article, aside, details, figcaption, figure, footer, header, main, menu, nav, se
 .pageContent {
     margin-bottom: 10px;
 }
+.pageContent a, .pageContent a:hover, .pageContent a:active, .pageContent a:link, .pageContent a:visited {
+    color: #000;
+    text-decoration: underline;
+
+}
+.pageContent .buttons {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.pageContent .buttons button, a {
+    margin-right: 10px;
+}
+.rightButton {
+    align-items: flex-end;
+}
 
 @media only screen and (max-width: 1199px) {
     .container {

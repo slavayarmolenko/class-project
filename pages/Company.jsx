@@ -30,8 +30,10 @@ class AddLawyer extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handlePropChange = this.handlePropChange.bind(this);
+        this._isMounted = false;
     }
     componentDidMount() {
+        this._isMounted = true;
         // custom rule will have name 'isPasswordMatch'
         ValidatorForm.addValidationRule('isPasswordMatch', (value) => {
             if (value !== this.state.company.password) {
@@ -48,6 +50,9 @@ class AddLawyer extends React.Component {
         if (this.isNew) {
             this.getLawyerById(this.props.id);
         }
+    }
+    componentWillUnmount() {
+        this._isMounted = false;
     }
     handleChange(event) {
         const { company } = this.state;
@@ -66,6 +71,9 @@ class AddLawyer extends React.Component {
     getCompanyById() {
         axios.get(URLs.services.COMPANY, { params: { id: this.props.id } })
                 .then(result => {
+                    if (!this._isMounted) {
+                        return;
+                    }
                     if (result.data.success) {
                         this.setState({ company: result.data.data });
                     } else {
@@ -102,24 +110,24 @@ class AddLawyer extends React.Component {
     }
 
     goToList() {
-        this.setState({redirectToList: true});
+        this.goBack.bind(this);
+    }
+    goBack() {
+        this.props.history.goBack();
     }
     
     render() {
-        const { uzvername, name, email,  
+        const { name, email,  
             description, zip, address} = this.state.company;
         const errorText = this.state.errorText;
-        const red300 = red['500'];
- 
-        const errStyle = {
-            color: red300,
-        };
+        const isNew = this.state.isNew;
+        const logged = this.state.logged;
 
-        if (!this.state.logged) {
-            return <Redirect to='/login'  />;
+        if (!logged && isNew) {
+            return <Redirect to={URLs.pages.LOGIN}  />;
         }
         if (this.state.redirectToList) {
-            return <Redirect to='/attorneys'  />;
+            this.goBack.bind(this);
         }
         return (
             <div className="container pageContent">
@@ -136,6 +144,8 @@ class AddLawyer extends React.Component {
                     validators={['required']}
                     errorMessages={['this field is required']}
                     value={name}
+                    inputProps={{readOnly: !logged }}
+                    InputLabelProps={logged? {} :{shrink: !logged}}
                 /></div>
                 <div><TextValidator
                     label="E-Mail"
@@ -145,6 +155,8 @@ class AddLawyer extends React.Component {
                     value={email}
                     validators={['required', 'isEmail']}
                     errorMessages={['this field is required', 'email is not valid']}
+                    inputProps={{readOnly: !logged }}
+                    InputLabelProps={logged? {} :{shrink: !logged}}
                 /></div>
                 <div><TextValidator
                     label="Description"
@@ -156,6 +168,8 @@ class AddLawyer extends React.Component {
                     validators={['maxStringLength:255']}
                     errorMessages={['Description length exceeds 255 symbols']}
                     fullWidth={true}
+                    inputProps={{readOnly: !logged }}
+                    InputLabelProps={logged? {} :{shrink: !logged}}
                 /></div>
                 <div><TextValidator
                     label="Zip Code"
@@ -165,6 +179,8 @@ class AddLawyer extends React.Component {
                     value={zip}
                     validators={['required', 'isZip']}
                     errorMessages={['this field is required', 'Zip Code is not valid']}
+                    inputProps={{readOnly: !logged }}
+                    InputLabelProps={logged? {} :{shrink: !logged}}
                 /></div>
                 <div><TextValidator
                     label="Address"
@@ -175,9 +191,16 @@ class AddLawyer extends React.Component {
                     errorMessages={[]}
                     value={address}
                     fullWidth={true}
+                    inputProps={{readOnly: !logged }}
+                    InputLabelProps={logged? {} :{shrink: !logged}}
                 /></div>
                 <div className="error">{errorText}</div>
-                <Button type="submit" color="primary" variant="contained">Submit</Button>
+                <div className="buttons">
+                    <Button type="button" color="secondary" vatiant="container" onClick={this.goBack.bind(this)}>Go Back</Button>
+                    {
+                        logged ? <Button type="submit" color="primary" variant="contained">Submit</Button> : ''
+                    }
+                </div>
             </ValidatorForm>
             </div>
                    );
