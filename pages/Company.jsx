@@ -1,18 +1,16 @@
 import React from 'react';
 import { Redirect } from "react-router-dom";
-import red from '@material-ui/core/colors/red';
 import Button from '@material-ui/core/Button';
 import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
+import ExtendableMultiSelect from './../components/ExtendableMultiSelect.jsx';
 import axios from 'axios';
-import {URLs} from '../utils/URLs.js';
+import {URLs} from './../utils/URLs.js';
+//import DownshiftMultiple from '../components/DownshiftMultiple.jsx';
 
-import ExtendableMultiSelect from '../components/ExtendableMultiSelect.jsx';
-
-
-class AddLawyer extends React.Component {
+class Company extends React.Component {
     constructor(props) {
         super(props);
-        this.state ={
+        this.state = {
             company: {
                 id: this.props.id,
                 name: '',
@@ -20,39 +18,35 @@ class AddLawyer extends React.Component {
                 description: '',
                 zip: '',        
                 address: '',
+                types: []
             },
             errorText: '',
-            redirectToList: false,
-            isNew: this.props.id ? false : true,
-            logged: true
+            logged: true,
+            isNew: this.props.id ? false : true
         };
-        
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handlePropChange = this.handlePropChange.bind(this);
         this._isMounted = false;
     }
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
+    
     componentDidMount() {
         this._isMounted = true;
-        // custom rule will have name 'isPasswordMatch'
-        ValidatorForm.addValidationRule('isPasswordMatch', (value) => {
-            if (value !== this.state.company.password) {
-                return false;
-            }
-            return true;
-        });
         ValidatorForm.addValidationRule('isZip', (value) => {
+            if (!value) {
+                return true;
+            }
             if (/(^\d{5}$)|(^\d{5}-\d{4}$)/.test(value)) {
                 return true;
             }
             return false;
         });
-        if (this.isNew) {
-            this.getLawyerById(this.props.id);
+        if (!this.state.isNew) {
+            this.getCompanyById(this.props.id);
         }
-    }
-    componentWillUnmount() {
-        this._isMounted = false;
     }
     handleChange(event) {
         const { company } = this.state;
@@ -64,9 +58,29 @@ class AddLawyer extends React.Component {
         }
         this.setState({ company });
     }
+    
     handlePropChange(event) {
         var propname = event.target.name;
         this.setState({ [propname]: event.target.value });
+    }
+    handleSubmit() {
+        this.setState({ errorText: '' });
+        axios.post(URLs.services.COMPANY, this.state.company)
+                .then(result => {
+                    if (result.data.success) {
+                        this.goToList();
+                    } else {
+                        this.setState({
+                            errorText: result.data.errMessage
+                        });
+                    }
+                })
+                .catch(error => {
+                    
+                    this.setState({
+                        errorText: error.response.statusText
+                    });
+                });
     }
     getCompanyById() {
         axios.get(URLs.services.COMPANY, { params: { id: this.props.id } })
@@ -75,6 +89,7 @@ class AddLawyer extends React.Component {
                         return;
                     }
                     if (result.data.success) {
+                        result.data.data.types = [];
                         this.setState({ company: result.data.data });
                     } else {
                         this.setState({
@@ -88,62 +103,37 @@ class AddLawyer extends React.Component {
                     });
                 });
     }
-
-    handleSubmit() {
-        this.setState({ errorText: '' });
-        axios.post(URLs.services.COMPANY, this.state.company)
-                .then(result => {
-                    if (result.data.success) {
-                        this.goToList();
-                    } else {
-                        this.setState({
-                            errorText: 'Could not create an attorney: ' + result.data.errMessage
-                        });
-                    }
-                })
-                .catch(error => {
-                    
-                    this.setState({
-                        errorText: 'Error: ' + error.response.statusText,
-                    });
-                });
-    }
-
     goToList() {
-        this.goBack.bind(this);
-    }
-    goBack() {
         this.props.history.goBack();
     }
-    
     render() {
-        const { name, email,  
-            description, zip, address} = this.state.company;
+        const { name, email, 
+            description, zip, address,
+            types} = this.state.company;
         const errorText = this.state.errorText;
         const isNew = this.state.isNew;
-        const logged = this.state.logged;
+        const logged = this.state.logged;        
 
         if (!logged && isNew) {
-            return <Redirect to={URLs.pages.LOGIN}  />;
-        }
-        if (this.state.redirectToList) {
-            this.goBack.bind(this);
+            this.goToList();
         }
         return (
-            <div className="container pageContent">
-            <h1>{this.isNew ? 'Create Company' : 'Company'}</h1>
+          <div className="container pageContent">
+            <h1>{ isNew ? 'Create Company' : 'Company'}</h1>
             <ValidatorForm 
                 onSubmit={this.handleSubmit}
                 onError={errors => console.log(errors)}
+                readOnly={true}
             >   
                 <div><TextValidator
                     label="Full Name"
                     onChange={this.handleChange}
                     name="name"
                     type="text"
-                    validators={['required']}
-                    errorMessages={['this field is required']}
+                    validators={['required', 'maxStringLength:255']}
+                    errorMessages={['this field is required', 'exceeds 255 symbols in length']}
                     value={name}
+                    fullWidth={true}
                     inputProps={{readOnly: !logged }}
                     InputLabelProps={logged? {} :{shrink: !logged}}
                 /></div>
@@ -153,8 +143,9 @@ class AddLawyer extends React.Component {
                     name="email"
                     type="email"
                     value={email}
-                    validators={['required', 'isEmail']}
-                    errorMessages={['this field is required', 'email is not valid']}
+                    fullWidth={true}
+                    validators={['required', 'isEmail', 'maxStringLength:100']}
+                    errorMessages={['this field is required', 'email is not valid', 'exceeds 100 symbols in length']}
                     inputProps={{readOnly: !logged }}
                     InputLabelProps={logged? {} :{shrink: !logged}}
                 /></div>
@@ -187,23 +178,38 @@ class AddLawyer extends React.Component {
                     onChange={this.handleChange}
                     name="address"
                     type="text"
-                    validators={[]}
-                    errorMessages={[]}
-                    value={address}
+                    validators={['maxStringLength:255']}
+                    errorMessages={['exceeds 255 symbols in length']}
+                    value={address || ''}
                     fullWidth={true}
                     inputProps={{readOnly: !logged }}
                     InputLabelProps={logged? {} :{shrink: !logged}}
                 /></div>
+                <div>
+                    <ExtendableMultiSelect
+                        id="select-type"
+                        label="Company Type"
+                        helperText="Please, select company type"
+                        value={types}
+                        name="languages"
+                        onChange={this.handleChange}
+                        getItemsUrl={URLs.services.COMPANY_TYPES}
+                        readOnly={!logged}
+                    />
+                </div>    
                 <div className="error">{errorText}</div>
                 <div className="buttons">
-                    <Button type="button" color="secondary" vatiant="container" onClick={this.goBack.bind(this)}>Go Back</Button>
+                    <Button type="button" variant="contained" onClick={this.goToList.bind(this)}>&lt;Back</Button>
                     {
-                        logged ? <Button type="submit" color="primary" variant="contained">Submit</Button> : ''
+                        logged && 
+                        <Button type="submit" color="primary" variant="contained">{isNew ? 'Create': 'Save'}</Button>
                     }
                 </div>
             </ValidatorForm>
             </div>
                    );
-    }
+        }
+    //}
+
 }
-export default AddLawyer;
+export default Company;

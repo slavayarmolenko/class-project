@@ -31,19 +31,24 @@ class Companies extends React.Component {
             });
     }
     render() {
-        const columns = [{
-                Header: 'Id',
-                accessor: 'id',
-                show: false
-            },
+        const columns = [
             {
                 Header: 'Name',
                 accessor: 'name', // String-based value accessors!
                 Cell: (props) => <Link to={URLs.pages.ATTORNEY + props.row.id}>{props.value}</Link>
             }, {
-                Header: 'Email',
-                accessor: 'email',
-            }];
+                Header: 'description',
+                accessor: 'description',
+            },
+            {
+                Header: 'Delete',
+                accessor: 'id',
+                className: 'center',
+                Cell: (props) => <Button onClick={() => {
+                    this.handleOpenConfirmDialog(props.row.id);
+                }}>x</Button>
+            },
+        ];
         
  
         return (

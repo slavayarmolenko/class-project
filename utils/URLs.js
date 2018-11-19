@@ -26,6 +26,7 @@ export const URLs = {
                 PARTNER: '/api/partner',
                 SPONSOR: '/api/sponsor',
                 LANGUAGES: '/api/utils/languages',
-                SERVICES: '/api/utils/services'
+                SERVICES: '/api/utils/services',
+                COMPANY_TYPES: '/api/utils/companyTypes'
         }
 };
