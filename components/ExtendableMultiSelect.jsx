@@ -21,7 +21,8 @@ class ExtendableMultiSelect extends React.Component {
             name: string
             helperText: string
             enterNewLabel: string
-            getItemsUrl: string
+            getItemsUrl: string - URL of the service, which returns array of {id, name} objects
+            allowAddNew: boolean
          */
         this.state = {
             items: this.props.items || [],
@@ -184,7 +185,7 @@ class ExtendableMultiSelect extends React.Component {
     render() {
         const value = this.state.value;
         const items = this.state.items;
-        const readOnly = this.props.readOnly;
+        const readOnly = this.props.readOnly ? true : false;
         return (
                 <FormControl style={{display: 'flex', flexWrap: 'wrap'}}>
 
@@ -194,8 +195,9 @@ class ExtendableMultiSelect extends React.Component {
                         value={value}
                         displayEmpty={true}
                         onChange={this.handleSelectionChange}
-                        input={<Input id={this.props.id} readOnly = {readOnly} />}
+                        input={<Input id={this.props.id} readOnly={readOnly} placeholder={this.props.helperText} />}
                     >
+                        { this.props.allowAddNew &&
                         <MenuItem key={null} value={null}>
                                 <TextValidator
                                     label={'Enter new value'}
@@ -209,13 +211,13 @@ class ExtendableMultiSelect extends React.Component {
                                 />
                                 <Button onClick={this.handleAdd}>+</Button>
                         </MenuItem>
+                        }
                         {items.map(item => (
                         <MenuItem key={item.id} value={item.id}>
                             {item.name}
                         </MenuItem>
                         ))}
                     </Select>
-                    <FormHelperText>{this.props.helperText}</FormHelperText>
                     <FormHelperText error={ this.state.errorText ? true : false}>{this.state.errorText}</FormHelperText>
                 </FormControl>
                    );

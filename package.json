@@ -41,7 +41,7 @@
     "svg-react-loader": "^0.4.6",
     "url-loader": "^1.1.2",
     "webpack": "^4.16.1",
-    "webpack-dev-server": "^3.1.4",
+    "webpack-dev-server": "^3.1.10",
     "whatwg-fetch": "^2.0.4",
     "zipcodes": "^8.0.0"
   },

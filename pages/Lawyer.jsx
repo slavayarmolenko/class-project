@@ -138,7 +138,7 @@ class Lawyer extends React.Component {
                 onError={errors => console.log(errors)}
                 readOnly={true}
             >   
-                {logged ? 
+                {logged && 
                 <div>
                     <div>
                     <TextValidator
@@ -171,7 +171,7 @@ class Lawyer extends React.Component {
                         value={repeatPassword}
                         style={{marginLeft: '15px'}}
                     /></div>
-                </div> : '' }
+                </div> }
                 <div><TextValidator
                     label="Full Name"
                     onChange={this.handleChange}
@@ -260,8 +260,8 @@ class Lawyer extends React.Component {
                 <div className="buttons">
                     <Button type="button" variant="contained" onClick={this.goToList.bind(this)}>Back to the List</Button>
                     {
-                        logged ? 
-                        <Button type="submit" color="primary" variant="contained">Submit</Button> : ''
+                        logged && 
+                        <Button type="submit" color="primary" variant="contained">Submit</Button>
                     }
                 </div>
             </ValidatorForm>

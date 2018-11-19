@@ -3,14 +3,10 @@ import ReactTable from 'react-table';
 import { Link } from "react-router-dom";
 import axios from 'axios';
 import Button from '@material-ui/core/Button';
-import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
+import { ValidatorForm} from 'react-material-ui-form-validator';
 import { URLs } from '../utils/URLs.js';
 import ConfirmationDialog from './../components/ConfirmDialog.jsx';
+import LawyerFilter from './../components/LawyerFilter.jsx';
 
 
 class Lawyers extends React.Component {
@@ -20,17 +16,12 @@ class Lawyers extends React.Component {
             data: [],
             dataLoaded: false,
             errorText: '',
-            filter: {
-                distance: 10,
-                usersZip: '',
-                units: 'mil',
-            },
+            filter: {},
             pageSize: 10,
             confirmDeleteDialogOpen: false,
             allServices: [{id: 0, name: 'DACA'},{id:1, name:'Family Reunion'}, {id:2, name: 'Deportation'}],
         };
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleChangeFilter = this.handleChangeFilter.bind(this);
+        this.handleChangeFilter = this.handleChangeFilter.bind(this)
         this.changePageSize = this.changePageSize.bind(this);
         this.handleConfirmDelete = this.handleConfirmDelete.bind(this);
         this.handleOpenConfirmDialog = this.handleOpenConfirmDialog.bind(this);
@@ -39,20 +30,20 @@ class Lawyers extends React.Component {
     }
     componentDidMount() {
         this._isMounted = true;
-        ValidatorForm.addValidationRule('isZip', (value) => {
-            if (/(^\d{5}$)|(^\d{5}-\d{4}$)/.test(value)) {
-                return true;
-            }
-            return false;
-        });
-
         axios.get(URLs.services.LAWYER)
             .then(result => {
                 if (this._isMounted) {
-                    this.setState({
-                        data: result.data.data,
-                        dataLoaded: true
-                    });
+                    if (result.data.success) {
+                        this.setState({
+                            data: result.data.data,
+                            dataLoaded: true
+                        });
+                    } else {
+                        this.setState({
+                            errorText: result.data.errMessage,
+                            dataLoaded: false
+                        });
+                    }
                 }
             })
             .catch(error => {
@@ -101,49 +92,40 @@ class Lawyers extends React.Component {
 
                 });
     }
-    handleChangeFilter(event) {
-        const { filter } = this.state;
-        
-        if (event.target.type === 'checkbox') {
-            filter[event.target.name] = event.target.checked;
-        } else {
-            filter[event.target.name] = event.target.value;
-        }
-        this.setState({ filter });
-    }
-    handleSubmit(event) {
+    handleChangeFilter(event, filter) {
         event.preventDefault();
+        this.handleSubmit(filter);
+        this.setState(filter);
+    }
+    handleSubmit(filter) {
         this.setState({ errorText: '' });
         let data = {
-            params: this.state.filter
+            params: filter
         };
-        if (data.usersZip !== '' && data.distance !== '' && data.description !== '') {
-            axios.get(URLs.services.LAWYER, data)
-                .then(result => {
+        axios.get(URLs.services.LAWYER, data)
+            .then(result => {
+                if (result.data.success) {
                     this.setState({
                         data: result.data.data,
                         dataLoaded: true
                     });
-
-                })
-                .catch(error => {
+                } else {
                     this.setState({
-                        errorText: error.response.statusText,
+                        errorText: result.data.errMessage,
                         dataLoaded: false
                     });
-
+                }
+            })
+            .catch(error => {
+                this.setState({
+                    errorText: error.response.statusText,
+                    dataLoaded: false
                 });
 
-
-
-        } else {
-            alert('Some data is not filled');
-        }
+            });
     }
     render() {
         const errorText = this.state.errorText;
-
-        const {distance, usersZip, units } = this.state.filter;
 
         const columns = [
             {
@@ -151,11 +133,11 @@ class Lawyers extends React.Component {
                 accessor: 'name', // String-based value accessors!
                 Cell: (props) => <Link to={URLs.pages.ATTORNEY + props.row.id}>{props.value}</Link>
             }, {
-                Header: 'E-mail',
-                accessor: 'email',
+                Header: 'Zip',
+                accessor: 'zip',
             }, {
-                Header: 'Description',
-                accessor: 'description'
+                Header: 'E-mail',
+                accessor: 'email'
             },
             {
                 Header: 'Delete',
@@ -172,51 +154,9 @@ class Lawyers extends React.Component {
                 <div className="container pageContent">
                     <h1>Attorneys</h1>
                     <div className="filtered-layout">
-                        <div className="filter">
-                            <ValidatorForm 
-                                onSubmit={this.handleSubmit}
-                                onError={errors => console.log(errors)}
-                            >   
-                                <div className="error">{errorText}</div>
-                                <div><TextValidator
-                                    label="Zip Code"
-                                    onChange={this.handleChangeFilter}
-                                    name="usersZip"
-                                    type="text"
-                                    value={usersZip}
-                                    validators={['required', 'isZip']}
-                                    errorMessages={['this field is required', 'Zip Code is not valid']}
-                                /></div>
-                                <div>
-                                    <TextValidator
-                                    label="Distance"
-                                    onChange={this.handleChangeFilter}
-                                    name="distance"
-                                    type="number"
-                                    validators={['required', 'isNumber']}
-                                    errorMessages={['this field is required', 'distance should be numeric']}
-                                    value={distance}/>
-                                </div>
-                                <div>
-                                    <FormControl component="fieldset">
-                                        <FormLabel component="legend">Units</FormLabel>
-                                        <RadioGroup
-                                            aria-label="Units"
-                                            name="units"
-                                            value={units}
-                                            onChange={this.handleChangeFilter}
-                                            row
-                                        >
-                                            <FormControlLabel value="mil" control={<Radio />} label="Miles" />
-                                            <FormControlLabel value="km" control={<Radio />} label="Km" />
-                                        </RadioGroup>
-                                    </FormControl>
-                                </div>
-                                <Button type="submit" color="primary" variant="contained">Filter</Button>
-                            </ValidatorForm>
-                            
-                        </div>
+                        <LawyerFilter onChange={this.handleChangeFilter}></LawyerFilter>
                         <div className="result">
+                            <div className="error">{errorText}</div>
                             <ReactTable
                                 data={this.state.data}
                                 columns={columns}
