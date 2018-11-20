@@ -1,0 +1,102 @@
+
+
+.intro {
+    padding: 88px 0 87px;
+    //background: url(../css/images/map.jpg) no-repeat;
+    background-position: 50% 10px;
+
+    .header {
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto 48px;
+        font-size: 18px;
+        line-height: 30px;
+
+        .mainTitle {
+            font-size: 28px;
+            line-height: 32px;
+        }
+        p {
+
+        }
+    }
+    .columns3 {
+        width: 33.333%;
+        float: left;
+        padding-left: 115px;
+        padding-right: 10px;
+
+        .imgHolder {
+            margin-left: 20px;
+            img {
+                width: 199px;
+                height: 199px;
+                -webkit-border-radius: 500px;
+                border-radius: 50%;
+                vertical-align: top;
+            }
+        }
+        .iconHolder {
+            position: relative;
+            top: -89px;
+            width: 85px;
+            margin: 0 0 -62px;
+            img {
+                vertical-align: top;
+            }
+        }
+        .textHolder {
+            .title {
+                font-size: 22px;
+                line-height: 30px;
+                color: #000;
+                display: block;
+                font-weight: normal;
+                margin: 0 0 5px;
+            }
+            .btn {
+                font-size: 18px;
+                line-height: 30px;
+                display: inline-block;
+                font-weight: 700;
+                color: #ff0000;
+                text-transform: uppercase;
+            }
+            
+        }
+    }
+}
+
+.row {
+    margin-right: -10px;
+    margin-left: -10px;
+    &:after {
+        content: '';
+        display: block;
+        clear: both;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .intro {
+        padding: 40px 0;
+        .header .mainTitle {
+            font-size: 28px;
+            line-height: 32px;
+        }
+
+        .columns-3 {
+            width: 100%;
+            margin-bottom: 30px;
+        }
+    }
+}
+
+@media only screen and (max-width: 1199px) {
+    .intro {
+
+        .columns-3 {
+            padding-left: 10px;
+        }
+    }
+}
