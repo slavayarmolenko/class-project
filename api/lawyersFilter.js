@@ -7,7 +7,7 @@ exports.filterLawyers = function (languageID, serviceID, zip, rad) {
         'INNER JOIN (SELECT * FROM lawyer_service WHERE lawyer_service.serviceID IN (' + serviceID+')) AS lawyer_service ON lawyers.id=lawyer_service.lawyerID';
     } else if (languageID&&languageID.length){
         SQLquery = 'SELECT lawyers.id, lawyers.name, lawyers.email, lawyers.zip FROM lawyers ' +
-        'INNER JOIN (SELECT * FROM lawyer_language WHERE lawyer_language.languageID IN (' + languageID + ")) AS lawyer_language ON lawyers.id = lawyer_language.lawyerID ";                  
+        'INNER JOIN (SELECT * FROM lawyer_language WHERE lawyer_language.languageID IN (' + languageID + ")) AS lawyer_language ON lawyers.id = lawyer_language.lawyerID";                  
     } else if (serviceID&&serviceID.length){
         SQLquery = 'SELECT lawyers.id, lawyers.name, lawyers.email, lawyers.zip FROM lawyers ' +
         'INNER JOIN (SELECT * FROM lawyer_service WHERE lawyer_service.serviceID IN (' + serviceID + ")) AS lawyer_service ON lawyers.id = lawyer_service.lawyerID ";                  
@@ -21,6 +21,6 @@ exports.filterLawyers = function (languageID, serviceID, zip, rad) {
         SQLquery += "WHERE lawyers.zip IN (" + zips + ")";
         }
     }
-    SQLquery += ";";
+    SQLquery += " GROUP BY lawyers.id;";
     return SQLquery;
 }
