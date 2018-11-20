@@ -1,3 +1,24 @@
+html {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+html {
+    font-family: 'PT Serif', serif;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+}
+body {
+    margin: 0;
+}
+*, *:before, *:after {
+    -webkit-box-sizing: inherit;
+    -moz-box-sizing: inherit;
+    box-sizing: inherit;
+}
+
+
+
 img.wp-smiley,
 img.emoji {
 	display: inline !important;
@@ -97,7 +118,7 @@ article, aside, details, figcaption, figure, footer, header, main, menu, nav, se
 }
 
 a {
-    color: #45c267;
+    color: #000;
     text-decoration: none;
     outline: none;
 }
@@ -181,3 +202,12 @@ svg:not(:root) {
 .error {
     color: #ff0000;
 }
+
+img {
+    height: auto;
+    max-width: 100%;
+    border: 0;
+}
+
+.home a { color: #ff0000;}
+
