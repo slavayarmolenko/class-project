@@ -67,6 +67,144 @@
     }
 }
 
+.ourProjects {
+    &:after {
+        content: '';
+        display: block;
+        clear: both;
+    }
+    .header {
+        background: rgb(116, 55, 3);
+        padding: 68px 10px;
+        text-align: center;
+        .mainTitle {
+            font-size: 40px;
+            line-height: 45px;
+            font-weight: 700;
+            color: #fff;
+            margin: 0;
+        }
+        
+    }
+    .projectHolder {
+        display: block;
+        margin-top: 0px;
+        padding-left: 0px;
+
+        li.columns2 {
+            list-style-type: none;
+            width: 50%;
+            float: left;
+            position: relative;
+            overflow: hidden;
+            img {
+                vertical-align: top;
+                width: 100%;
+            }
+            &:hover {
+                .textHolder{
+                    display: none;
+                }
+                .hoverState {
+                    display: flex;
+                }
+            }
+
+        }
+        .alignCenter {
+            flex: auto;
+        }
+        .textHolder {
+            .title {
+                display: block;
+                font-size: 30px;
+                line-height: 35px;
+                font-weight: 700;
+                color: #fff;
+            }
+
+            position: absolute;
+            width: 100%;
+            top: 0;
+            left: 0;
+            height: 100%;
+            text-align: center;
+            font-size: 24px;
+            line-height: 36px;
+            color: #d2d2d2;
+            background: rgba(0, 0, 0, 0.25);
+            padding: 0 4.5vw;
+            
+            display: flex;
+            align-items: center;
+        }
+
+        .hoverState {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.90);
+            text-align: center;
+            padding: 0 2.5vw;
+            font-size: 24px;
+            line-height: 36px;
+            color: #777;
+            opacity: 0.9;
+            -webkit-transition: ease 0.5s;
+            -moz-transition: ease 0.5s;
+            transition: ease 0.5s;
+            display: none;
+            align-items: center;
+
+            .title {
+                display: block;
+                font-size: 30px;
+                line-height: 35px;
+                font-weight: 700;
+                color: #fcb216;
+            }
+            p {
+                margin: 0 0 20px;
+            }
+            .btnHolder {
+                a {
+                    display: inline-block;
+                    width: 50px;
+                    height: 50px;
+                    border: 1px solid #777;
+                    color: #777;
+                    font-size: 24px;
+                    line-height: 50px;
+                    text-align: center;
+                    -webkit-border-radius: 100px;
+                    border-radius: 50%;
+                }
+                svg {
+                    overflow: visible;
+                    width: .5em;
+                    overflow: hidden;
+                    display: inline-block;
+                    font-size: inherit;
+                    height: 1em;
+                    overflow: visible;
+                    vertical-align: -.125em;
+                }
+            }
+            .textContent {
+                font-size: 16px;
+                line-height: 30px;
+                border-top: 1px solid #fcb216;
+                position: relative;
+                top: 4vw;
+            }
+            
+        }
+    }
+
+}
+
 .row {
     margin-right: -10px;
     margin-left: -10px;
@@ -85,9 +223,39 @@
             line-height: 32px;
         }
 
-        .columns-3 {
+        .columns3 {
             width: 100%;
             margin-bottom: 30px;
+        }
+    }
+    .ourProjects {
+        .header {
+            padding: 30px 10px;
+            .mainTitle {
+                font-size: 28px;
+                line-height: 32px;
+            }
+        }
+        .projectHolder {
+            .textHolder {
+                font-size: 18px;
+                line-height: 22px;
+                .title {
+                    font-size: 24px;
+                    line-height: 28px;
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 991px) {
+    .ourProjects {
+        .projectHolder {
+            li.columns2 {
+                width: 100%;
+            }
+            
         }
     }
 }
@@ -95,7 +263,7 @@
 @media only screen and (max-width: 1199px) {
     .intro {
 
-        .columns-3 {
+        .columns3 {
             padding-left: 10px;
         }
     }

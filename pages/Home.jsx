@@ -4,9 +4,51 @@ import styles from './Home.module.scss';
 import {URLs} from '../utils/URLs.js';
 
 class Home extends React.Component {
+    
     render() {
-
-        console.log('render home');
+        const projects = [
+            { 
+                id: 'attorneys',
+                title: 'Attorney Database',
+                subtitle: 'Low-cost and Pro-Bono Legal Services',
+                link: URLs.pages.ATTORNEYS,
+                image: "https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/img5-5-2.jpg",
+                text: 'Database of California attorneys willing to provide free or low cost legal services to undocumented students and/or their families.'
+            },
+            {
+                id:'legal_fund',
+                title: 'Legal Fund',
+                subtitle: '',
+                link: '#',
+                image: "https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/img5-5-2.jpg",
+                text: 'An emergency fund to be used for legal services and fees by undocumented students and/or their families.'
+            },
+            {
+                id: 'HIEROGLYPHS',
+                title: 'HIEROGLYPHS',
+                subtitle: 'Opportunities Beyond the Classroom',
+                link: URLs.pages.HIEROGLYPHS,
+                image: "https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/img5-5-2.jpg",
+                text: 'scHolarships, Internships, Externships, Research Opportunities, Grants, and Local Youth Programs for High Schoolers'
+            },
+            {
+                id: 'scholarship_fund',
+                title: 'Scholarship Fund',
+                subtitle: '',
+                link: '#',
+                image: "https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/img5-5-2.jpg",
+                text: 'A scholarship fund to award stipends to students participating in our HIEROGLYPHS program and/or other established unpaid projects, to offset opportunity cost of a paid job.'
+            },
+            {
+                id: 'dream_talks',
+                title: 'DREAM Talks',
+                subtitle: 'Starting a Conversation on Campus',
+                link: '#',
+                image: "https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/img5-5-2.jpg",
+                text: 'Assemblies across high schools and college campuses in California to raise awareness about DREAM Act and DACA reinstatement.'
+            } 
+        ];
+        
         return (
             <div className="home">
                 <div className="banner">
@@ -59,6 +101,39 @@ class Home extends React.Component {
                             
                             
                     </div>
+                </section>
+                <section className={styles.ourProjects}>
+                    <header className={styles.header}>
+                        <h2 className={styles.mainTitle}>Our Projects</h2>
+                    </header>
+                    <ul className={styles.projectHolder}>
+                        {projects.map(project => (
+                        <li className={styles.columns2} key={project.id}>
+                            <img width="960" height="450" 
+                                src={project.image} 
+                                alt="" itemProp="image" srcSet="https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/img5-5-2.jpg 960w, https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/img5-5-2-300x141.jpg 300w, https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/img5-5-2-768x360.jpg 768w" 
+                                sizes="(max-width: 960px) 100vw, 960px" />
+                            <div className={styles.textHolder}>
+                                <div className={styles.alignCenter}>
+                                    <strong className={styles.title}>{project.title}</strong>
+                                    <p>{project.subtitle}</p>
+                                </div>
+                            </div>
+                            <div className={styles.hoverState}>
+                                <div className={styles.alignCenter}>
+                                    <strong className={styles.title}>{project.title}</strong>
+                                    <p>{project.subtitle}</p>
+                                    <div className={styles.btnHolder}>
+                                        <a href={URLs.pages.link}><svg aria-hidden="true" data-prefix="fa" data-icon="angle-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512" data-fa-i2svg=""><path fill="currentColor" d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"></path></svg></a>
+                                    </div>
+                                    <div className={styles.textContent}>
+                                    <p>{project.text}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        ))}
+                    </ul>
                 </section>
             </div>
 
