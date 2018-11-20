@@ -19,6 +19,7 @@ import Donate from './pages/Donate.jsx';
 import Login from './pages/Login.jsx';
 import Company from './pages/Company.jsx';
 import Lawyer from './pages/Lawyer.jsx';
+import HIEROGLYPHS from './pages/HIEROGLYPHS.jsx';
 import {URLs} from './utils/URLs.js';
 
 const home = () => <Home></Home>;
@@ -33,6 +34,7 @@ const company = (input) => <Company id={input.match.params.id}></Company>;
 const sponsors = () => <Sponsors></Sponsors>;
 const partners = () => <Partners></Partners>;
 const volonteers = () => <Volonteers></Volonteers>;
+const hierogliphs = () => <HIEROGLYPHS></HIEROGLYPHS>;
 
 
 const AppRouter = () => (
@@ -55,6 +57,7 @@ const AppRouter = () => (
                 <Route path={URLs.pages.SPONSORS} component={sponsors} />
                 <Route path={URLs.pages.PARTNERS} component={partners} />
                 <Route path={URLs.pages.VOLONTEERS} component={volonteers} />
+                <Route path={URLs.pages.HIEROGLYPHS} component={hierogliphs} />
             <Footer/>
         </div>
     </Router>

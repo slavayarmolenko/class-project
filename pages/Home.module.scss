@@ -1,4 +1,4 @@
-
+$dark-burgundy: #6c1d37;
 
 .intro {
     padding: 88px 0 87px;
@@ -59,7 +59,7 @@
                 line-height: 30px;
                 display: inline-block;
                 font-weight: 700;
-                color: #ff0000;
+                color: $dark-burgundy;
                 text-transform: uppercase;
             }
             
@@ -74,7 +74,7 @@
         clear: both;
     }
     .header {
-        background: rgb(116, 55, 3);
+        background: $dark-burgundy;
         padding: 68px 10px;
         text-align: center;
         .mainTitle {
@@ -163,7 +163,7 @@
                 font-size: 30px;
                 line-height: 35px;
                 font-weight: 700;
-                color: #fcb216;
+                color: $dark-burgundy;
             }
             p {
                 margin: 0 0 20px;
@@ -195,7 +195,7 @@
             .textContent {
                 font-size: 16px;
                 line-height: 30px;
-                border-top: 1px solid #fcb216;
+                border-top: 1px solid $dark-burgundy;
                 position: relative;
                 top: 4vw;
             }

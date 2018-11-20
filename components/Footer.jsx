@@ -4,8 +4,8 @@ slava.yarmolenko@gmail.com
 Created: August 2018
 */
 import React from "react";
-import { Link } from "react-router-dom";
 import styles from './Footer.module.scss';
+import {URLs} from '../utils/URLs.js';
 
 
 
@@ -23,30 +23,33 @@ const Footer = () => (
                             <h2 className={styles.widgetTitle}>Donate</h2>
                             <div className="menu-about-us-container">
                                 <ul id="menu-about-us" className="menu">
-                                    <li id="menu-item-112"><a href="#">Our Mission</a></li>
-                                    <li id="menu-item-110"><a href="#">Team</a></li>
-                                    <li id="menu-item-111"><a href="#">Career</a></li>
-                                    <li id="menu-item-113"><a href="#">Volunteer</a></li>
+                                    <li><a href={URLs.pages.ABOUT}>Our Mission</a></li>
+                                    <li><a href={URLs.pages.TEAM}>Team</a></li>
+                                    <li><a href={URLs.pages.VOLONTEERS}>Volunteer</a></li>
                         </ul></div></section>					
                     </div>
                     <div className={styles.column}>
                         <section id="nav_menu-2" className={styles.widget}>
                             <h2 className={styles.widgetTitle}>About Us</h2>
                             <div className="menu-donate-container">
-                            <ul id="menu-donate" className="menu">
-                                <li id="menu-item-108"><a href="#">Why Hopeful Foundation</a></li>
-                                <li id="menu-item-109"><a href="#">Sponsor Our Cause</a></li>
-                                <li id="menu-item-106"><a href="#">FAQ</a></li>
-                                <li id="menu-item-107"><a href="#">Privacy Policy</a></li>
-                            </ul></div></section>					</div>
+                                <ul id="menu-donate" className="menu">
+                                    <li><a href={URLs.pages.TEAM}>Team</a></li>
+                                    <li><a href={URLs.pages.SPONSORS}>Sponsors</a></li>
+                                    <li><a href={URLs.pages.PARTNERS}>Partners</a></li>
+                                    <li><a href={URLs.pages.VOLONTEERS}>Volonteers</a></li>
+                                </ul>
+                            </div>
+                        </section>				
+                    </div>
                     <div className={styles.column}>
                         <section id="nav_menu-3" className={styles.widget}>
-                            <h2 className={styles.widgetTitle}>Privacy</h2>
+                            <h2 className={styles.widgetTitle}>Projects</h2>
                             <div className="menu-privacy-container">
                                 <ul id="menu-privacy" className="menu">
-                                <li id="menu-item-114"><a href="#">Terms and Conditions</a></li>
-                                    <li id="menu-item-115"><a href="#">Full disclosure</a></li>
-                                    <li id="menu-item-116"><a href="#">Policies</a></li>
+                                    <li><a href={URLs.pages.ATTORNEYS}>Attorney Database</a></li>
+                                    <li><a href={URLs.pages.LEGALFUND}>Legal Fund</a></li>
+                                    <li><a href={URLs.pages.ATTORNEYS}>Scholarships/Internshipd</a></li>
+                                    <li><a href={URLs.pages.SCHOLARSHIPFUND}>Scholarships Fund</a></li>
                             </ul></div>
                         </section>					
                     </div>

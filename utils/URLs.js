@@ -16,7 +16,9 @@ export const URLs = {
                 VOLONTEERS: '/volonteers/',
                 PARTNERS: '/partners/',
                 SPONSORS: '/sponsors/',
-                HIEROGLYPHS: '/HIEROGLYPHS/'
+                HIEROGLYPHS: '/HIEROGLYPHS/',
+                LEGALFUND: '/legalfund/',
+                SCHOLARSHIPFUND: '/scholarshipfund/'
         },
         services: {
                 LAWYER: '/api/lawyer',
