@@ -15,7 +15,10 @@ export const URLs = {
                 TEAM: '/team/',
                 VOLONTEERS: '/volonteers/',
                 PARTNERS: '/partners/',
-                SPONSORS: '/sponsors/'
+                SPONSORS: '/sponsors/',
+                HIEROGLYPHS: '/HIEROGLYPHS/',
+                LEGALFUND: '/legalfund/',
+                SCHOLARSHIPFUND: '/scholarshipfund/'
         },
         services: {
                 LAWYER: '/api/lawyer',

@@ -1,26 +1,144 @@
+
 import React from 'react';
+import styles from './Home.module.scss';
+import {URLs} from '../utils/URLs.js';
 
-        class Home extends React.Component {
-        render() {
-            
-        console.log('render home');
-                return (
-                    <div>
-                        <div className="banner">
-                            <img width="1350" src="https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/enthusiastic-children-876543-2.jpg" className="attachment-benevolent-slider size-benevolent-slider wp-post-image" alt="" itemProp="image" srcSet="https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/enthusiastic-children-876543-2.jpg 1350w, https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/enthusiastic-children-876543-2-300x151.jpg 300w, https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/enthusiastic-children-876543-2-768x387.jpg 768w, https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/enthusiastic-children-876543-2-1024x516.jpg 1024w" sizes="(max-width: 1350px) 100vw, 1350px"></img>
+class Home extends React.Component {
+    
+    render() {
+        const projects = [
+            { 
+                id: 'attorneys',
+                title: 'Attorney Database',
+                subtitle: 'Low-cost and Pro-Bono Legal Services',
+                link: URLs.pages.ATTORNEYS,
+                image: "https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/img5-5-2.jpg",
+                text: 'Database of California attorneys willing to provide free or low cost legal services to undocumented students and/or their families.'
+            },
+            {
+                id:'legal_fund',
+                title: 'Legal Fund',
+                subtitle: '',
+                link: '#',
+                image: "https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/img5-5-2.jpg",
+                text: 'An emergency fund to be used for legal services and fees by undocumented students and/or their families.'
+            },
+            {
+                id: 'HIEROGLYPHS',
+                title: 'HIEROGLYPHS',
+                subtitle: 'Opportunities Beyond the Classroom',
+                link: URLs.pages.HIEROGLYPHS,
+                image: "https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/img5-5-2.jpg",
+                text: 'scHolarships, Internships, Externships, Research Opportunities, Grants, and Local Youth Programs for High Schoolers'
+            },
+            {
+                id: 'scholarship_fund',
+                title: 'Scholarship Fund',
+                subtitle: '',
+                link: '#',
+                image: "https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/img5-5-2.jpg",
+                text: 'A scholarship fund to award stipends to students participating in our HIEROGLYPHS program and/or other established unpaid projects, to offset opportunity cost of a paid job.'
+            },
+            {
+                id: 'dream_talks',
+                title: 'DREAM Talks',
+                subtitle: 'Starting a Conversation on Campus',
+                link: '#',
+                image: "https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/img5-5-2.jpg",
+                text: 'Assemblies across high schools and college campuses in California to raise awareness about DREAM Act and DACA reinstatement.'
+            } 
+        ];
+        
+        return (
+            <div className="home">
+                <div className="banner">
+                    <img width="1350" src="https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/enthusiastic-children-876543-2.jpg" className="attachment-benevolent-slider size-benevolent-slider wp-post-image" alt="" itemProp="image" srcSet="https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/enthusiastic-children-876543-2.jpg 1350w, https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/enthusiastic-children-876543-2-300x151.jpg 300w, https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/enthusiastic-children-876543-2-768x387.jpg 768w, https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/enthusiastic-children-876543-2-1024x516.jpg 1024w" sizes="(max-width: 1350px) 100vw, 1350px"></img>
+                </div>
+                <section className={styles.intro}>
+                    <div className="container">
+                        <header className={styles.header}>
+                            <h2 className={styles.mainTitle}>According to PPIC, California is home to over 10 million immigrants. 1 in 4 of those are undocumented.</h2>
+                            <p>We join together to support our peers whose immigrant status and future may be at risk.</p>
+                        </header>
+                        <div className={styles.row}>
+                            <div className={styles.columns3}>
+                                <div className={styles.imgHolder}>
+                                    <img src="/css/images/home/cropped-img2-2-1.jpg" alt="Support CLASS"/>
+                                </div>
+                                <div className={styles.iconHolder}>
+                                    <img src="/css/images/home/icon1-1-2.png" alt="Support CLASS" />
+                                </div>
+                                <div className={styles.textHolder}>
+                                    <strong className={styles.title}>Support CLASS</strong>
+                                    <a className={styles.btn} href={URLs.pages.DONATE}>Donate &gt;</a>
+                                </div>
+                            </div>
+                            <div className={styles.columns3}>
+                                <div className={styles.imgHolder}>
+                                    <img src="/css/images/home/img3-2.jpg" alt="Seek Legal Assistance" />
+                                </div>
+                                <div className={styles.iconHolder}>
+                                    <img src="/css/images/home/icon2-2.png" alt="Seek Legal Assistance" />
+                                </div>
+                                <div className={styles.textHolder}>
+                                    <strong className={styles.title}>Seek Legal Assistance</strong>
+                                    <a className={styles.btn} href={URLs.pages.ATTORNEYS}>Find an Attorney &gt;</a>
+                                </div>
+                            </div>
+                            <div className={styles.columns3}>
+                                <div className={styles.imgHolder}>
+                                    <img src="/css/images/home/img4-2.jpg" alt="Join Our Cause" />
+                                </div>
+                                <div className={styles.iconHolder}>
+                                    <img src="/css/images/home/icon3-2.png" alt="Join Our Cause" />
+                                </div>
+                                <div className={styles.textHolder}>
+                                    <strong className={styles.title}>Join Our Cause</strong>
+                                    <a className={styles.btn} href={URLs.pages.VOLONTEERS}>Volunteer &gt;</a>
+                                </div>
+                            </div>	
                         </div>
-                        <div className="container">
-                            <h1>CLASS Application. Our mission.</h1>
-                            <p>
-                            Since the Trump Administration repealed the DACA program in September 2017, we have been concerned for our friends and classmates whose safety, academic opportunities, and DREAMs for a bright future in the country they grew up in have been compromised.  
-                            We are a group of Carlmont High School and Design Tech High School students who have tasked ourselves with building a safety net and speaking up for those who are now too afraid to speak for themselves. Come join our ranks, and together we can make a difference. 
-                            Jenna Teterin Luz Victoria Valle Remond Nisha Marino Adrian Fernandez
-                            </p>
-                        </div>
+                            
+                            
                     </div>
+                </section>
+                <section className={styles.ourProjects}>
+                    <header className={styles.header}>
+                        <h2 className={styles.mainTitle}>Our Projects</h2>
+                    </header>
+                    <ul className={styles.projectHolder}>
+                        {projects.map(project => (
+                        <li className={styles.columns2} key={project.id}>
+                            <img width="960" height="450" 
+                                src={project.image} 
+                                alt="" itemProp="image" srcSet="https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/img5-5-2.jpg 960w, https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/img5-5-2-300x141.jpg 300w, https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/img5-5-2-768x360.jpg 768w" 
+                                sizes="(max-width: 960px) 100vw, 960px" />
+                            <div className={styles.textHolder}>
+                                <div className={styles.alignCenter}>
+                                    <strong className={styles.title}>{project.title}</strong>
+                                    <p>{project.subtitle}</p>
+                                </div>
+                            </div>
+                            <div className={styles.hoverState}>
+                                <div className={styles.alignCenter}>
+                                    <strong className={styles.title}>{project.title}</strong>
+                                    <p>{project.subtitle}</p>
+                                    <div className={styles.btnHolder}>
+                                        <a href={project.link}><svg aria-hidden="true" data-prefix="fa" data-icon="angle-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512" data-fa-i2svg=""><path fill="currentColor" d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"></path></svg></a>
+                                    </div>
+                                    <div className={styles.textContent}>
+                                    <p>{project.text}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        ))}
+                    </ul>
+                </section>
+            </div>
 
-                        
-                );
-        }
-        }
+
+        );
+    }
+}
 export default Home;
