@@ -18,9 +18,10 @@ exports.filterLawyers = function (languageID, serviceID, zip, rad) {
     if(zip && rad){
         var zips = ZipCodes.radius(zip, rad);
         if (zips.length){
-        SQLquery += "WHERE lawyers.zip IN (" + zips + ")";
+        SQLquery += " WHERE lawyers.zip IN (" + zips + ")";
         }
     }
     SQLquery += " GROUP BY lawyers.id;";
+    console.log(SQLquery);
     return SQLquery;
 }

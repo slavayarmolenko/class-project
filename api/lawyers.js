@@ -21,7 +21,7 @@ exports.create = function (app, connection) {
             usersDistance = ZipCodes.toMiles(usersDistance);
         }
         var query = filter.filterLawyers(req.query.languages, req.query.services, usersZip, usersDistance);
-
+        console.log(query);
         connection.query(query, function (err, results) {
             if (err) {
                 res.json(common.getErrorObject(err));
