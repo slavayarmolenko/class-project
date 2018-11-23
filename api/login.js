@@ -3,36 +3,39 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session');
 
 
-exports.create = function (app, connection) {
-    console.log("we were in init session ");
-    app.use(cookieParser());
-    app.use(session({secret: "Shh, its a secret!"}));
+exports.create = function (app, connection) {  
+
+    app.use(session({ secret: 'this-is-a-secret-token', cookie: { maxAge: 1200000 }}));
     app.post('/api/login', function (req, res) {
-        if (req.session.page_views) {
-            req.session.page_views++;
-        } else {
-            req.session.page_views = 1;
-        }
-        console.log(req.body.login + " Logged in");
-        var query = 'SELECT * FROM users WHERE password="' + req.body.password + '" AND name="' + req.body.login + '";';
+        var password = req.body.password;
+        var username = req.body.login;
+        var timestamp =  new Date();
+        var sessData = req.session;
+        var query = 'SELECT id FROM users WHERE password = "' + password + '" and name="' + username + '";';
+        console.log(query);
         connection.query(query, function (err, results) {
-            console.log('Users found =' + results.length);
-            if (err) 
-                throw err;
-            console.log("Bug here");
-            var receivedPassword = results[0];  
-            if ((req.body.login === "Vasya")&&(req.body.password === results[1])){
-                req.session.admin = true;
-                req.session.ssid = 1;
-            }   
+            if (err){
+                res.json({success: false});
+                return;
+            } 
+            if (results && results.length == 1){
+                var sessData = req.session;
+                sessData.userID = results[0].id;
+                res.json({success: true});
+                console.log(username + " logged in.");
+            } else {
+                res.json({success: false});
+            }
         });
         
-        
-        console.log('connection query successfully sent');
-        //console.log(req.session.admin);
-        res.json({success: true, page_views: req.session.page_views, ssid: req.session.ssid, admin: req.session.admin});
-        
-        
+    });
+    app.get('/api/login', function(req,res){
+        var userID = req.session.userID;
+        if(userID){
+            res.json({success: true});
+        } else {
+            res.json({success: false});
+        }
     });
 };
 

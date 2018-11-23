@@ -7,6 +7,7 @@ import { ValidatorForm} from 'react-material-ui-form-validator';
 import { URLs } from '../utils/URLs.js';
 import ConfirmationDialog from './../components/ConfirmDialog.jsx';
 import LawyerFilter from './../components/LawyerFilter.jsx';
+import { checkPropTypes } from 'prop-types';
 
 
 class Lawyers extends React.Component {
@@ -27,6 +28,7 @@ class Lawyers extends React.Component {
         this.handleOpenConfirmDialog = this.handleOpenConfirmDialog.bind(this);
         this.deleteLawyerId = 0;
         this._isMounted = false;
+        this.checkLogin = this.checkLogin.bind(this);
     }
     componentDidMount() {
         this._isMounted = true;
@@ -132,6 +134,12 @@ class Lawyers extends React.Component {
 
             });
     }
+    checkLogin(){
+        axios.get("/api/login")
+            .then(result => {
+                alert(result.data.success);
+            })
+    }
     render() {
         const errorText = this.state.errorText;
 
@@ -160,6 +168,7 @@ class Lawyers extends React.Component {
 
             return (
                 <div className="container pageContent">
+                    <button onClick = {this.checkLogin}> </button>
                     <h1>Attorneys</h1>
                     <div className="filtered-layout">
                         <LawyerFilter onChange={this.handleChangeFilter}></LawyerFilter>
