@@ -3,8 +3,19 @@ import { Redirect } from "react-router-dom";
 import Button from '@material-ui/core/Button';
 import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
 import ExtendableMultiSelect from './../components/ExtendableMultiSelect.jsx';
-import axios from 'axios';
-import {URLs} from './../utils/URLs.js';
+import {URLs} from '../utils/URLs.js';
+
+import {getItem, updateItem} from '../actions/itemsActions';
+import {getLogged} from '../actions/loginActions';
+
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
+import {LANGUAGE, SERVICE, ATTORNEY} from '../actions/entities';
+import {UPDATE_ITEM} from '../actions/types';
+import {errors} from '../api/errorTypes';
+//import { stat } from 'fs';
+
+
 //import DownshiftMultiple from '../components/DownshiftMultiple.jsx';
 
 class Lawyer extends React.Component {
@@ -25,8 +36,7 @@ class Lawyer extends React.Component {
                 services: [],
             },
             errorText: '',
-            redirectToList: false,
-            logged: true,
+            redirectTo: '',
             isNew: this.props.id ? false : true
         };
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -38,7 +48,7 @@ class Lawyer extends React.Component {
         this._isMounted = false;
     }
     
-    componentDidMount() {
+    componentWillMount() {
         this._isMounted = true;
         // custom rule will have name 'isPasswordMatch'
         ValidatorForm.addValidationRule('isPasswordMatch', (value) => {
@@ -57,7 +67,33 @@ class Lawyer extends React.Component {
             return false;
         });
         if (!this.state.isNew) {
-            this.getLawyerById(this.props.id);
+            this.props.getItem(ATTORNEY, this.props.id);
+        } else {
+            this.props.getLogged();
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.lawyer.id && this.props.id && (nextProps.lawyer.id.toString() === this.props.id.toString())) {
+            var lawyer = nextProps.lawyer;
+            lawyer.repeatPassword = '';
+            lawyer.password = '';
+            this.setState({lawyer: lawyer });
+        }
+        if (nextProps.errors.length > this.props.errors.length) {
+            const lastErr = nextProps.errors[nextProps.errors.length - 1];
+            if (lastErr.errCode === errors.UNAUTHORIZED) {
+                this.goToLogin();
+            } else {
+                this.setState({ errorText: 'Error while saving changes: ' + lastErr.text });
+            }
+        }
+        if ((nextProps.results.length > this.props.results.length) && nextProps.results[nextProps.results.length - 1].success) {
+            var lastResult = nextProps.results[nextProps.results.length - 1];
+            if (lastResult.success && lastResult.type === UPDATE_ITEM) {
+                this.goToList();
+                //this.goToList();
+            }
         }
     }
     handleChange(event) {
@@ -77,47 +113,23 @@ class Lawyer extends React.Component {
     }
     handleSubmit() {
         this.setState({ errorText: '' });
-        axios.post(URLs.services.LAWYER, this.state.lawyer)
+        this.props.updateItem(ATTORNEY, this.state.lawyer);
+        /* axios.post(URLs.services.LAWYER, this.state.lawyer)
                 .then(result => {
-                    if (result.data.success) {
+                    if (!common.processError(result, this, 'saving attorney info')) {
                         this.goToList();
-                    } else {
-                        this.setState({
-                            errorText: result.data.errMessage
-                        });
                     }
                 })
                 .catch(error => {
-                    
-                    this.setState({
-                        errorText: error.response.statusText
-                    });
-                });
+                    common.processError(error, this, 'savig attorney info');
+                });*/
     }
-    getLawyerById() {
-        axios.get(URLs.services.LAWYER, { params: { id: this.props.id } })
-                .then(result => {
-                    if (!this._isMounted) {
-                        return;
-                    }
-                    if (result.data.success) {
-                        result.data.data.repeatPassword = '';
-                        result.data.data.password = '';
-                        this.setState({ lawyer: result.data.data });
-                    } else {
-                        this.setState({
-                            errorText: 'Error: ' + result.data.errMessage
-                        });
-                    }
-                })
-                .catch(error => {
-                    this.setState({
-                        errorText: 'Error: ' + error.response.statusText,
-                    });
-                });
-    }
+    
     goToList() {
-        this.setState({redirectToList: true});
+        this.setState({ redirectTo: URLs.pages.ATTORNEYS });
+    }
+    goToLogin() {
+        this.setState({ redirectTo: URLs.pages.LOGIN });
     }
     render() {
         const { uzvername, name, email, password, repeatPassword,
@@ -125,13 +137,13 @@ class Lawyer extends React.Component {
             services} = this.state.lawyer;
         const errorText = this.state.errorText;
         const isNew = this.state.isNew;
-        const logged = this.state.logged;        
+        const logged = this.props.logged;        
 
         if (!logged && isNew) {
-            return <Redirect to='/attorneys'  />;
+            return <Redirect to={URLs.pages.LOGIN}  />;
         }
-        if (this.state.redirectToList) {
-            return <Redirect to='/attorneys'  />;
+        if (this.state.redirectTo) {
+            return <Redirect to={this.state.redirectTo}  />;
         }
         return (
           <div className="container pageContent">
@@ -204,7 +216,7 @@ class Lawyer extends React.Component {
                     onChange={this.handleChange}
                     name="description"
                     type="text"
-                    value={description}
+                    value={description || ''}
                     multiline={true}
                     validators={['maxStringLength:255']}
                     errorMessages={['Description length exceeds 255 symbols']}
@@ -243,7 +255,9 @@ class Lawyer extends React.Component {
                         value={languages}
                         name="languages"
                         onChange={this.handleChange}
-                        getItemsUrl={URLs.services.LANGUAGES}
+                        entity={LANGUAGE}
+                        items={this.props.languages}
+                        added={this.props.newLanguage}
                         readOnly={!logged}
                         allowAddNew={true}
                     />
@@ -256,7 +270,8 @@ class Lawyer extends React.Component {
                         value={services}
                         name="services"
                         onChange={this.handleChange}
-                        getItemsUrl={URLs.services.SERVICES}
+                        entity={SERVICE}
+                        items={this.props.services}
                         readOnly={!logged}
                         allowAddNew={true}
                     ></ExtendableMultiSelect>
@@ -276,4 +291,30 @@ class Lawyer extends React.Component {
     //}
 
 }
-export default Lawyer;
+
+Lawyer.propTypes = {
+    getItem: PropTypes.func.isRequired, 
+    updateItem: PropTypes.func.isRequired, 
+    getLogged: PropTypes.func.isRequired, 
+    
+    lawyer: PropTypes.object,
+    languages: PropTypes.array.isRequired,
+    newLanguage: PropTypes.object.isRequired,
+    services: PropTypes.array.isRequired,
+    logged: PropTypes.bool.isRequired,
+    results: PropTypes.array.isRequired,
+    errors: PropTypes.array.isRequired
+};
+const mapStateToProps = state => ({
+    lawyer: state.attorney.item,
+    languages: state.language.items || [],
+    newLanguage: state.language.item,
+    services: state.service.items || [],
+    logged: state.login.logged,
+    results: state.attorney.results,
+    errors: state.attorney.errors
+});
+export default connect(mapStateToProps, { getItem, updateItem, getLogged })(Lawyer);
+
+
+//export default Lawyer;

@@ -1,4 +1,3 @@
-
 export const URLs = {
         pages: {
                 HOME: '/home/',
@@ -30,6 +29,8 @@ export const URLs = {
                 SPONSOR: '/api/sponsor',
                 LANGUAGES: '/api/utils/languages',
                 SERVICES: '/api/utils/services',
-                COMPANY_TYPES: '/api/utils/companyTypes'
+                COMPANY_TYPES: '/api/utils/companyTypes',
+                LOGGED: '/api/login',
+                LOGIN: '/api/login'
         }
 };

@@ -7,12 +7,22 @@ var loginService = require('./login');
 var utilsService = require('./utils');
 var mysql = require('mysql');
 var bodyParser = require('body-parser');
+var session = require('express-session');
+
+app.use(session({ secret: 'this-is-a-secret-token', cookie: { maxAge: 1200000 }}));
+app.all('*', function (req, res, next) {
+    console.log(req.session);
+
+  next(); // pass control to the next handler
+});
+
 var connection = mysql.createConnection({
     host: "classdb.c1fc1qmtlpg9.us-west-1.rds.amazonaws.com",
     user: "master",
     password: "dEbi07oOFHaAW1s",
     database: "test1"
 });
+
 console.log('Trying to create connection');
 connection.connect(function (err) {
     if (err)
@@ -25,6 +35,8 @@ connection.connect(function (err) {
 
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+
+
 
 utilsService.create(app, connection);
 teamService.create(app, connection);

@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
 import Radio from '@material-ui/core/Radio';
@@ -8,7 +7,12 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import { URLs } from '../utils/URLs.js';
+
 import ExtendableMultiSelect from './ExtendableMultiSelect.jsx';
+
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
+import {LANGUAGE, SERVICE} from '../actions/entities';
 
 
 /*const styles = theme => ({
@@ -129,9 +133,11 @@ class LawyerFilter extends React.Component {
                         label="Speaking languages"
                         helperText="Please, select/add languages attorneys support"
                         value={languages}
+                        items={this.props.languages}
+                        added={this.props.newLanguage}
                         name="languages"
                         onChange={this.handleChangeFilter}
-                        getItemsUrl={URLs.services.LANGUAGES}
+                        entity={LANGUAGE}
                     ></ExtendableMultiSelect>
             </div>
             <div>
@@ -139,10 +145,12 @@ class LawyerFilter extends React.Component {
                         id="select-services"
                         label="Offer Services"
                         helperText="Please, select/add services attorneys offer"
+                        items={this.props.services}
                         value={services}
+                        added={this.props.newService}
                         name="services"
                         onChange={this.handleChangeFilter}
-                        getItemsUrl={URLs.services.SERVICES}
+                        entity={SERVICE}
                     ></ExtendableMultiSelect>
             </div>
             <div className="buttons">
@@ -156,8 +164,22 @@ class LawyerFilter extends React.Component {
     }
   }
   
-  LawyerFilter.propTypes = {
+
+  
+LawyerFilter.propTypes = {
     onChange: PropTypes.func,
-  };
-  //export default withStyles(styles)(ConfirmationDialog);
-  export default LawyerFilter;
+    languages: PropTypes.array.isRequired,
+    services: PropTypes.array.isRequired,
+    newLanguage: PropTypes.object,
+    newService: PropTypes.object
+};
+const mapStateToProps = state => ({
+    languages: state.language.items || [],
+    services: state.service.items || [],
+    newLanguage: state.language.item || {},
+    newService: state.service.item || {}
+});
+export default connect(mapStateToProps, { })(LawyerFilter);
+
+
+//export default LawyerFilter;

@@ -3,11 +3,14 @@ import ReactTable from 'react-table';
 import { Link } from "react-router-dom";
 import axios from 'axios';
 import Button from '@material-ui/core/Button';
-import { ValidatorForm} from 'react-material-ui-form-validator';
 import { URLs } from '../utils/URLs.js';
 import ConfirmationDialog from './../components/ConfirmDialog.jsx';
 import LawyerFilter from './../components/LawyerFilter.jsx';
-import { checkPropTypes } from 'prop-types';
+import {connect} from 'react-redux';
+import {getItems, deleteItem} from '../actions/itemsActions';
+import {ATTORNEY} from '../actions/entities';
+import PropTypes from 'prop-types';
+import {errors} from '../api/errorTypes';
 
 
 class Lawyers extends React.Component {
@@ -19,8 +22,7 @@ class Lawyers extends React.Component {
             errorText: '',
             filter: {},
             pageSize: 10,
-            confirmDeleteDialogOpen: false,
-            allServices: [{id: 0, name: 'DACA'},{id:1, name:'Family Reunion'}, {id:2, name: 'Deportation'}],
+            confirmDeleteDialogOpen: false
         };
         this.handleChangeFilter = this.handleChangeFilter.bind(this)
         this.changePageSize = this.changePageSize.bind(this);
@@ -30,33 +32,11 @@ class Lawyers extends React.Component {
         this._isMounted = false;
         this.checkLogin = this.checkLogin.bind(this);
     }
+    componentWillMount() {
+        this.props.getItems(ATTORNEY);
+    }
     componentDidMount() {
         this._isMounted = true;
-        axios.get(URLs.services.LAWYER)
-            .then(result => {
-                if (!this._isMounted) {
-                    return;
-                }
-                if (!result.data.success) {
-                    this.setState({
-                        errorText: result.data.errMessage,
-                        dataLoaded: false
-                    });
-                    return;
-                }
-                
-                this.setState({
-                    data: result.data.data,
-                    dataLoaded: true
-                });
-            })
-            .catch(error => {
-                this.setState({
-                    errorText: 'Error: ' + error.response.statusText,
-                    dataLoaded: false
-                });
-
-            });
     }
     componentWillUnmount() {
         this._isMounted = false;
@@ -71,77 +51,44 @@ class Lawyers extends React.Component {
     }
     handleConfirmDelete(confirmed) {
         this.setState({ confirmDeleteDialogOpen: false});
+        
         if (confirmed && this.deleteLawyerId) {
             this.deleteLawyer(this.deleteLawyerId);
         }
     }
-    deleteLawyer() {
+    deleteLawyer(deleteLawyerId) {
         var { filter } = this.state;
-        axios.delete(URLs.services.LAWYER, {params: {id: this.deleteLawyerId, filter}})
-                .then(result => {
-                    if (!this._isMounted) {
-                        return;
-                    }
-                    if (!result.data.success) {
-                        this.setState({
-                            errorText: result.data.errMessage,
-                            dataLoaded: false
-                        });
-                        return;
-                    }
-                    this.setState({
-                        data: result.data.data,
-                        dataLoaded: true
-                    });
-
-                })
-                .catch(error => {
-                    this.setState({
-                        errorText: error.response.statusText,
-                        dataLoaded: false
-                    });
-
-                });
+        this.props.deleteItem(ATTORNEY, deleteLawyerId, filter);
     }
     handleChangeFilter(filter) {
         this.handleSubmit(filter);
-        this.setState(filter);
+        this.setState({ filter: filter });
     }
     handleSubmit(filter) {
         this.setState({ errorText: '' });
-        let data = {
-            params: filter
-        };
-        axios.get(URLs.services.LAWYER, data)
-            .then(result => {
-                if (result.data.success) {
-                    this.setState({
-                        data: result.data.data,
-                        dataLoaded: true
-                    });
-                } else {
-                    this.setState({
-                        errorText: result.data.errMessage,
-                        dataLoaded: false
-                    });
-                }
-            })
-            .catch(error => {
-                this.setState({
-                    errorText: error.response.statusText,
-                    dataLoaded: false
-                });
-
-            });
+        let data = filter;
+        this.props.getItems(ATTORNEY, data);
     }
     checkLogin(){
         axios.get("/api/login")
             .then(result => {
-                alert(result.data.success);
+                alert(result.data.logged);
             })
     }
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.errors.length > this.props.errors.length) {
+            const lastErr = nextProps.errors[nextProps.errors.length - 1];
+            if (lastErr.errCode === errors.UNAUTHORIZED) {
+                return (<Redirect to={URLs.pages.LOGIN} />);
+            } else {
+                this.setState({ errorText: 'Error while saving changes: ' + lastErr.text });
+            }
+        }
+    }
     render() {
-        const errorText = this.state.errorText;
+        const lastError = this.props.errors.length ? this.props.errors[this.props.errors.length - 1]: null;
+        const errorText = lastError ? lastError.text : '';
+        const logged = this.props.logged;
 
         const columns = [
             {
@@ -157,6 +104,7 @@ class Lawyers extends React.Component {
             },
             {
                 Header: 'Delete',
+                show: logged,
                 accessor: 'id',
                 className: 'center',
                 Cell: (props) => <Button onClick={() => {
@@ -168,14 +116,18 @@ class Lawyers extends React.Component {
 
             return (
                 <div className="container pageContent">
-                    <button onClick = {this.checkLogin}> </button>
                     <h1>Attorneys</h1>
                     <div className="filtered-layout">
                         <LawyerFilter onChange={this.handleChangeFilter}></LawyerFilter>
                         <div className="result">
                             <div className="error">{errorText}</div>
+                            {logged && (
+                                <div className="buttons"> 
+                                    <Button component={Link} to={URLs.pages.CREATE_ATTORNEY} color="primary" variant="outlined">Create Attorney</Button>
+                                </div>
+                            ) }
                             <ReactTable
-                                data={this.state.data}
+                                data={this.props.data}
                                 columns={columns}
                                 pageSize={this.state.pageSize}
                                 onPageSizeChange={this.changePageSize}
@@ -194,4 +146,18 @@ class Lawyers extends React.Component {
     }
 
 }
-export default Lawyers;
+
+Lawyers.propTypes = {
+    getItems: PropTypes.func.isRequired,
+    deleteItem: PropTypes.func.isRequired,
+
+    data: PropTypes.array.isRequired, 
+    logged: PropTypes.bool.isRequired,
+    errors: PropTypes.array.isRequired
+};
+const mapStateToProps = state => ({
+    data: state.attorney.items || [],
+    logged: state.login.logged || false,
+    errors: state.attorney.errors || []
+});
+export default connect(mapStateToProps, { getItems, deleteItem })(Lawyers);

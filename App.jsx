@@ -6,6 +6,7 @@ Created: August 2018
 import React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import Header from './components/Header.jsx';
+import ErrorList from './components/ErrorList.jsx';
 import Footer from './components/Footer.jsx';
 import Home from './pages/Home.jsx';
 import Contact from './pages/Contact.jsx';
@@ -19,8 +20,11 @@ import Donate from './pages/Donate.jsx';
 import Login from './pages/Login.jsx';
 import Company from './pages/Company.jsx';
 import Lawyer from './pages/Lawyer.jsx';
-import HIEROGLYPHS from './pages/HIEROGLYPHS.jsx';
+import HIEROGLYPHS from './pages/HIEROGLYPHS.jsx'; 
 import {URLs} from './utils/URLs.js';
+
+import { Provider } from 'react-redux';
+import store from './store';
 
 const home = () => <Home></Home>;
 const contact = () => <Contact></Contact>;
@@ -38,10 +42,12 @@ const hierogliphs = () => <HIEROGLYPHS></HIEROGLYPHS>;
 
 
 const AppRouter = () => (
-    <Router>
-        <div>
-            <Header/>
-
+    
+        <Router>
+            <Provider store={store}>
+            <div>
+                <Header/>
+                <ErrorList/>
 
                 <Route path="/" exact component={home} />
                 <Route path={URLs.pages.ABOUT} component={about} />
@@ -58,9 +64,12 @@ const AppRouter = () => (
                 <Route path={URLs.pages.PARTNERS} component={partners} />
                 <Route path={URLs.pages.VOLONTEERS} component={volonteers} />
                 <Route path={URLs.pages.HIEROGLYPHS} component={hierogliphs} />
-            <Footer/>
-        </div>
-    </Router>
+                
+                <Footer/>
+            </div>
+            </Provider>
+        </Router>
+    
 );
 
 export default AppRouter;
