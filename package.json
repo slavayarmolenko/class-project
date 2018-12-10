@@ -8,7 +8,8 @@
     "url": "git://github.com/Iluhins/class-project.git"
   },
   "scripts": {
-    "start": "webpack-dev-server --hot"
+    "start": "webpack-dev-server --host 0.0.0.0 --hot --disable-host-check --port 8080",
+    "start-prod": "webpack --host 0.0.0.0 --port 8080"
   },
   "proxy": "http://localhost:8081",
   "author": "",
