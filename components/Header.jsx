@@ -8,8 +8,18 @@ import { Link } from "react-router-dom";
 import styles from './Header.module.scss';
 import { URLs } from '../utils/URLs.js';
 
-const Header = () => (
-            
+import { connect } from 'react-redux';
+import { getLogged } from '../actions/loginActions';
+import PropTypes from 'prop-types';
+
+class Header extends React.Component {
+    componentWillMount() {
+        this.props.getLogged();
+    }
+    render() {
+        const logged = this.props.logged;
+        return (
+
             <header id="masthead" className={styles.siteHeader} role="banner" itemScope="" itemType="http://schema.org/WPHeader">
 
                 <div className={styles.headerTop}>
@@ -24,15 +34,21 @@ const Header = () => (
                                     <li id="menu-item-270">
                                         <Link to={URLs.pages.DONATE}>Donate</Link>
                                     </li>
+                                    {!logged && (
                                     <li id="menu-item-271">
                                         <Link to={URLs.pages.LOGIN}>Login</Link>
                                     </li>
+                                    )}
+                                    { logged && (
                                     <li id="menu-item-271">
                                         <Link to={URLs.pages.CREATE_ATTORNEY}>Create Attorney</Link>
                                     </li>
+                                    )}
+                                    { logged && (
                                     <li id="menu-item-271">
                                         <Link to={URLs.pages.CREATE_COMPANY}>Create Company</Link>
                                     </li>
+                                    )}
                                 </ul>
                             </div>
                         </nav>
@@ -71,24 +87,24 @@ const Header = () => (
                                         <Link to="/">Home</Link>
                                     </li>
                                     <li className={styles.dropDownMenu}>
-                                            <span>People</span>
-                                            <ul>
-                                                <li><Link to={URLs.pages.TEAM}>Our Team</Link></li>
-                                                <li><Link to={URLs.pages.VOLONTEERS}>Our Volunteers</Link></li>
-                                                <li><Link to={URLs.pages.PARTNERS}>Our Partners</Link></li>
-                                                <li><Link to={URLs.pages.SPONSORS}>Our Sponsors</Link></li>
-                                            </ul>
+                                        <span>People</span>
+                                        <ul>
+                                            <li><Link to={URLs.pages.TEAM}>Our Team</Link></li>
+                                            <li><Link to={URLs.pages.VOLONTEERS}>Our Volunteers</Link></li>
+                                            <li><Link to={URLs.pages.PARTNERS}>Our Partners</Link></li>
+                                            <li><Link to={URLs.pages.SPONSORS}>Our Sponsors</Link></li>
+                                        </ul>
                                     </li>
                                     <li className={styles.dropDownMenu}>
-                                            <span>Projects</span>
-                                            <ul>
-                                                <li><Link to={URLs.pages.ATTORNEYS}>Attorney Database</Link></li>
-                                                <li><Link to={URLs.pages.ATTORNEYS}>Legal Fund</Link></li>
-                                                <li><Link to={URLs.pages.ATTORNEYS}>HIEROGLYPHS</Link></li>
-                                                <li><Link to={URLs.pages.ATTORNEYS}>Scholarship Fund</Link></li>
-                                            </ul>
+                                        <span>Projects</span>
+                                        <ul>
+                                            <li><Link to={URLs.pages.ATTORNEYS}>Attorney Database</Link></li>
+                                            <li><Link to={URLs.pages.ATTORNEYS}>Legal Fund</Link></li>
+                                            <li><Link to={URLs.pages.ATTORNEYS}>HIEROGLYPHS</Link></li>
+                                            <li><Link to={URLs.pages.ATTORNEYS}>Scholarship Fund</Link></li>
+                                        </ul>
                                     </li>
-                                    
+
                                     <li>
                                         <Link to={URLs.pages.TEAM}>Post</Link>
                                     </li>
@@ -100,6 +116,18 @@ const Header = () => (
 
                 </div>
             </header>
-);
+        )
+    };
+}
 
-export default Header;
+Header.propTypes = {
+    getLogged: PropTypes.func.isRequired,
+    logged: PropTypes.bool.isRequired
+};
+
+
+const mapStateToProps = state => ({
+    logged: state.login.logged,
+    errors: state.errors
+});
+export default connect(mapStateToProps, { getLogged })(Header);

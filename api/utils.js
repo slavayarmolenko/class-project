@@ -3,10 +3,10 @@ exports.create = function(app, connection) {
     app.get('/api/utils/languages', function (req, res) {
         connection.query('SELECT * FROM languages', function (err, results) {
             if (err) {
-                res.json(common.getErrorObject(err));
+                res.json(common.getSqlErrorObject(err, req));
                 return;
             } 
-            res.json({data: results, success: true});
+            res.json(common.getSuccessObject(results, req));
         });    
 
     });
@@ -14,11 +14,11 @@ exports.create = function(app, connection) {
     app.get('/api/utils/services', function (req, res) {
         connection.query('SELECT * FROM service', function (err, results) {
             if (err) {
-                res.json(common.getErrorObject(err));
+                res.json(common.getSqlErrorObject(err, req));
                 return;
             } 
 
-            res.json({data: results, success: true});
+            res.json(common.getSuccessObject(results, req));
             
         });    
 
@@ -27,11 +27,11 @@ exports.create = function(app, connection) {
     app.get('/api/utils/companyTypes', function (req, res) {
         connection.query('SELECT * FROM companyTypes', function (err, results) {
             if (err) {
-                res.json(common.getErrorObject(err));
+                res.json(common.getSqlErrorObject(err, req));
                 return;
             } 
 
-            res.json({data: results, success: true});
+            res.json(common.getSuccessObject(results, req));
             
         });    
 
@@ -44,10 +44,10 @@ exports.create = function(app, connection) {
         }
         connection.query('INSERT INTO languages(name) VALUES ("' + newName + '")', function (err, results) {
             if (err) {
-                res.json(common.getErrorObject(err));
+                res.json(common.getSqlErrorObject(err, req));
                 return;
             } 
-            res.json({data: {id: results.insertId}, success: true});
+            res.json(common.getSuccessObject({id: results.insertId}, req));
         });    
 
     });
@@ -59,10 +59,10 @@ exports.create = function(app, connection) {
         }
         connection.query('INSERT INTO service(name) VALUES ("' + newName + '")', function (err, results) {
             if (err) {
-                res.json(common.getErrorObject(err));
+                res.json(common.getSqlErrorObject(err, req));
                 return;
             } 
-            res.json({data: {id: results.insertId}, success: true});
+            res.json(common.getSuccessObject(results, req));
         });    
 
     });
@@ -73,15 +73,15 @@ exports.create = function(app, connection) {
         }
         connection.query('DELETE FROM languages WHERE id=' + languageId, function (delErr) {
             if (delErr) {
-                res.json(common.getErrorObject(delErr));
+                res.json(common.getSqlErrorObject(delErr, req));
                 return;
             }
             connection.query('SELECT * FROM languages', function (selectErr, results) {
                 if (selectErr) {
-                    res.json(common.getErrorObject(selectErr));
+                    res.json(common.getSqlErrorObject(selectErr, req));
                     return;
                 } 
-                res.json({ data: results, success: true });
+                res.json(common.getSuccessObject(results, req));
             });
             
         });

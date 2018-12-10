@@ -4,8 +4,10 @@ slava.yarmolenko@gmail.com
 Created: August 2018
 */
 var common = require('./common');
+
 var ZipCodes = require('zipcodes');
 var filter = require("./lawyersFilter");
+var errorCodes = require('./errorTypes.js');
 
 exports.create = function (app, connection) {
 
@@ -21,15 +23,13 @@ exports.create = function (app, connection) {
             usersDistance = ZipCodes.toMiles(usersDistance);
         }
         var query = filter.filterLawyers(req.query.languages, req.query.services, usersZip, usersDistance);
-        console.log(query);
         connection.query(query, function (err, results) {
             if (err) {
-                res.json(common.getErrorObject(err));
+                res.json(common.getSqlErrorObject(err, req));
                 return;
             }
 
-            var send = { data: [], success: true };
-            send.data = results;
+            var send = common.getSuccessObject(results, req);
             res.json(send);
 
 
@@ -38,6 +38,10 @@ exports.create = function (app, connection) {
         });
     });
     app.post('/api/lawyer', function (req, res) {
+        if (!common.getIsLogged(req)) {
+            res.json(common.getUnloggedError());
+            return;
+        }
         var addNewLawyerLine1 = 'INSERT INTO lawyers (';
         var addNewLawyerLine2 = ') VALUES (';
         var i = 0;
@@ -46,12 +50,17 @@ exports.create = function (app, connection) {
             addNewLawyerLine1 = 'UPDATE lawyers SET ';
             ending = " WHERE id=" + req.body.id + ";";
             addNewLawyerLine2 = ' ';
-            console.log("DELETE FROM lawyer_language WHERE lawyerID = " + req.body.id + ";")
             connection.query("DELETE FROM lawyer_language WHERE lawyerID = " + req.body.id + ";", function (err, results) {
-                if (err) throw err;
+                if (err) {
+                    res.json(common.getSqlErrorObject(inErr, req));
+                    return;
+                }
             });
             connection.query("DELETE FROM lawyer_service WHERE lawyerID = " + req.body.id + ";", function (err, results) {
-                if (err) throw err;
+                if (err) {
+                    res.json(common.getSqlErrorObject(inErr, req));
+                    return;
+                }
             });
         }
         var isUpdate = req.body.id ? true : false;
@@ -110,20 +119,17 @@ exports.create = function (app, connection) {
         var IDLawyer;
         connection.query(addNewLawyerLine1 + addNewLawyerLine2, function (err, results) {
             if (err) {
-                res.json(common.getErrorObject(err));
+                res.json(common.getSqlErrorObject(err, req));
                 return;
             }
             if (!req.body.id) {
-                console.log("new" + results.insertId);
                 IDLawyer = results.insertId;
             } else {
-                console.log("upd" + req.body.id);
                 IDLawyer = req.body.id;
             }
             var languages = req.body.languages;
-            res.json({ success: true, results: results, returnObj: results });
+            res.json(common.getSuccessObject({id: results.insertId}, req));
             if (languages && languages.length) {
-                console.log(IDLawyer + " check 2");
                 var addLanguages = "INSERT INTO lawyer_language (lawyerID, languageID) VALUES ";
                 for (var i = 0; i < languages.length; i++) {
                     addLanguages += "(" + IDLawyer + ", "
@@ -133,12 +139,14 @@ exports.create = function (app, connection) {
                     } else addLanguages += ";";
                 }
                 connection.query(addLanguages, function (inErr, inResults) {
-                    if (inErr) throw inErr;
+                    if (inErr) {
+                        res.json(common.getSqlErrorObject(inErr, req));
+                        return;
+                    }
                 });
             }       
             var services = req.body.services;    
             if (services && services.length) {
-                console.log(IDLawyer + " check 2");
                 var addServices = "INSERT INTO lawyer_service (lawyerID, serviceID) VALUES ";
                 for (var i = 0; i < services.length; i++) {
                     addServices += "(" + IDLawyer + ", "
@@ -147,9 +155,11 @@ exports.create = function (app, connection) {
                         addServices += ", ";
                     } else addServices += ";";
                 }
-                console.log(addServices);
                 connection.query(addServices, function (inErr, inResults) {
-                    if (inErr) throw inErr;
+                    if (inErr) {
+                        res.json(common.getSqlErrorObject(inErr, req));
+                        return;
+                    };
                 });
             }
         });
@@ -159,53 +169,24 @@ exports.create = function (app, connection) {
         var userId = req.query.id;
         connection.query('SELECT lawyers.*,lawyer_language.languages,lawyer_service.services FROM (SELECT * FROM lawyers WHERE id='+ userId+') AS lawyers LEFT JOIN (SELECT lawyerID, GROUP_CONCAT(languageID) AS languages FROM lawyer_language GROUP BY lawyerID) AS lawyer_language ON lawyers.id=lawyer_language.lawyerID LEFT JOIN (SELECT lawyerID, GROUP_CONCAT(serviceID) AS services FROM lawyer_service GROUP BY lawyerID) AS lawyer_service ON lawyers.id=lawyer_service.lawyerID ;', function (err, results) {
             if (err) {
-                res.json(common.getErrorObject(err));
+                res.json(common.getSqlErrorObject(err, req));
                 return;
             }
-            /*var languages = [];
-            languages[0] = results[0].languageID;
-            var services = [];
-            services[0] = results[0].serviceID;
-            var isPresent;
-            for (var i = 1; i < results.length; i++) {
-                isPresent = true;
-                for (var a = 0; a < languages.length; a++) {
-                    if (results[i].languageID == languages[a]) {
-                        isPresent = false;
 
-                    }
-
-
-                }
-                if (isPresent) {
-                    languages.push(results[i].languageID);
-                }
+            if (results.length !== 1) {
+                res.json(common.getErrorObject('Attorney with assigned ID is not found', req, errorCodes.errors.NOT_FOUND));
+                return;
             }
-            for (var i = 1; i < results.length; i++) {
-                isPresent = true;
-                for (var a = 0; a < services.length; a++) {
-                    if (results[i].serviceID == services[a]) {
-                        isPresent = false;
-
-                    }
-
-
-                }
-                if (isPresent) {
-                    services.push(results[i].serviceID);
-                }
-            }*/
-             
 
             var lawyer = results[0];
-            console.log(lawyer);
             eval("var languages = [" + (lawyer.languages||"") + "]");
             eval("var services = [" + (lawyer.services||"") + "]");
             
             lawyer.languages = languages;
             lawyer.services = services;
+            console.log('Lawyer: ');
             console.log(lawyer);
-            res.json({ data: lawyer, success: true });
+            res.json(common.getSuccessObject(lawyer, req));
 
         });
 
@@ -216,14 +197,25 @@ exports.create = function (app, connection) {
         if (!userId) {
             return;
         }
+        if (!common.getIsLogged(req)) {
+            res.json(common.getUnloggedError());
+            return;
+        }
+
         connection.query('DELETE FROM lawyers WHERE id=' + userId, function (delErr) {
             if (delErr) {
-                res.json(common.getErrorObject(delErr));
+                res.json(common.getSqlErrorObject(delErr, req));
                 return;
             }
-            connection.query('SELECT id, email, name FROM lawyers', function (selectErr, results) {
+            var usersDistance = parseInt(req.query.distance);
+            var usersZip = parseInt(req.query.usersZip);
+            if (req.query.units == "km") {
+                usersDistance = ZipCodes.toMiles(usersDistance);
+            }
+            var query = filter.filterLawyers(req.query.languages, req.query.services, usersZip, usersDistance);
+            connection.query(query, function (selectErr, results) {
                 if (selectErr) {
-                    res.json(common.getErrorObject(selectErr));
+                    res.json(common.getSqlErrorObject(selectErr, req));
                     return;
                 }
                 res.json({ data: results, success: true });
