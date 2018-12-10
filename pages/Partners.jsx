@@ -1,4 +1,5 @@
 import React from 'react';
+import { constants } from '../utils/constants.js';
 import Companies from '../components/Companies.jsx';
 class Partners extends React.Component {
     constructor() {
@@ -19,7 +20,7 @@ class Partners extends React.Component {
         return (
                 <div className="container pageContent">
                     <h1>Partners</h1>
-                    <Companies companyType="1"></Companies>
+                    <Companies companyType={constants.companyType.PARTNER}></Companies>
                 </div>
                 )
     }

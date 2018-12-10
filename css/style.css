@@ -81,6 +81,9 @@ article, aside, details, figcaption, figure, footer, header, main, menu, nav, se
     text-decoration: underline;
 
 }
+a[role="button"], a[role="button"]:hover, a[role="button"]:active, a[role="button"]:link, a[role="button"]:visited {
+    text-decoration: none;
+}
 .pageContent .buttons {
     margin-top: 10px;
     margin-bottom: 10px;

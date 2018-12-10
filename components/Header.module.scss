@@ -224,3 +224,14 @@ $submenu-side-margin: 20px;
     
 }
 
+.errors {
+    padding: 0px;
+    margin: 0px;
+    .error {
+        line-height: 1em;
+        border: 1px solid #ff0000;
+        margin: 0px;
+        padding: 5px;
+    }
+}
+

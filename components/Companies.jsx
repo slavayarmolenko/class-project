@@ -2,6 +2,9 @@ import React from 'react';
 import ReactTable from 'react-table';
 import axios from 'axios';
 import {URLs} from '../utils/URLs.js';
+import { Link } from "react-router-dom";
+import Button from '@material-ui/core/Button';
+import { common } from '../utils/common.js';
 
 class Companies extends React.Component {
     constructor(props) {
@@ -12,23 +15,27 @@ class Companies extends React.Component {
             dataLoaded: false,
             errorText: ''
         };
+        this._isMounted = false;
 
     }
     componentDidMount() {
+        this._isMounted = true;
         axios.get(URLs.services.COMPANY, { params: { companyType: this.props.companyType }})
             .then(result => {
-                this.setState({
-                    data: result.data.data,
-                    dataLoaded: true
-                });
+                if (!common.processError(result, this, 'retrieving companies list')) {
+                    this.setState({
+                        data: result.data.data,
+                        dataLoaded: true
+                    });
+                }
             })
             .catch(error => {
-                this.setState({
-                    errorText: 'Error: ' + error.response.statusText,
-                    dataLoaded: false
-                });
+                common.processError(error, this, 'retrieving companies list');
 
             });
+    }
+    componentWillUnmount() {
+        this._isMounted = false;
     }
     render() {
         const columns = [

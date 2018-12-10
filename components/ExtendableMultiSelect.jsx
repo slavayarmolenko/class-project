@@ -9,21 +9,16 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import { TextValidator} from 'react-material-ui-form-validator';
 import axios from 'axios';
 
+import {connect} from 'react-redux';
+import {getItems, deleteItem} from '../actions/itemsActions';
+import PropTypes from 'prop-types';
+
+
 
 class ExtendableMultiSelect extends React.Component {
     constructor(props) {
         super(props);
-        /* Props should contain the following props
-            label: string
-            onChange(event): function
-            items:[<id:string, name: string>]
-            value:[<string>]
-            name: string
-            helperText: string
-            enterNewLabel: string
-            getItemsUrl: string - URL of the service, which returns array of {id, name} objects
-            allowAddNew: boolean
-         */
+        
         this.state = {
             items: this.props.items || [],
             value: this.props.value || [],
@@ -35,42 +30,43 @@ class ExtendableMultiSelect extends React.Component {
         this.handlePropChange = this.handlePropChange.bind(this);
         this.handleAdd = this.handleAdd.bind(this);
         this.onNewNameKeyPress = this.onNewNameKeyPress.bind(this);
-        //this.deleteItem = this.deleteItem.bind(this);
         this._isMounted = false;
     }
     componentWillUnmount() {
         this._isMounted = false;
     }
-    componentDidMount() {
+    componentWillMount() {
         this._isMounted = true;
-        var itemsUrl = this.props.getItemsUrl;
-        if (!itemsUrl) {
-            return;
+        if (!this.props.items.length) {
+            this.props.getItems(this.props.entity);
         }
-        axios.get(itemsUrl)
-                .then(result => {
-                    if (!this._isMounted) {
-                        return;
-                    }
-                    if (result.data.success) {
-                        this.setState({ items: result.data.data });
-                    } else {
-                        this.setState({
-                            errorText: 'Error: ' + result.data.errMessage
-                        });
-                    }
-                })
-                .catch(error => {
-                    this.setState({
-                        errorText: 'Error: ' + error.response.statusText,
-                    });
-                });
-        
     }
     componentWillReceiveProps(nextProps){
         if(nextProps.value!==this.props.value){
           this.setState({value: nextProps.value });
         }
+
+        if(nextProps.items.length!==this.props.items.length){
+            this.setState({items: nextProps.items });
+        }
+
+        if (nextProps.added && nextProps.added.id) {
+            if (nextProps.added.id) {
+                        var value = this.state.value;
+                        var newValueIndex = value.findIndex(function(val){ 
+                            return val === newItemName; 
+                        });
+                        
+                        if (newValueIndex !== -1) {
+                            value[newValueIndex] = nextProps.added.id;
+                        }
+                        this.setState({ value});
+                        this.props.onChange({ target: { name: this.props.name, value: value, type: 'select' }});
+            } else {
+                //this.onAddItemError(newItemName, result.data.errMessage);
+            }
+        }
+
     }
     handleSelectionChange(event) {
         var itemSelected = event.target.value;
@@ -164,7 +160,8 @@ class ExtendableMultiSelect extends React.Component {
     }
 
     deleteItem(itemId) {
-        var deleteUrl = this.props.getItemsUrl;
+        this.props.deleteItem(itemId);
+        /*var deleteUrl = this.props.getItemsUrl;
          axios.delete(deleteUrl, {params: {id: itemId }})
             .then(result => {
                 this.setState({
@@ -179,7 +176,7 @@ class ExtendableMultiSelect extends React.Component {
                     dataLoaded: false
                 });
 
-            });
+            });*/
     }
 
     render() {
@@ -224,4 +221,21 @@ class ExtendableMultiSelect extends React.Component {
     }
 }
 /*{ <Button onClick={this.deleteItem.bind(this, item.id)}>x</Button>}*/
-export default ExtendableMultiSelect;
+
+ExtendableMultiSelect.propTypes = {
+    getItems: PropTypes.func.isRequired,
+
+    label: PropTypes.string.isRequired,
+    onChange: PropTypes.func,
+    items: PropTypes.array, //[<id:string, name: string>]
+    value:PropTypes.array, //[<string>]
+    name: PropTypes.string,
+    added: PropTypes.object,
+    helperText: PropTypes.string,
+    enterNewLabel: PropTypes.string,
+    entity: PropTypes.string, // - name of the entity, which returns array of {id, name} objects
+    allowAddNew: PropTypes.bool
+};
+
+export default connect(null, { getItems, deleteItem })(ExtendableMultiSelect);
+//export default ExtendableMultiSelect;
