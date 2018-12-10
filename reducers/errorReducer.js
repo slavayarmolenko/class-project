@@ -13,7 +13,14 @@ export default function(state=initialState, action) {
             if (action.payload.success) {
                 return state;
             }
-            return [...state, { id: 'err' + Date.now(), text: action.payload.errMessage, code: action.payload.errCode }];
+            return [...state, { 
+                id: 'err' + Date.now(), 
+                text: action.payload.errMessage, 
+                code: action.payload.errCode,
+                action: action.type,
+                entity: action.entity || 'unknown',
+                data: action.payload.data
+           }];
         default:
             return state;
                                                                       

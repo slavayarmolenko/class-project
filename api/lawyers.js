@@ -128,7 +128,7 @@ exports.create = function (app, connection) {
                 IDLawyer = req.body.id;
             }
             var languages = req.body.languages;
-            res.json(common.getSuccessObject({id: results.insertId}, req));
+            res.json(common.getSuccessObject({...req.body, id: results.insertId}, req));
             if (languages && languages.length) {
                 var addLanguages = "INSERT INTO lawyer_language (lawyerID, languageID) VALUES ";
                 for (var i = 0; i < languages.length; i++) {

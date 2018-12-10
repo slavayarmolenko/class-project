@@ -40,14 +40,17 @@ class Login extends React.Component {
 
     }
     componentWillReceiveProps(nextProps) {
-        if ((nextProps.results.length > this.props.results.length) && nextProps.results[nextProps.results.length - 1].success) {
-            var lastResult = nextProps.results[nextProps.results.length - 1];
-            if (lastResult.success && lastResult.type === LOG_IN) {
-                this.state.redirect = true;
-            }
+        if (nextProps.results.length > this.props.results.length) {
+                const lastResult = nextProps.results[nextProps.results.length - 1];
+                if (lastResult.action === LOG_IN) {
+                    this.state.redirect = true;
+                }
         }
         if (nextProps.errors.length > this.props.errors.length) {
-            this.setState({ errorText: 'Error while saving changes: ' + nextProps.errors[nextProps.errors.length - 1].text });
+            const lastError = nextProps.errors[nextProps.errors.length - 1];
+            if (lastError.action === LOG_IN) {
+                this.setState({ errorText: 'Error while saving changes: ' + nextProps.errors[nextProps.errors.length - 1].text });
+            }
         }
     }
     render() {
@@ -110,7 +113,7 @@ Login.propTypes = {
 };
 const mapStateToProps = state => ({
     logged: state.login.logged,
-    results: state.login.results,
-    errors: state.login.errors
+    results: state.results,
+    errors: state.errors
 });
 export default connect(mapStateToProps, { login })(Login);

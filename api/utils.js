@@ -47,7 +47,7 @@ exports.create = function(app, connection) {
                 res.json(common.getSqlErrorObject(err, req));
                 return;
             } 
-            res.json(common.getSuccessObject({id: results.insertId}, req));
+            res.json(common.getSuccessObject({...req.body, id: results.insertId}, req));
         });    
 
     });
@@ -62,7 +62,7 @@ exports.create = function(app, connection) {
                 res.json(common.getSqlErrorObject(err, req));
                 return;
             } 
-            res.json(common.getSuccessObject(results, req));
+            res.json(common.getSuccessObject({...req.body, id: results.insertId}, req));
         });    
 
     });
@@ -77,6 +77,28 @@ exports.create = function(app, connection) {
                 return;
             }
             connection.query('SELECT * FROM languages', function (selectErr, results) {
+                if (selectErr) {
+                    res.json(common.getSqlErrorObject(selectErr, req));
+                    return;
+                } 
+                res.json(common.getSuccessObject(results, req));
+            });
+            
+        });
+
+    });
+
+    app.delete('/api/utils/services', function (req, res) {
+        var languageId = req.query.id;
+        if (!languageId) {
+            return;
+        }
+        connection.query('DELETE FROM services WHERE id=' + languageId, function (delErr) {
+            if (delErr) {
+                res.json(common.getSqlErrorObject(delErr, req));
+                return;
+            }
+            connection.query('SELECT * FROM services', function (selectErr, results) {
                 if (selectErr) {
                     res.json(common.getSqlErrorObject(selectErr, req));
                     return;

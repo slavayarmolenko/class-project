@@ -59,7 +59,8 @@ exports.getErrorObject = function(errText, req, errCode) {
         success: false, 
         errMessage: errText || 'Unknown error',
         errCode: errCode || errorCodes.errors.BAD_REQUEST,
-        logged: this.getIsLogged(req)
+        logged: this.getIsLogged(req),
+        data: req.query || req.body
     };
 
 };
