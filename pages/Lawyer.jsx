@@ -74,7 +74,7 @@ class Lawyer extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.lawyer.id && (nextProps.lawyer.id.toString() === this.props.id.toString())) {
+        if (nextProps.lawyer.id && this.props.id && (nextProps.lawyer.id.toString() === this.props.id.toString())) {
             var lawyer = nextProps.lawyer;
             lawyer.repeatPassword = '';
             lawyer.password = '';
@@ -216,7 +216,7 @@ class Lawyer extends React.Component {
                     onChange={this.handleChange}
                     name="description"
                     type="text"
-                    value={description}
+                    value={description || ''}
                     multiline={true}
                     validators={['maxStringLength:255']}
                     errorMessages={['Description length exceeds 255 symbols']}
