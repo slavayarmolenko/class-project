@@ -19,14 +19,12 @@ export default function(state=initialState, action) {
             return { 
                 ...state,
                 items: action.payload.data, 
-                errors: errors,
                 results: results                                                       
             };
         case types.GET_ITEM:
             return { 
                 ...state,
                 item: action.payload.data, 
-                errors: errors ,
                 results: results                                                      
             };
         case types.UPDATE_ITEM:
@@ -34,7 +32,6 @@ export default function(state=initialState, action) {
             return { 
                 ...state,
                 results: results, 
-                errors: errors                                                       
             };
         default:
             return state;

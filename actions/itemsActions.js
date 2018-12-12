@@ -41,7 +41,7 @@ export const deleteItem = (entity, id, someOtherParams) => dispatch => {
                         type: types.DELETE_ITEM,
                         payload: {
                                 success: false,
-                                errMessage: 'Error, while getting ' + entity + ': ' + error.response.statusText,
+                                errMessage: 'Error, while getting ' + entity + ': ' + (error.message || error.response.statusText),
                                 logged: false
                         }
                     })
@@ -72,7 +72,7 @@ export const getItem = (entity, id) => dispatch => {
                         type: types.GET_ITEM,
                         payload: {
                                 success: false,
-                                errMessage: 'Error, while getting ' + entity + ': ' + error.response.statusText,
+                                errMessage: 'Error, while getting ' + entity + ': ' + (error.message || error.response.statusText),
                                 logged: false
                         }
                     })
@@ -102,7 +102,7 @@ export const getItems = (entity, data) => dispatch => {
                     type: types.GET_ITEMS,
                     payload: {
                             success: false,
-                            errMessage: 'Error, while getting ' + entity + ' list: ' + error.response.statusText,
+                            errMessage: 'Error, while getting ' + entity + ' list: ' + (error.message || error.response.statusText),
                             logged: false
                     }
                 })
@@ -133,7 +133,7 @@ export const updateItem = (entity, data) => dispatch => {
                 type: types.UPDATE_ITEM,
                 payload: {
                         success: false,
-                        errMessage: 'Error, while updating ' + entity + ': ' + error.response.statusText,
+                        errMessage: 'Error, while updating ' + entity + ': ' + (error.message || error.response.statusText),
                         logged: false
                 }
             })
