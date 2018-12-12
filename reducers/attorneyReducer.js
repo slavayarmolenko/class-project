@@ -4,20 +4,12 @@ import {ATTORNEY} from '../actions/entities.js';
 const initialState = { 
     items: [],
     item: {},
-    errors: [],
     results: [] 
 }
 
 export default function(state=initialState, action) {
     if (action.entity !== ATTORNEY) {
         return state;
-    }
-    let errors = [...state.errors];
-    if (!action.success && action.payload.errMessage) {
-        errors.push({ 
-            id: 'err' + Date.now(),
-            text: action.payload.errMessage
-        });
     }
 
     let results = [...state.results, { type:action.type, entity: action.entity, success:action.payload.success }];
