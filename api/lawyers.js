@@ -23,47 +23,52 @@ exports.create = function (app, connection) {
             usersDistance = ZipCodes.toMiles(usersDistance);
         }
         var query = filter.filterLawyers(req.query.languages, req.query.services, usersZip, usersDistance);
+        console.log('Search for lawyers. Query: ' + query);
         connection.query(query, function (err, results) {
             if (err) {
+                console.error('DB exception while getting lawyers.');
                 res.json(common.getSqlErrorObject(err, req));
                 return;
             }
 
             var send = common.getSuccessObject(results, req);
+            console.log('Searched succesfully.');
             res.json(send);
-
-
-
-            //res.send('Hello');
         });
     });
     app.post('/api/lawyer', function (req, res) {
+        console.log('Update/Insert lawyers. Data: ');
+        console.log(req.body);
         if (!common.getIsLogged(req)) {
             res.json(common.getUnloggedError());
+            console.warn('User can not update lawyer unlogged');
             return;
         }
+        var isUpdate = req.body.id ? true : false;
         var addNewLawyerLine1 = 'INSERT INTO lawyers (';
         var addNewLawyerLine2 = ') VALUES (';
         var i = 0;
         var ending = ");"
-        if (req.body.id) {
+        if (isUpdate) {
             addNewLawyerLine1 = 'UPDATE lawyers SET ';
             ending = " WHERE id=" + req.body.id + ";";
             addNewLawyerLine2 = ' ';
             connection.query("DELETE FROM lawyer_language WHERE lawyerID = " + req.body.id + ";", function (err, results) {
                 if (err) {
+                    console.error('Error while updating languages for lawyers.');
                     res.json(common.getSqlErrorObject(inErr, req));
                     return;
                 }
             });
             connection.query("DELETE FROM lawyer_service WHERE lawyerID = " + req.body.id + ";", function (err, results) {
                 if (err) {
+                    console.error('Error while updating services for lawyers.');
                     res.json(common.getSqlErrorObject(inErr, req));
                     return;
                 }
             });
         }
-        var isUpdate = req.body.id ? true : false;
+        
 
         var columnObject = [
             {
@@ -117,8 +122,11 @@ exports.create = function (app, connection) {
 
 
         var IDLawyer;
+        console.log('Query for lawyer update: ');
+        console.log(addNewLawyerLine1 + addNewLawyerLine2);
         connection.query(addNewLawyerLine1 + addNewLawyerLine2, function (err, results) {
             if (err) {
+                console.error('Failed while updating lawyer:');
                 res.json(common.getSqlErrorObject(err, req));
                 return;
             }
@@ -128,7 +136,7 @@ exports.create = function (app, connection) {
                 IDLawyer = req.body.id;
             }
             var languages = req.body.languages;
-            res.json(common.getSuccessObject({id: results.insertId}, req));
+            res.json(common.getSuccessObject({...req.body, id: results.insertId}, req));
             if (languages && languages.length) {
                 var addLanguages = "INSERT INTO lawyer_language (lawyerID, languageID) VALUES ";
                 for (var i = 0; i < languages.length; i++) {
@@ -140,6 +148,7 @@ exports.create = function (app, connection) {
                 }
                 connection.query(addLanguages, function (inErr, inResults) {
                     if (inErr) {
+                        console.error('Failed while insert languages for the lawyer:');
                         res.json(common.getSqlErrorObject(inErr, req));
                         return;
                     }
@@ -157,6 +166,7 @@ exports.create = function (app, connection) {
                 }
                 connection.query(addServices, function (inErr, inResults) {
                     if (inErr) {
+                        console.error('Failed while insert services for the lawyer:');
                         res.json(common.getSqlErrorObject(inErr, req));
                         return;
                     };
@@ -167,8 +177,10 @@ exports.create = function (app, connection) {
     });
     var getLawyerById = function (req, res) {
         var userId = req.query.id;
+        console.log('We get lawyer by ID=' + userId);
         connection.query('SELECT lawyers.*,lawyer_language.languages,lawyer_service.services FROM (SELECT * FROM lawyers WHERE id='+ userId+') AS lawyers LEFT JOIN (SELECT lawyerID, GROUP_CONCAT(languageID) AS languages FROM lawyer_language GROUP BY lawyerID) AS lawyer_language ON lawyers.id=lawyer_language.lawyerID LEFT JOIN (SELECT lawyerID, GROUP_CONCAT(serviceID) AS services FROM lawyer_service GROUP BY lawyerID) AS lawyer_service ON lawyers.id=lawyer_service.lawyerID ;', function (err, results) {
             if (err) {
+                console.error('Failed to get lawyer by id:');
                 res.json(common.getSqlErrorObject(err, req));
                 return;
             }
@@ -197,13 +209,17 @@ exports.create = function (app, connection) {
         if (!userId) {
             return;
         }
+
+        console.log('Deleting lawyer from the table');
         if (!common.getIsLogged(req)) {
+            console.warn('WARN: You can not delete lawyer unlogged');
             res.json(common.getUnloggedError());
             return;
         }
 
         connection.query('DELETE FROM lawyers WHERE id=' + userId, function (delErr) {
             if (delErr) {
+                console.error('Error while deleting lawyer.');
                 res.json(common.getSqlErrorObject(delErr, req));
                 return;
             }
@@ -215,9 +231,11 @@ exports.create = function (app, connection) {
             var query = filter.filterLawyers(req.query.languages, req.query.services, usersZip, usersDistance);
             connection.query(query, function (selectErr, results) {
                 if (selectErr) {
+                    console.error('Error while getting the list of lawyers after lawyer delete.');
                     res.json(common.getSqlErrorObject(selectErr, req));
                     return;
                 }
+                console.log('Lawyer is retrieved succesfully.');
                 res.json({ data: results, success: true });
             });
 

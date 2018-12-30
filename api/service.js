@@ -28,9 +28,6 @@ connection.connect(function (err) {
     if (err)
         throw err;
     console.log('You are now connected...');
-    //connection.query('INSERT INTO people (id,name, age, address) VALUES (?, ?, ?, ?)', ['4', 'Slava', '17', 'California, USA'], function (err, result) {
-    if (err)
-        throw err;
 })
 
 app.use(bodyParser.json()); // support json encoded bodies

@@ -10,6 +10,7 @@ import {connect} from 'react-redux';
 import {getItems, deleteItem} from '../actions/itemsActions';
 import {ATTORNEY} from '../actions/entities';
 import PropTypes from 'prop-types';
+import {DELETE_ITEM, GET_ITEMS} from '../actions/types';
 import {errors} from '../api/errorTypes';
 
 
@@ -76,18 +77,22 @@ class Lawyers extends React.Component {
             })
     }
     componentWillReceiveProps(nextProps) {
-        if (nextProps.errors.length > this.props.errors.length) {
+        if ((nextProps.errors.length > this.props.errors.length)) {
             const lastErr = nextProps.errors[nextProps.errors.length - 1];
-            if (lastErr.errCode === errors.UNAUTHORIZED) {
-                return (<Redirect to={URLs.pages.LOGIN} />);
-            } else {
-                this.setState({ errorText: 'Error while saving changes: ' + lastErr.text });
+            if (lastErr.entity === ATTORNEY) {
+                if (lastErr.errCode === errors.UNAUTHORIZED) {
+                    return (<Redirect to={URLs.pages.LOGIN} />);
+                } else {
+                    this.setState({ errorText: 'Error while ' + 
+                        (lastErr.action === DELETE_ITEM ? 'deleting' : 'retrieving') +
+                        'attorneys: ' + lastErr.text 
+                    });
+                }
             }
         }
     }
     render() {
-        const lastError = this.props.errors.length ? this.props.errors[this.props.errors.length - 1]: null;
-        const errorText = lastError ? lastError.text : '';
+        const errorText = this.state.errorText;
         const logged = this.props.logged;
 
         const columns = [
@@ -158,6 +163,6 @@ Lawyers.propTypes = {
 const mapStateToProps = state => ({
     data: state.attorney.items || [],
     logged: state.login.logged || false,
-    errors: state.attorney.errors || []
+    errors: state.errors || []
 });
 export default connect(mapStateToProps, { getItems, deleteItem })(Lawyers);

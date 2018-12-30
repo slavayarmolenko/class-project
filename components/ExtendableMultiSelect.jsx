@@ -10,8 +10,9 @@ import { TextValidator} from 'react-material-ui-form-validator';
 import axios from 'axios';
 
 import {connect} from 'react-redux';
-import {getItems, deleteItem} from '../actions/itemsActions';
+import {getItems, deleteItem, updateItem} from '../actions/itemsActions';
 import PropTypes from 'prop-types';
+import { UPDATE_ITEM } from '../actions/types';
 
 
 
@@ -50,20 +51,37 @@ class ExtendableMultiSelect extends React.Component {
             this.setState({items: nextProps.items });
         }
 
-        if (nextProps.added && nextProps.added.id) {
-            if (nextProps.added.id) {
-                        var value = this.state.value;
-                        var newValueIndex = value.findIndex(function(val){ 
-                            return val === newItemName; 
-                        });
-                        
-                        if (newValueIndex !== -1) {
-                            value[newValueIndex] = nextProps.added.id;
-                        }
-                        this.setState({ value});
-                        this.props.onChange({ target: { name: this.props.name, value: value, type: 'select' }});
-            } else {
-                //this.onAddItemError(newItemName, result.data.errMessage);
+        if ((nextProps.results.length > this.props.results.length) && nextProps.results[nextProps.results.length - 1].success) {
+            var lastResult = nextProps.results[nextProps.results.length - 1];
+            if ((lastResult.entity === this.props.entity) && (lastResult.action === UPDATE_ITEM) && 
+                nextProps.added && nextProps.added.id) {
+                    var value = this.state.value;
+                    var items = this.state.items;
+                    var newItemName = nextProps.added.name;
+                    var newItemIndex = items.findIndex(function(it){ 
+                        return it.id === newItemName; 
+                    });
+                    var newValueIndex = value.findIndex(function(val){ 
+                        return val === newItemName; 
+                    });
+                    
+                    if (newValueIndex !== -1) {
+                        value[newValueIndex] = nextProps.added.id;
+                    }
+                    if (newItemIndex !== -1) {
+                        items[newItemIndex].id = nextProps.added.id;
+                    }
+                    this.setState({ value, items});
+                    this.props.onChange({ target: { name: this.props.name, value: value, type: 'select' }});
+            }
+        }
+
+        
+        if (nextProps.errors.length > this.props.errors.length) {
+            var lastErr = nextProps.errors[nextProps.errors.length - 1];
+            if ((lastErr.action === UPDATE_ITEM) && (lastErr.entity === this.props.entity)) {
+                var failedLanguageName = lastErr.data.name;
+                this.onAddItemError(failedLanguageName, lastErr.text);
             }
         }
 
@@ -110,40 +128,7 @@ class ExtendableMultiSelect extends React.Component {
     }
 
     putNewLanguageIntoDBList(newItemName) {
-            var itemsUrl = this.props.getItemsUrl;
-            if (!itemsUrl) {
-                return;
-            }
-            
-            axios.post(itemsUrl, { name: newItemName })
-                    .then(result => {
-                        if (!this._isMounted) {
-                            return;
-                        }
-                        var items = this.state.items;
-                        var value = this.state.value;
-                        var newItemIndex = items.findIndex(function(it) { 
-                            return it.id === newItemName 
-                        });
-                        var newValueIndex = value.findIndex(function(val){ 
-                            return val === newItemName; 
-                        });
-                        if (result.data.success) {
-                            if (newItemIndex !== -1) {
-                                items[newItemIndex].id = result.data.data.id;
-                            }
-                            if (newValueIndex !== -1) {
-                                value[newValueIndex] = result.data.data.id;
-                            }
-                            this.setState({ items, value});
-                            this.props.onChange({ target: { name: this.props.name, value: value, type: 'select' }});
-                        } else {
-                            this.onAddItemError(newItemName, result.data.errMessage);
-                        }
-                    })
-                    .catch(error => {
-                        this.onAddItemError(newItemName, error.response.statusText);
-                    });
+            this.props.updateItem(this.props.entity, { name: newItemName });
     }
     onAddItemError(newItemName, errText) {
         var items = this.state.items;
@@ -160,23 +145,7 @@ class ExtendableMultiSelect extends React.Component {
     }
 
     deleteItem(itemId) {
-        this.props.deleteItem(itemId);
-        /*var deleteUrl = this.props.getItemsUrl;
-         axios.delete(deleteUrl, {params: {id: itemId }})
-            .then(result => {
-                this.setState({
-                    items: result.data.data,
-                    dataLoaded: true
-                });
-
-            })
-            .catch(error => {
-                this.setState({
-                    errorText: error.response.statusText,
-                    dataLoaded: false
-                });
-
-            });*/
+        this.props.deleteItem(this.props.entity, itemId);
     }
 
     render() {
@@ -224,6 +193,8 @@ class ExtendableMultiSelect extends React.Component {
 
 ExtendableMultiSelect.propTypes = {
     getItems: PropTypes.func.isRequired,
+    deleteItem: PropTypes.func.isRequired,
+    updateItem: PropTypes.func.isRequired,
 
     label: PropTypes.string.isRequired,
     onChange: PropTypes.func,
@@ -234,8 +205,15 @@ ExtendableMultiSelect.propTypes = {
     helperText: PropTypes.string,
     enterNewLabel: PropTypes.string,
     entity: PropTypes.string, // - name of the entity, which returns array of {id, name} objects
-    allowAddNew: PropTypes.bool
+    allowAddNew: PropTypes.bool,
+    
+    results: PropTypes.array.isRequired,
+    errors: PropTypes.array.isRequired
 };
 
-export default connect(null, { getItems, deleteItem })(ExtendableMultiSelect);
-//export default ExtendableMultiSelect;
+const mapStateToProps = state => ({
+    results: state.results,
+    errors: state.errors
+});
+
+export default connect(mapStateToProps, { getItems, deleteItem, updateItem })(ExtendableMultiSelect);

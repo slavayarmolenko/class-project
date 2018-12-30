@@ -35,13 +35,12 @@ exports.getInsertValueString = function(columnObject, columnValue){
 };
 
 exports.getIsLogged = function(req) {
-    console.log('We logged: ' + (req.session && req.session.userID));
+    console.log('We logged: ' + (req.session && req.session.userID) ? true : false);
     return (req.session && req.session.userID) ? true : false;
 };
 
 exports.getSuccessObject = function(data, req) {
-    console.log('Returning success. Session:  ');
-    console.log(req.session);
+    console.log('Returning success.');
     var logged = this.getIsLogged(req);
     return {
         success: true,
@@ -50,6 +49,8 @@ exports.getSuccessObject = function(data, req) {
     }
 };
 exports.getSqlErrorObject = function(err, req) {
+    console.error('Error:');
+    console.log(err);
     return this.getErrorObject(err.sqlMessage, req, errorCodes.errors.SQL_RESTRICTIONS_FAILED);
 
 };
@@ -59,7 +60,8 @@ exports.getErrorObject = function(errText, req, errCode) {
         success: false, 
         errMessage: errText || 'Unknown error',
         errCode: errCode || errorCodes.errors.BAD_REQUEST,
-        logged: this.getIsLogged(req)
+        logged: this.getIsLogged(req),
+        data: req.query || req.body
     };
 
 };

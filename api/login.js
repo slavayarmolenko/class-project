@@ -8,11 +8,12 @@ exports.create = pool.getConnection(function (app, connection) {
     app.post('/api/login', function (req, res) {
         var password = req.body.password;
         var username = req.body.login;
+        console.log('User "' + username + '" is trying to log in...');
         var query = 'SELECT id FROM users WHERE password = "' + password + '" and name="' + username + '";';
-        console.log(query);
         connection.query(query, function (err, results) {
             if (err){
                 res.json(common.getSqlErrorObject(err, req));
+                console.error('User failed to login: DB error.');
                 return;
             } 
             if (results && results.length == 1){
@@ -22,6 +23,7 @@ exports.create = pool.getConnection(function (app, connection) {
                 console.log(username + " logged in.");
             } else {
                 res.json(common.getErrorObject('User with assigned username and password is not found', req, errorCodes.errors.NOT_FOUND));
+                console.warn('User failed to login: User is not found.');
             }
         });
         

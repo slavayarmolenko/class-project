@@ -82,17 +82,18 @@ class Lawyer extends React.Component {
         }
         if (nextProps.errors.length > this.props.errors.length) {
             const lastErr = nextProps.errors[nextProps.errors.length - 1];
-            if (lastErr.errCode === errors.UNAUTHORIZED) {
-                this.goToLogin();
-            } else {
-                this.setState({ errorText: 'Error while saving changes: ' + lastErr.text });
+            if (lastErr.entity === ATTORNEY) {
+                if (lastErr.errCode === errors.UNAUTHORIZED) {
+                    this.goToLogin();
+                } else {
+                    this.setState({ errorText: 'Error while saving changes: ' + lastErr.text });
+                }
             }
         }
         if ((nextProps.results.length > this.props.results.length) && nextProps.results[nextProps.results.length - 1].success) {
             var lastResult = nextProps.results[nextProps.results.length - 1];
-            if (lastResult.success && lastResult.type === UPDATE_ITEM) {
+            if ((lastResult.entity === ATTORNEY) && (lastResult.action === UPDATE_ITEM)) {
                 this.goToList();
-                //this.goToList();
             }
         }
     }
@@ -114,15 +115,6 @@ class Lawyer extends React.Component {
     handleSubmit() {
         this.setState({ errorText: '' });
         this.props.updateItem(ATTORNEY, this.state.lawyer);
-        /* axios.post(URLs.services.LAWYER, this.state.lawyer)
-                .then(result => {
-                    if (!common.processError(result, this, 'saving attorney info')) {
-                        this.goToList();
-                    }
-                })
-                .catch(error => {
-                    common.processError(error, this, 'savig attorney info');
-                });*/
     }
     
     goToList() {
@@ -311,8 +303,8 @@ const mapStateToProps = state => ({
     newLanguage: state.language.item,
     services: state.service.items || [],
     logged: state.login.logged,
-    results: state.attorney.results,
-    errors: state.attorney.errors
+    results: state.results,
+    errors: state.errors
 });
 export default connect(mapStateToProps, { getItem, updateItem, getLogged })(Lawyer);
 
