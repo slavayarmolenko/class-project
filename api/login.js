@@ -2,7 +2,7 @@ var common = require('./common');
 var errorCodes = require('./errorTypes.js');
 
 
-exports.create = function (app, connection) {  
+exports.create = pool.getConnection(function (app, connection) {  
 
     
     app.post('/api/login', function (req, res) {
@@ -29,7 +29,7 @@ exports.create = function (app, connection) {
     app.get('/api/login', function(req,res){
         res.json(common.getSuccessObject({}, req));
     });
-};
+});
 
 
 
