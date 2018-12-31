@@ -7,7 +7,6 @@ import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import { TextValidator} from 'react-material-ui-form-validator';
-import axios from 'axios';
 
 import {connect} from 'react-redux';
 import {getItems, deleteItem, updateItem} from '../actions/itemsActions';

@@ -6,6 +6,7 @@ export default function(state=initialState, action) {
     switch (action.type) {
         case types.GET_LOGGED:
         case types.LOG_IN:
+        case types.SAVE_IMAGE:
         case types.GET_ITEM:
         case types.UPDATE_ITEM:
         case types.CREATE_ITEM:

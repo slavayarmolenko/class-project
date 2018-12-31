@@ -109,5 +109,29 @@ exports.create = function(app, connection) {
         });
 
     });
+
+    app.post('/api/utils/uploadImage', function (req, res) {
+        fs.open(temp_path, 'r', function (status, fd) {
+            if (status) {
+                console.log(status.message);
+                return;
+            }
+            var fileSize = getFilesizeInBytes(temp_path);
+            var buffer = new Buffer(fileSize);
+            fs.read(fd, buffer, 0, fileSize, 0, function (err, num) {
+        
+                var query = "INSERT INTO images SET ?",
+                    values = {
+                        file_type: 'img',
+                        file_size: buffer.length,
+                        file: buffer
+                    };
+                mySQLconnection.query(query, values, function (er, da) {
+                    if(er)throw er;
+                });
+        
+            });
+        });
+    });
 };
 

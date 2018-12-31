@@ -10,6 +10,6 @@ export const serviceURLs = {
         SERVICES: '/api/utils/services',
         COMPANY_TYPES: '/api/utils/companyTypes',
         LOGGED: '/api/login',
-        LOGIN: '/api/login'
-        
+        LOGIN: '/api/login',
+        UPLOAD_IMAGE: '/api/utils/uploadImage'
 };

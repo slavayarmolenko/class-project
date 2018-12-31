@@ -3,6 +3,7 @@ import { Redirect } from "react-router-dom";
 import Button from '@material-ui/core/Button';
 import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
 import ExtendableMultiSelect from './../components/ExtendableMultiSelect.jsx';
+import UploadImageField from './../components/UploadImageField.jsx';
 import {URLs} from '../utils/URLs.js';
 
 import {getItem, updateItem} from '../actions/itemsActions';
@@ -75,9 +76,11 @@ class Lawyer extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.lawyer.id && this.props.id && (nextProps.lawyer.id.toString() === this.props.id.toString())) {
-            var lawyer = nextProps.lawyer;
-            lawyer.repeatPassword = '';
-            lawyer.password = '';
+            var lawyer = {
+                ...nextProps.lawyer,
+                repeatPassword:'',
+                password: ''
+            }
             this.setState({lawyer: lawyer });
         }
         if (nextProps.errors.length > this.props.errors.length) {
@@ -178,7 +181,9 @@ class Lawyer extends React.Component {
                         value={repeatPassword}
                         style={{marginLeft: '15px'}}
                     /></div>
-                </div> }
+                    <div><UploadImageField></UploadImageField></div>
+                </div> 
+                }
                 <div><TextValidator
                     label="Full Name"
                     onChange={this.handleChange}
