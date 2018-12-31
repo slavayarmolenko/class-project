@@ -2,15 +2,16 @@ var common = require('./common');
 var errorCodes = require('./errorTypes.js');
 
 
-exports.create = pool.getConnection(function (app, connection) {  
-
-    
+exports.create = function (app, pool) {  
+    //console.log(pool);
+    //connection = pool.getConnection();
+    console.log("Here");
     app.post('/api/login', function (req, res) {
         var password = req.body.password;
         var username = req.body.login;
         console.log('User "' + username + '" is trying to log in...');
         var query = 'SELECT id FROM users WHERE password = "' + password + '" and name="' + username + '";';
-        connection.query(query, function (err, results) {
+        pool.query(query, function (err, results) {
             if (err){
                 res.json(common.getSqlErrorObject(err, req));
                 console.error('User failed to login: DB error.');
@@ -31,7 +32,7 @@ exports.create = pool.getConnection(function (app, connection) {
     app.get('/api/login', function(req,res){
         res.json(common.getSuccessObject({}, req));
     });
-});
+};
 
 
 

@@ -15,31 +15,37 @@ app.all('*', function (req, res, next) {
 
   next(); // pass control to the next handler
 });
-
-var connection = mysql.createConnection({
+var pool  = mysql.createPool({
+    connectionLimit : 10,
     host: "classdb.c1fc1qmtlpg9.us-west-1.rds.amazonaws.com",
     user: "master",
     password: "dEbi07oOFHaAW1s",
     database: "test1"
-});
+  });
+ /*var connection = mysql.createConnection({
+    host: "classdb.c1fc1qmtlpg9.us-west-1.rds.amazonaws.com",
+    user: "master",
+    password: "dEbi07oOFHaAW1s",
+    database: "test1"
+});*/
 
 console.log('Trying to create connection');
-connection.connect(function (err) {
+/*pool.connect(function (err) {
     if (err)
         throw err;
     console.log('You are now connected...');
-})
+})*/
 
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 
 
-utilsService.create(app, connection);
-teamService.create(app, connection);
-lawyersService.create(app, connection);
-companiesService.create(app, connection);
-loginService.create(app, connection);
+utilsService.create(app, pool);
+teamService.create(app, pool);
+lawyersService.create(app, pool);
+companiesService.create(app, pool);
+loginService.create(app, pool);
 var server = app.listen(8081, function () {
     var host = server.address().address;
     var port = server.address().port;
