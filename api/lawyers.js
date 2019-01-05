@@ -104,6 +104,10 @@ exports.create = function (app, connection) {
                 type: "string",
                 id: "address",
                 required: false
+            }, {
+                type: "number",
+                id: "imageID",
+                required: true
             }
         ];
         for (var i = 0; i < columnObject.length; i++) {
@@ -182,7 +186,11 @@ exports.create = function (app, connection) {
     var getLawyerById = function (req, res) {
         var userId = req.query.id;
         console.log('We get lawyer by ID=' + userId);
-        connection.query('SELECT lawyers.*,lawyer_language.languages,lawyer_service.services FROM (SELECT * FROM lawyers WHERE id='+ userId+') AS lawyers LEFT JOIN (SELECT lawyerID, GROUP_CONCAT(languageID) AS languages FROM lawyer_language GROUP BY lawyerID) AS lawyer_language ON lawyers.id=lawyer_language.lawyerID LEFT JOIN (SELECT lawyerID, GROUP_CONCAT(serviceID) AS services FROM lawyer_service GROUP BY lawyerID) AS lawyer_service ON lawyers.id=lawyer_service.lawyerID ;', function (err, results) {
+        connection.query('SELECT lawyers.*,lawyer_language.languages,lawyer_service.services, images.imageURL ' +
+            'FROM (SELECT * FROM lawyers WHERE id='+ userId+') AS lawyers ' +
+            'LEFT JOIN (SELECT lawyerID, GROUP_CONCAT(languageID) AS languages FROM lawyer_language GROUP BY lawyerID) AS lawyer_language ON lawyers.id=lawyer_language.lawyerID ' + 
+            'LEFT JOIN (SELECT lawyerID, GROUP_CONCAT(serviceID) AS services FROM lawyer_service GROUP BY lawyerID) AS lawyer_service ON lawyers.id=lawyer_service.lawyerID ' +
+            'LEFT JOIN images ON lawyers.imageID=images.id;', function (err, results) {
             if (err) {
                 console.error('Failed to get lawyer by id:');
                 res.json(common.getSqlErrorObject(err, req));

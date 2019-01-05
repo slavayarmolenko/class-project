@@ -39,13 +39,19 @@ exports.getIsLogged = function(req) {
     return (req.session && req.session.userID) ? true : false;
 };
 
+exports.getLoggedUserID = function(req) {
+    return (req.session && req.session.userID) ? req.session.userID : 0;
+};
+
 exports.getSuccessObject = function(data, req) {
     console.log('Returning success.');
     var logged = this.getIsLogged(req);
+    var userID = this.getLoggedUserID(req);
     return {
         success: true,
         data: data,
-        logged: logged
+        logged: logged,
+        userID: userID
     }
 };
 exports.getSqlErrorObject = function(err, req) {
@@ -61,6 +67,7 @@ exports.getErrorObject = function(errText, req, errCode) {
         errMessage: errText || 'Unknown error',
         errCode: errCode || errorCodes.errors.BAD_REQUEST,
         logged: this.getIsLogged(req),
+        userID: this.getLoggedUserID(req),
         data: req.query || req.body
     };
 
@@ -73,6 +80,7 @@ exports.getUnloggedError = function() {
         success: false, 
         errMessage: 'Can not perform this operation without logging',
         errCode: errorCodes.errors.UNAUTHORIZED,
-        logged: false
+        logged: false,
+        userID: 0
     };
 };

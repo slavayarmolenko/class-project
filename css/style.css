@@ -170,6 +170,10 @@ svg:not(:root) {
     width: 100%;
 }
 
+img.photo {
+    border: 1px solid black;
+}
+
 
 
 

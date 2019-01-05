@@ -115,7 +115,8 @@ exports.create = function (app, connection) {
     app.use(fileUpload());
     app.post('/api/utils/uploadImage', function (req, res) {
         if (Object.keys(req.files).length == 0) {
-            return res.status(400).send('No files were uploaded.');
+            res.json(common.getErrorObject('No files were uploaded.', req));
+            return;
         }
         // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
         let file = req.files.file;
@@ -125,11 +126,11 @@ exports.create = function (app, connection) {
         var filePath = 'uploadedImages/test' + time.getTime() + name.slice(name.lastIndexOf('.'));
         file.mv(filePath, function (err) {
             if (err) {
-                console.log(err);
-                return res.status(500).send(err);
+                res.json(common.getErrorObject('Cannot save file on the server.', req));
+                return;
             }
             connection.query('INSERT INTO images (url) VALUES ("' + filePath + '");', function (selectErr, results) {
-                res.json(common.getSuccessObject({filePath: results.insertId}, req));
+                res.json(common.getSuccessObject({imageID: results.insertId, url: filePath}, req));
             
             });
         });

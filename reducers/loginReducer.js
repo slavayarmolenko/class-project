@@ -3,6 +3,7 @@ import * as types from '../actions/types.js';
 
 const initialState = { 
     logged: false,
+    userID: 0
 }
 
 export default function(state=initialState, action) {
@@ -12,7 +13,8 @@ export default function(state=initialState, action) {
         
             return {
                 ...state,
-                logged: action.payload.logged || false
+                logged: action.payload.logged || false,
+                userID: action.payload.userID
             }
         case types.GET_LOGGED:
         case types.LOG_IN:
@@ -22,7 +24,8 @@ export default function(state=initialState, action) {
         case types.DELETE_ITEM:
             return { 
                 ...state,
-                logged: action.payload.logged || false                                                       
+                logged: action.payload.logged || false,
+                userID: action.payload.userID                                                       
             };
         default: 
             return state;

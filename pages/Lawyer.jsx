@@ -43,6 +43,7 @@ class Lawyer extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handlePropChange = this.handlePropChange.bind(this);
+        this.onChangePhoto = this.onChangePhoto.bind(this);
         this._isMounted = false;
     }
     componentWillUnmount() {
@@ -119,6 +120,11 @@ class Lawyer extends React.Component {
         this.setState({ errorText: '' });
         this.props.updateItem(ATTORNEY, this.state.lawyer);
     }
+
+    onChangePhoto(imageID) {
+        lawyer['imageID'] = imageID;
+        this.setState({ lawyer });
+    }
     
     goToList() {
         this.setState({ redirectTo: URLs.pages.ATTORNEYS });
@@ -129,7 +135,7 @@ class Lawyer extends React.Component {
     render() {
         const { uzvername, name, email, password, repeatPassword,
             description, zip, languages, address,
-            services} = this.state.lawyer;
+            services, imageURL} = this.state.lawyer;
         const errorText = this.state.errorText;
         const isNew = this.state.isNew;
         const logged = this.props.logged;        
@@ -181,7 +187,7 @@ class Lawyer extends React.Component {
                         value={repeatPassword}
                         style={{marginLeft: '15px'}}
                     /></div>
-                    <div><UploadImageField></UploadImageField></div>
+                    <div><UploadImageField url={imageURL} onChange={this.onChangePhoto}></UploadImageField></div>
                 </div> 
                 }
                 <div><TextValidator

@@ -13,6 +13,8 @@ const getEntityUrl = (entity) => {
             return serviceURLs.LANGUAGES;
         case entities.SERVICE:
             return serviceURLs.SERVICES;
+        case entities.USER:
+            return serviceURLs.USER;
         default:
             return '';
     };

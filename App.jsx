@@ -20,6 +20,7 @@ import Donate from './pages/Donate.jsx';
 import Login from './pages/Login.jsx';
 import Company from './pages/Company.jsx';
 import Lawyer from './pages/Lawyer.jsx';
+import User from './pages/User.jsx';
 import HIEROGLYPHS from './pages/HIEROGLYPHS.jsx'; 
 import {URLs} from './utils/URLs.js';
 
@@ -35,6 +36,7 @@ const donate = () => <Donate></Donate>;
 const login = () => <Login></Login>;
 const lawyer = (input) => <Lawyer id={input.match.params.id}></Lawyer>;
 const company = (input) => <Company id={input.match.params.id}></Company>;
+const user = (input) => <User id={input.match.params.id}></User>;
 const sponsors = () => <Sponsors></Sponsors>;
 const partners = () => <Partners></Partners>;
 const volonteers = () => <Volonteers></Volonteers>;
@@ -60,6 +62,7 @@ const AppRouter = () => (
                 <Route path={URLs.pages.COMPANY + ':id'} component={company} />
                 <Route path={URLs.pages.CREATE_ATTORNEY} component={lawyer} />
                 <Route path={URLs.pages.ATTORNEY + ':id'} component={lawyer} />
+                <Route path={URLs.pages.TEAM + ':id'} component={user} />
                 <Route path={URLs.pages.SPONSORS} component={sponsors} />
                 <Route path={URLs.pages.PARTNERS} component={partners} />
                 <Route path={URLs.pages.VOLONTEERS} component={volonteers} />
