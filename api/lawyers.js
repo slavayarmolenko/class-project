@@ -24,7 +24,6 @@ exports.create = function (app, connection) {
             usersDistance = ZipCodes.toMiles(usersDistance);
         }
         var query = filter.filterLawyers(req.query.languages, req.query.services, usersZip, usersDistance);
-        console.log('Search for lawyers. Query: ' + query);
         connection.query(query, function (err, results) {
             if (err) {
                 console.error('DB exception while getting lawyers.');
@@ -33,13 +32,10 @@ exports.create = function (app, connection) {
             }
 
             var send = common.getSuccessObject(results, req);
-            console.log('Searched succesfully.');
             res.json(send);
         });
     });
     app.post('/api/lawyer', function (req, res) {
-        console.log('Update/Insert lawyers. Data: ');
-        console.log(req.body);
         if (!common.getIsLogged(req)) {
             res.json(common.getUnloggedError());
             console.warn('User can not update lawyer unlogged');
@@ -208,8 +204,7 @@ exports.create = function (app, connection) {
             
             lawyer.languages = languages;
             lawyer.services = services;
-            console.log('Lawyer: ');
-            console.log(lawyer);
+           
             res.json(common.getSuccessObject(lawyer, req));
 
         });
@@ -222,7 +217,8 @@ exports.create = function (app, connection) {
             return;
         }
 
-        console.log('Deleting lawyer from the table');
+       
+    
         if (!common.getIsLogged(req)) {
             console.warn('WARN: You can not delete lawyer unlogged');
             res.json(common.getUnloggedError());
