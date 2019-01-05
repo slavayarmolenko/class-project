@@ -41,7 +41,7 @@ class Team extends React.Component {
             {
                 Header: 'Name',
                 accessor: 'name', // String-based value accessors!
-                Cell: (props) => <Link to={URLs.pages.TEAM + props.row.id}>{props.value}</Link>
+                Cell: (props) => <Link to={URLs.pages.USER + props.row.id}>{props.value}</Link>
             }, {
                 Header: 'Role',
                 accessor: 'role',

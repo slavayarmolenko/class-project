@@ -12,6 +12,7 @@ export const URLs = {
                 CONTACT: '/contact/',
                 ABOUT: '/about/',
                 TEAM: '/team/',
+                USER: '/user/',
                 VOLONTEERS: '/volonteers/',
                 PARTNERS: '/partners/',
                 SPONSORS: '/sponsors/',

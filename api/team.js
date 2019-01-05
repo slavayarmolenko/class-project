@@ -20,7 +20,7 @@ exports.create = function(app, connection) {
     var getUserById = function (req, res) {
         var userId = req.query.id;
         console.log('We get user by ID=' + userId);
-        connection.query('SELECT users.name, users.email, users.role,  posts.body, posts.subject, posts.type, images.url ' + 
+        connection.query('SELECT users.id, users.username, users.name, users.email, users.role,  posts.body, posts.subject, posts.type, images.url ' + 
             'FROM (SELECT * FROM users WHERE id=' + userId + ' ) AS users ' +
             'LEFT JOIN (SELECT * FROM posts WHERE type = "profile") AS posts ON posts.userID = users.id '+
             'LEFT JOIN images ON images.id=posts.imageID;', function (err, results) {

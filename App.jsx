@@ -62,7 +62,7 @@ const AppRouter = () => (
                 <Route path={URLs.pages.COMPANY + ':id'} component={company} />
                 <Route path={URLs.pages.CREATE_ATTORNEY} component={lawyer} />
                 <Route path={URLs.pages.ATTORNEY + ':id'} component={lawyer} />
-                <Route path={URLs.pages.TEAM + ':id'} component={user} />
+                <Route path={URLs.pages.USER + ':id'} component={user} />
                 <Route path={URLs.pages.SPONSORS} component={sponsors} />
                 <Route path={URLs.pages.PARTNERS} component={partners} />
                 <Route path={URLs.pages.VOLONTEERS} component={volonteers} />
