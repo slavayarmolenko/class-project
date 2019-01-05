@@ -24,6 +24,7 @@ exports.create = function (app, connection) {
             usersDistance = ZipCodes.toMiles(usersDistance);
         }
         var query = filter.filterLawyers(req.query.languages, req.query.services, usersZip, usersDistance);
+        console.log('Search for lawyers. Query: ' + query);
         connection.query(query, function (err, results) {
             if (err) {
                 console.error('DB exception while getting lawyers.');
@@ -32,10 +33,13 @@ exports.create = function (app, connection) {
             }
 
             var send = common.getSuccessObject(results, req);
+            console.log('Searched succesfully.');
             res.json(send);
         });
     });
     app.post('/api/lawyer', function (req, res) {
+        console.log('Update/Insert lawyers. Data: ');
+        console.log(req.body);
         if (!common.getIsLogged(req)) {
             res.json(common.getUnloggedError());
             console.warn('User can not update lawyer unlogged');
@@ -178,7 +182,7 @@ exports.create = function (app, connection) {
     var getLawyerById = function (req, res) {
         var userId = req.query.id;
         console.log('We get lawyer by ID=' + userId);
-        connection.query('SELECT users.name, users.email, users.role,  posts.body, posts.subject FROM (SELECT * FROM users WHERE id= ' + userID + ') AS users LEFT JOIN posts ON posts.userID = users.id;', function (err, results) {
+        connection.query('SELECT lawyers.*,lawyer_language.languages,lawyer_service.services FROM (SELECT * FROM lawyers WHERE id='+ userId+') AS lawyers LEFT JOIN (SELECT lawyerID, GROUP_CONCAT(languageID) AS languages FROM lawyer_language GROUP BY lawyerID) AS lawyer_language ON lawyers.id=lawyer_language.lawyerID LEFT JOIN (SELECT lawyerID, GROUP_CONCAT(serviceID) AS services FROM lawyer_service GROUP BY lawyerID) AS lawyer_service ON lawyers.id=lawyer_service.lawyerID ;', function (err, results) {
             if (err) {
                 console.error('Failed to get lawyer by id:');
                 res.json(common.getSqlErrorObject(err, req));
@@ -196,7 +200,8 @@ exports.create = function (app, connection) {
             
             lawyer.languages = languages;
             lawyer.services = services;
-           
+            console.log('Lawyer: ');
+            console.log(lawyer);
             res.json(common.getSuccessObject(lawyer, req));
 
         });
@@ -209,8 +214,7 @@ exports.create = function (app, connection) {
             return;
         }
 
-       
-    
+        console.log('Deleting lawyer from the table');
         if (!common.getIsLogged(req)) {
             console.warn('WARN: You can not delete lawyer unlogged');
             res.json(common.getUnloggedError());

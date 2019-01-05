@@ -5,11 +5,9 @@ var errorCodes = require('./errorTypes.js');
 exports.create = function (app, pool) {  
     //console.log(pool);
     //connection = pool.getConnection();
-    console.log("Here");
     app.post('/api/login', function (req, res) {
         var password = req.body.password;
         var username = req.body.login;
-        console.log('User "' + username + '" is trying to log in...');
         var query = 'SELECT id FROM users WHERE password = "' + password + '" and username="' + username + '";';
         pool.query(query, function (err, results) {
             if (err){
