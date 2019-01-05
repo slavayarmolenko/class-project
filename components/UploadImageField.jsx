@@ -54,7 +54,7 @@ class UploadImageField extends React.Component {
         const files = Array.from(e.target.files);
         if (files.length === 1) {
             var file = files[0];
-            this.props.uploadImage(file, file.name);
+            this.props.uploadImage(file);
         }
     }
 
