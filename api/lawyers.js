@@ -206,7 +206,6 @@ exports.create = function (app, connection) {
             lawyer.languages = languages;
             lawyer.services = services;
             console.log('Lawyer: ');
-            console.log(lawyer);
             res.json(common.getSuccessObject(lawyer, req));
 
         });
