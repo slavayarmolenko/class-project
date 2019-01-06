@@ -1,12 +1,23 @@
 import * as types from '../actions/types.js';
 
-const initialState = '';
+const initialState = {
+    imageID: 0,
+    url: ''
+};
 
 export default function(state=initialState, action) {
     if (action !== types.SAVE_IMAGE) {
-        return '';
+        return state;
     }
-    return action.payload.data || '';                                                     
+    if (action.payload.success) {
+        return { 
+            ...state,
+            imageID: action.payload.data.imageID,
+            url: action.payload.data.url                                                       
+        };
+    } else {
+        return state;
+    }                                                    
 
     
 }

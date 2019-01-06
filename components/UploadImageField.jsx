@@ -14,8 +14,7 @@ class UploadImageField extends React.Component {
         super(props);
 
         this.state = {
-            value: this.props.value || [],
-            newItemName: '',
+            url: this.props.url || [],
             errorText: '',
             redirectToList: false
         };
@@ -29,14 +28,14 @@ class UploadImageField extends React.Component {
         this._isMounted = true;
     }
     componentWillReceiveProps(nextProps) {
-        if (nextProps.value !== this.props.value) {
-            this.setState({ value: nextProps.value });
+        if (nextProps.imageURL !== this.props.imageURL) {
+            this.setState({ url: nextProps.imageURL });
         }
 
         if ((nextProps.results.length > this.props.results.length) && nextProps.results[nextProps.results.length - 1].success) {
             var lastResult = nextProps.results[nextProps.results.length - 1];
-            if ((lastResult.action === SAVE_IMAGE) && nextProps.image) {
-                this.props.onChange({ id: nextProps.image });
+            if ((lastResult.action === SAVE_IMAGE) && nextProps.image.id) {
+                this.props.onChange({ id: nextProps.image.id });
             }
         }
 
@@ -71,6 +70,9 @@ class UploadImageField extends React.Component {
                             errorMessages={[]}
                             multiple={false}
                         />
+                        {this.state.url &&
+                            <img src={this.state.url} className="photo"></img>
+                        }
                     </div>
         );
     }
@@ -82,11 +84,15 @@ UploadImageField.propTypes = {
 
     results: PropTypes.array.isRequired,
     errors: PropTypes.array.isRequired,
-    image: PropTypes.string.isRequired
+    imageID: PropTypes.number.isRequired,
+
+    imageURL: PropTypes.string,
+    onChange: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-    image: state.image,
+    imageID: state.image.imageID,
+    imageURL: state.image.url,
     results: state.results,
     errors: state.errors
 });

@@ -49,7 +49,7 @@ class Login extends React.Component {
         if (nextProps.errors.length > this.props.errors.length) {
             const lastError = nextProps.errors[nextProps.errors.length - 1];
             if (lastError.action === LOG_IN) {
-                this.setState({ errorText: 'Error while saving changes: ' + nextProps.errors[nextProps.errors.length - 1].text });
+                this.setState({ errorText: 'Error while logging: ' + nextProps.errors[nextProps.errors.length - 1].text });
             }
         }
     }

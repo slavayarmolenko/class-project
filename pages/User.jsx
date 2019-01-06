@@ -2,8 +2,7 @@ import React from 'react';
 import { Redirect } from "react-router-dom";
 import Button from '@material-ui/core/Button';
 import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
-import ExtendableMultiSelect from './../components/ExtendableMultiSelect.jsx';
-import UploadImageField from './../components/UploadImageField.jsx';
+import UploadImageField from '../components/UploadImageField.jsx';
 import {URLs} from '../utils/URLs.js';
 
 import {getItem, updateItem} from '../actions/itemsActions';
@@ -11,30 +10,21 @@ import {getLogged} from '../actions/loginActions';
 
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {LANGUAGE, SERVICE, ATTORNEY} from '../actions/entities';
+import {USER} from '../actions/entities';
 import {UPDATE_ITEM} from '../actions/types';
 import {errors} from '../api/errorTypes';
-//import { stat } from 'fs';
 
-
-//import DownshiftMultiple from '../components/DownshiftMultiple.jsx';
-
-class Lawyer extends React.Component {
+class User extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            lawyer: {
+            user: {
                 id: this.props.id,
                 uzvername: '',
                 name: '',
                 email: '',
                 password: '',
                 repeatPassword: '',
-                description: '',
-                zip: '',        
-                address: '',
-                languages: [],
-                services: [],
             },
             errorText: '',
             redirectTo: '',
@@ -54,7 +44,7 @@ class Lawyer extends React.Component {
         this._isMounted = true;
         // custom rule will have name 'isPasswordMatch'
         ValidatorForm.addValidationRule('isPasswordMatch', (value) => {
-            if (value !== this.state.lawyer.password) {
+            if (value !== this.state.user.password) {
                 return false;
             }
             return true;
@@ -69,24 +59,24 @@ class Lawyer extends React.Component {
             return false;
         });
         if (!this.state.isNew) {
-            this.props.getItem(ATTORNEY, this.props.id);
+            this.props.getItem(USER, this.props.id);
         } else {
             this.props.getLogged();
         }
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.lawyer.id && this.props.id && (nextProps.lawyer.id.toString() === this.props.id.toString())) {
-            var lawyer = {
-                ...nextProps.lawyer,
+        if (nextProps.user.id && this.props.id && (nextProps.user.id.toString() === this.props.id.toString())) {
+            var user = {
+                ...nextProps.user,
                 repeatPassword:'',
                 password: ''
             }
-            this.setState({lawyer: lawyer });
+            this.setState({user: user });
         }
         if (nextProps.errors.length > this.props.errors.length) {
             const lastErr = nextProps.errors[nextProps.errors.length - 1];
-            if (lastErr.entity === ATTORNEY) {
+            if (lastErr.entity === USER) {
                 if (lastErr.errCode === errors.UNAUTHORIZED) {
                     this.goToLogin();
                 } else {
@@ -96,20 +86,20 @@ class Lawyer extends React.Component {
         }
         if ((nextProps.results.length > this.props.results.length) && nextProps.results[nextProps.results.length - 1].success) {
             var lastResult = nextProps.results[nextProps.results.length - 1];
-            if ((lastResult.entity === ATTORNEY) && (lastResult.action === UPDATE_ITEM)) {
+            if ((lastResult.entity === USER) && (lastResult.action === UPDATE_ITEM)) {
                 this.goToList();
             }
         }
     }
     handleChange(event) {
-        const { lawyer } = this.state;
+        const { user } = this.state;
         
         if (event.target.type === 'checkbox') {
-            lawyer[event.target.name] = event.target.checked;
+            user[event.target.name] = event.target.checked;
         } else {
-            lawyer[event.target.name] = event.target.value;
+            user[event.target.name] = event.target.value;
         }
-        this.setState({ lawyer });
+        this.setState({ user });
     }
     
     handlePropChange(event) {
@@ -118,37 +108,34 @@ class Lawyer extends React.Component {
     }
     handleSubmit() {
         this.setState({ errorText: '' });
-        this.props.updateItem(ATTORNEY, this.state.lawyer);
-    }
-
-    onChangePhoto(imageID) {
-        lawyer['imageID'] = imageID;
-        this.setState({ lawyer });
+        this.props.updateItem(USER, this.state.user);
     }
     
+    onChangePhoto(imageID) {
+        user['imageID'] = imageID;
+        this.setState({ user });
+    }
     goToList() {
-        this.setState({ redirectTo: URLs.pages.ATTORNEYS });
+        this.setState({ redirectTo: URLs.pages.TEAM });
     }
     goToLogin() {
         this.setState({ redirectTo: URLs.pages.LOGIN });
     }
     render() {
-        const { uzvername, name, email, password, repeatPassword,
-            description, zip, languages, address,
-            services, imageURL} = this.state.lawyer;
+        const { username, name, email, password, repeatPassword, role, subject, body, url } = this.state.user;
         const errorText = this.state.errorText;
         const isNew = this.state.isNew;
-        const logged = this.props.logged;        
+        const logged = this.props.logged && (this.props.id === this.props.userID.toString());        
 
         if (!logged && isNew) {
-            return <Redirect to={URLs.pages.LOGIN}  />;
+            return <Redirect to={this.state.redirectTo}  />;
         }
         if (this.state.redirectTo) {
             return <Redirect to={this.state.redirectTo}  />;
         }
         return (
           <div className="container pageContent">
-            <h1>{ isNew ? 'Create Attorney' : 'Attorney'}</h1>
+            <h1>{ isNew ? 'Create a Team member' : 'Team Member'}</h1>
             <ValidatorForm 
                 onSubmit={this.handleSubmit}
                 onError={errors => console.log(errors)}
@@ -161,11 +148,12 @@ class Lawyer extends React.Component {
                         label="Username"
                         onChange={this.handleChange}
                         readOnly={true}
-                        name="uzvername"
+                        name="username"
                         type="text"
                         validators={['required', 'maxStringLength:50']}
                         errorMessages={['this field is required', 'exceeds 50 symbols in length']}
-                        value={uzvername}
+                        value={username}
+                        InputLabelProps={{}}
                     />
                     </div><div>   
                     <TextValidator
@@ -187,7 +175,7 @@ class Lawyer extends React.Component {
                         value={repeatPassword}
                         style={{marginLeft: '15px'}}
                     /></div>
-                    <div><UploadImageField url={imageURL} onChange={this.onChangePhoto}></UploadImageField></div>
+                    <div><UploadImageField url={url} onChange={this.onChangePhoto}></UploadImageField></div>
                 </div> 
                 }
                 <div><TextValidator
@@ -202,83 +190,61 @@ class Lawyer extends React.Component {
                     inputProps={{readOnly: !logged }}
                     InputLabelProps={logged? {} :{shrink: !logged}}
                 /></div>
+                {logged && 
+                    <div><TextValidator
+                        label="E-Mail"
+                        onChange={this.handleChange}
+                        name="email"
+                        type="email"
+                        value={email}
+                        fullWidth={true}
+                        validators={['isEmail', 'maxStringLength:100']}
+                        errorMessages={['email is not valid', 'exceeds 100 symbols in length']}
+                        inputProps={{readOnly: !logged }}
+                        InputLabelProps={logged? {} :{shrink: !logged}}
+                    /></div>
+                }
                 <div><TextValidator
-                    label="E-Mail"
+                    label="Role"
                     onChange={this.handleChange}
-                    name="email"
-                    type="email"
-                    value={email}
+                    name="role"
+                    type="text"
+                    validators={['required', 'maxStringLength:255']}
+                    errorMessages={['this field is required', 'exceeds 255 symbols in length']}
+                    value={role}
                     fullWidth={true}
-                    validators={['required', 'isEmail', 'maxStringLength:100']}
-                    errorMessages={['this field is required', 'email is not valid', 'exceeds 100 symbols in length']}
                     inputProps={{readOnly: !logged }}
                     InputLabelProps={logged? {} :{shrink: !logged}}
-                /></div>
+                /></div>                
+                {logged &&  
+                    <div><TextValidator
+                        label="Short subject/Slogan"
+                        onChange={this.handleChange}
+                        name="subject"
+                        type="text"
+                        validators={['maxStringLength:255']}
+                        errorMessages={['exceeds 255 symbols in length']}
+                        value={subject}
+                        fullWidth={true}
+                        inputProps={{readOnly: !logged }}
+                        InputLabelProps={logged? {} :{shrink: !logged}}
+                    /></div>
+                }
                 <div><TextValidator
-                    label="Description"
+                    label={logged ? "About" : (subject || "About")}
                     onChange={this.handleChange}
-                    name="description"
+                    name="body"
                     type="text"
-                    value={description || ''}
+                    value={body || ''}
                     multiline={true}
-                    validators={['maxStringLength:255']}
-                    errorMessages={['Description length exceeds 255 symbols']}
+                    validators={['maxStringLength:2000']}
+                    errorMessages={['About message length exceeds 2000 symbols']}
                     fullWidth={true}
                     inputProps={{readOnly: !logged }}
                     InputLabelProps={logged? {} :{shrink: !logged}}
                 /></div>
-                <div><TextValidator
-                    label="Zip Code"
-                    onChange={this.handleChange}
-                    name="zip"
-                    type="text"
-                    value={zip}
-                    validators={['required', 'isZip']}
-                    errorMessages={['this field is required', 'Zip Code is not valid']}
-                    inputProps={{readOnly: !logged }}
-                    InputLabelProps={logged? {} :{shrink: !logged}}
-                /></div>
-                <div><TextValidator
-                    label="Address"
-                    onChange={this.handleChange}
-                    name="address"
-                    type="text"
-                    validators={['maxStringLength:255']}
-                    errorMessages={['exceeds 255 symbols in length']}
-                    value={address || ''}
-                    fullWidth={true}
-                    inputProps={{readOnly: !logged }}
-                    InputLabelProps={logged? {} :{shrink: !logged}}
-                /></div>
-                <div>
-                    <ExtendableMultiSelect
-                        id="select-languages"
-                        label="Languages speaking"
-                        helperText="Please, select/add languages you speak"
-                        value={languages}
-                        name="languages"
-                        onChange={this.handleChange}
-                        entity={LANGUAGE}
-                        items={this.props.languages}
-                        added={this.props.newLanguage}
-                        readOnly={!logged}
-                        allowAddNew={true}
-                    />
-                </div>    
-                <div>
-                    <ExtendableMultiSelect
-                        id="select-services"
-                        label="Offer Services"
-                        helperText="Please, select/add services you offer"
-                        value={services}
-                        name="services"
-                        onChange={this.handleChange}
-                        entity={SERVICE}
-                        items={this.props.services}
-                        readOnly={!logged}
-                        allowAddNew={true}
-                    ></ExtendableMultiSelect>
-                </div>
+                
+                
                 <div className="error">{errorText}</div>
                 <div className="buttons">
                     <Button type="button" variant="contained" onClick={this.goToList.bind(this)}>Back to the List</Button>
@@ -295,29 +261,22 @@ class Lawyer extends React.Component {
 
 }
 
-Lawyer.propTypes = {
+User.propTypes = {
     getItem: PropTypes.func.isRequired, 
     updateItem: PropTypes.func.isRequired, 
     getLogged: PropTypes.func.isRequired, 
     
-    lawyer: PropTypes.object,
-    languages: PropTypes.array.isRequired,
-    newLanguage: PropTypes.object.isRequired,
-    services: PropTypes.array.isRequired,
+    user: PropTypes.object,
     logged: PropTypes.bool.isRequired,
+    userID: PropTypes.number.isRequired,
     results: PropTypes.array.isRequired,
     errors: PropTypes.array.isRequired
 };
 const mapStateToProps = state => ({
-    lawyer: state.attorney.item,
-    languages: state.language.items || [],
-    newLanguage: state.language.item,
-    services: state.service.items || [],
+    user: state.user.item,
     logged: state.login.logged,
+    userID: state.login.userID,
     results: state.results,
     errors: state.errors
 });
-export default connect(mapStateToProps, { getItem, updateItem, getLogged })(Lawyer);
-
-
-//export default Lawyer;
+export default connect(mapStateToProps, { getItem, updateItem, getLogged })(User);
