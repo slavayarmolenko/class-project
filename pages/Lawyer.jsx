@@ -122,6 +122,7 @@ class Lawyer extends React.Component {
     }
 
     onChangePhoto(imageID) {
+        const { lawyer } = this.state;
         lawyer['imageID'] = imageID;
         this.setState({ lawyer });
     }
@@ -187,7 +188,7 @@ class Lawyer extends React.Component {
                         value={repeatPassword}
                         style={{marginLeft: '15px'}}
                     /></div>
-                    <div><UploadImageField url={imageURL} onChange={this.onChangePhoto}></UploadImageField></div>
+                    <div><UploadImageField readOnly={!logged} url={imageURL} onChange={this.onChangePhoto}></UploadImageField></div>
                 </div> 
                 }
                 <div><TextValidator

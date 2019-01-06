@@ -42,6 +42,9 @@ exports.getIsLogged = function(req) {
 exports.getLoggedUserID = function(req) {
     return (req.session && req.session.userID) ? req.session.userID : 0;
 };
+exports.getLoggedUserName = function(req) {
+    return (req.session && req.session.userID) ? req.session.username : '';
+};
 
 exports.getSuccessObject = function(data, req) {
     console.log('Returning success.');

@@ -18,6 +18,7 @@ exports.create = function (app, pool) {
             if (results && results.length == 1){
                 var sessData = req.session;
                 sessData.userID = results[0].id;
+                sessData.username = username;
                 res.json(common.getSuccessObject(results, req));
                 console.log(username + " logged in.");
             } else {

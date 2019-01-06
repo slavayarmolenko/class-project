@@ -173,6 +173,15 @@ svg:not(:root) {
 img.photo {
     border: 1px solid black;
 }
+img.photo.big {
+    height: 300px;
+}
+img.photo.small {
+    height: 100px;
+}
+img.photo.icon {
+    height: 30px;
+}
 
 
 
