@@ -15,6 +15,8 @@ const getEntityUrl = (entity) => {
             return serviceURLs.SERVICES;
         case entities.USER:
             return serviceURLs.USER;
+        case entities.POST:
+            return serviceURLs.POST;
         default:
             return '';
     };

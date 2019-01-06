@@ -7,6 +7,7 @@ import resultReducer from './resultReducer.js';
 import languageReducer from './languageReducer.js';
 import serviceReducer from './serviceReducer.js';
 import imageReducer from './imageReducer.js';
+import postReducer from './postReducer.js';
 
 export default combineReducers({
     attorney: attorneyReducer,
@@ -16,5 +17,6 @@ export default combineReducers({
     login: loginReducer,
     errors: errorReducer,
     results: resultReducer,
-    image: imageReducer
+    image: imageReducer,
+    post: postReducer
 })

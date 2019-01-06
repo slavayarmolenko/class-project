@@ -1,4 +1,5 @@
 var common = require('./common');
+var errorCodes = require('./errorTypes.js');
 
 exports.create = function(app, connection) {
     app.get('/api/user', function (req, res) {

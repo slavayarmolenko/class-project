@@ -12,26 +12,23 @@ export default function(state=initialState, action) {
         return state;
     }
 
-    let results = [...state.results, { type:action.type, entity: action.entity, success:action.payload.success }];
+    //let results = [...state.results, { type:action.type, entity: action.entity, success:action.payload.success }];
     switch (action.type) {
         case types.GET_ITEMS:
         case types.DELETE_ITEM:
             return { 
                 ...state,
                 items: action.payload.data, 
-                results: results                                                       
             };
         case types.GET_ITEM:
             return { 
                 ...state,
                 item: action.payload.data, 
-                results: results                                                      
             };
         case types.UPDATE_ITEM:
         case types.CREATE_ITEM:
             return { 
                 ...state,
-                results: results, 
             };
         default:
             return state;

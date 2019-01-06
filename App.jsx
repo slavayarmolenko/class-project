@@ -21,6 +21,8 @@ import Login from './pages/Login.jsx';
 import Company from './pages/Company.jsx';
 import Lawyer from './pages/Lawyer.jsx';
 import User from './pages/User.jsx';
+import UserPosts from './pages/Blog.jsx';
+import EditPost from './pages/EditPost.jsx';
 import HIEROGLYPHS from './pages/HIEROGLYPHS.jsx'; 
 import {URLs} from './utils/URLs.js';
 
@@ -41,6 +43,8 @@ const sponsors = () => <Sponsors></Sponsors>;
 const partners = () => <Partners></Partners>;
 const volonteers = () => <Volonteers></Volonteers>;
 const hierogliphs = () => <HIEROGLYPHS></HIEROGLYPHS>;
+const userPosts = () => <UserPosts userID={input.match.params.id}></UserPosts>;
+const editPost = () => <EditPost id={input.match.params.id}></EditPost>;
 
 
 const AppRouter = () => (
@@ -67,6 +71,8 @@ const AppRouter = () => (
                 <Route path={URLs.pages.PARTNERS} component={partners} />
                 <Route path={URLs.pages.VOLONTEERS} component={volonteers} />
                 <Route path={URLs.pages.HIEROGLYPHS} component={hierogliphs} />
+                <Route path={URLs.pages.BLOG + ':id'} component={userPosts} />
+                <Route path={URLs.pages.POST + ':id'} component={editPost} />
                 
                 <Footer/>
             </div>

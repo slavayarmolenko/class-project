@@ -11,5 +11,6 @@ export const serviceURLs = {
         COMPANY_TYPES: '/api/utils/companyTypes',
         LOGGED: '/api/login',
         LOGIN: '/api/login',
-        UPLOAD_IMAGE: '/api/utils/uploadImage'
+        UPLOAD_IMAGE: '/api/utils/uploadImage',
+        POST: '/api/post'
 };

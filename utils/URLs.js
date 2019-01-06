@@ -18,7 +18,9 @@ export const URLs = {
                 SPONSORS: '/sponsors/',
                 HIEROGLYPHS: '/HIEROGLYPHS/',
                 LEGALFUND: '/legalfund/',
-                SCHOLARSHIPFUND: '/scholarshipfund/'
+                SCHOLARSHIPFUND: '/scholarshipfund/',
+                BLOG: '/blog/',
+                POST: '/post/',
         },
         services: {
                 LAWYER: '/api/lawyer',
