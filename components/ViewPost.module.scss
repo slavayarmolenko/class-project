@@ -1,0 +1,29 @@
+$dark-burgundy: #6c1d37;
+
+.post {
+    display: block;
+    h3 {
+        color: $dark-burgundy;
+    }
+    .createdAt {
+        float: right;
+        color: #777;
+    }
+    .body {
+        display: block;
+        min-height: 300px;
+    }
+    .author {
+        color: $dark-burgundy;
+        font-style: italic;
+        font-weight: normal;
+    }
+    .photo {
+        border: 1px solid #777;
+        width: 30%;
+        float: left;
+    }
+}
+
+
+

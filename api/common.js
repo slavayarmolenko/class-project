@@ -1,16 +1,43 @@
 var session = require('express-session');
 var errorCodes = require('./errorTypes.js');
-
+var _escapeString = function (val) {
+    val = val.replace(/[\0\n\r\b\t\\'"\x1a]/g, function (s) {
+      switch (s) {
+        case "\0":
+          return "\\0";
+        case "\n":
+          return "\\n";
+        case "\r":
+          return "\\r";
+        case "\b":
+          return "\\b";
+        case "\t":
+          return "\\t";
+        case "\x1a":
+          return "\\Z";
+        case "'":
+          return "''";
+        case '"':
+          return '""';
+        default:
+          return "\\" + s;
+      }
+    });
+  
+    return val;
+  };
 exports.getUpdateValueString = function(columnObject, columnValue){
     //columnObject : { type: 'string'/'number', id: string, required: true/false}
-    if(columnObject.required &&(!columnValue)){
+    if(columnObject.required &&((columnValue === undefined) || (columnValue === null) || (columnValue === ''))){
         return "";
     }
     if(columnObject.type == "string"){
-        return columnObject.id + "='" + (columnValue||'') + "', "; 
+        var dbColumnValue = _escapeString(columnValue||'');
+        return columnObject.id + "='" + dbColumnValue + "', "; 
     } else if ((columnObject.type == "number")||(columnObject.type == "boolean")){
-        return columnObject.id + "=" + (columnValue||'') + ", "; 
+        return columnObject.id + "=" + (columnValue) + ", "; 
     } else {
+        throw "ColumObject unknown type in common.js" + columnObject.id;
         return "";
     }
 };
