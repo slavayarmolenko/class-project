@@ -31,11 +31,14 @@ class UploadImageField extends React.Component {
         if (nextProps.imageURL !== this.props.imageURL) {
             this.setState({ url: nextProps.imageURL });
         }
+        if (nextProps.url !== this.props.url) {
+            this.setState({ url: nextProps.url });
+        }
 
         if ((nextProps.results.length > this.props.results.length) && nextProps.results[nextProps.results.length - 1].success) {
             var lastResult = nextProps.results[nextProps.results.length - 1];
-            if ((lastResult.action === SAVE_IMAGE) && nextProps.image.id) {
-                this.props.onChange({ id: nextProps.image.id });
+            if ((lastResult.action === SAVE_IMAGE) && nextProps.imageID) {
+                this.props.onChange(nextProps.imageID);
             }
         }
 
@@ -61,17 +64,19 @@ class UploadImageField extends React.Component {
         return (
                     <div>
                         <FormHelperText error={ this.state.errorText ? true : false}>{this.state.errorText}</FormHelperText>
-                        <TextValidator
-                            label={'Change Image'}
-                            onChange={this.uploadFile}
-                            name="photoImage"
-                            type="file"
-                            validators={[]}
-                            errorMessages={[]}
-                            multiple={false}
-                        />
+                        {!this.props.readOnly &&
+                            <TextValidator
+                                label="Change Image"
+                                onChange={this.uploadFile}
+                                name="photoImage"
+                                type="file"
+                                validators={[]}
+                                errorMessages={[]}
+                                multiple={false}
+                            />
+                        }
                         {this.state.url &&
-                            <img src={this.state.url} className="photo"></img>
+                            <div><img src={this.state.url} className="photo big" height="200"></img></div>
                         }
                     </div>
         );
@@ -87,7 +92,8 @@ UploadImageField.propTypes = {
     imageID: PropTypes.number.isRequired,
 
     imageURL: PropTypes.string,
-    onChange: PropTypes.func.isRequired
+    onChange: PropTypes.func.isRequired,
+    readOnly: PropTypes.bool
 };
 
 const mapStateToProps = state => ({

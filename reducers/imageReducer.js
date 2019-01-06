@@ -6,7 +6,7 @@ const initialState = {
 };
 
 export default function(state=initialState, action) {
-    if (action !== types.SAVE_IMAGE) {
+    if (action.type !== types.SAVE_IMAGE) {
         return state;
     }
     if (action.payload.success) {

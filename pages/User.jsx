@@ -112,6 +112,7 @@ class User extends React.Component {
     }
     
     onChangePhoto(imageID) {
+        const { user } = this.state;
         user['imageID'] = imageID;
         this.setState({ user });
     }
@@ -152,7 +153,7 @@ class User extends React.Component {
                         type="text"
                         validators={['required', 'maxStringLength:50']}
                         errorMessages={['this field is required', 'exceeds 50 symbols in length']}
-                        value={username}
+                        value={username || ''}
                         InputLabelProps={{}}
                     />
                     </div><div>   
@@ -175,9 +176,9 @@ class User extends React.Component {
                         value={repeatPassword}
                         style={{marginLeft: '15px'}}
                     /></div>
-                    <div><UploadImageField url={url} onChange={this.onChangePhoto}></UploadImageField></div>
                 </div> 
                 }
+                <div><UploadImageField readOnly={!logged} url={url} onChange={this.onChangePhoto}></UploadImageField></div>
                 <div><TextValidator
                     label="Full Name"
                     onChange={this.handleChange}
@@ -185,7 +186,7 @@ class User extends React.Component {
                     type="text"
                     validators={['required', 'maxStringLength:255']}
                     errorMessages={['this field is required', 'exceeds 255 symbols in length']}
-                    value={name}
+                    value={name || ''}
                     fullWidth={true}
                     inputProps={{readOnly: !logged }}
                     InputLabelProps={logged? {} :{shrink: !logged}}
@@ -196,7 +197,7 @@ class User extends React.Component {
                         onChange={this.handleChange}
                         name="email"
                         type="email"
-                        value={email}
+                        value={email || ''}
                         fullWidth={true}
                         validators={['isEmail', 'maxStringLength:100']}
                         errorMessages={['email is not valid', 'exceeds 100 symbols in length']}
@@ -211,7 +212,7 @@ class User extends React.Component {
                     type="text"
                     validators={['required', 'maxStringLength:255']}
                     errorMessages={['this field is required', 'exceeds 255 symbols in length']}
-                    value={role}
+                    value={role || ''}
                     fullWidth={true}
                     inputProps={{readOnly: !logged }}
                     InputLabelProps={logged? {} :{shrink: !logged}}
@@ -224,7 +225,7 @@ class User extends React.Component {
                         type="text"
                         validators={['maxStringLength:255']}
                         errorMessages={['exceeds 255 symbols in length']}
-                        value={subject}
+                        value={subject || ''}
                         fullWidth={true}
                         inputProps={{readOnly: !logged }}
                         InputLabelProps={logged? {} :{shrink: !logged}}

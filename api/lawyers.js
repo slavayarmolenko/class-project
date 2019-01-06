@@ -117,10 +117,7 @@ exports.create = function (app, connection) {
             }
 
         }
-        fs.appendFile(req.file.name, req.file.content, function (err) {
-            if (err) throw err;
-            console.log('Saved!');
-          });
+        
         addNewLawyerLine1 = addNewLawyerLine1.substring(0, addNewLawyerLine1.length - 2);
         addNewLawyerLine2 = addNewLawyerLine2.substring(0, addNewLawyerLine2.length - 2) + ending;
 

@@ -123,14 +123,20 @@ exports.create = function (app, connection) {
         var time = new Date();
         // Use the mv() method to place the file somewhere on your server
         var name = req.files.file.name;
-        var filePath = 'uploadedImages/test' + time.getTime() + name.slice(name.lastIndexOf('.'));
+        var creatorString = '_by_' + (common.getLoggedUserName(req) || 'unlogged') + '_'; 
+        var filePath = 'uploadedImages/' + name.substring(0, name.lastIndexOf('.')) + creatorString + time.getTime() + name.slice(name.lastIndexOf('.'));
         file.mv(filePath, function (err) {
             if (err) {
                 res.json(common.getErrorObject('Cannot save file on the server.', req));
                 return;
             }
-            connection.query('INSERT INTO images (url) VALUES ("' + filePath + '");', function (selectErr, results) {
-                res.json(common.getSuccessObject({imageID: results.insertId, url: filePath}, req));
+            var rootFilePath = '/' + filePath;
+            connection.query('INSERT INTO images (url) VALUES ("' + rootFilePath + '");', function (insertErr, results) {
+                if (insertErr) {
+                    res.json(common.getSqlErrorObject(insertErr, req));
+                    return;
+                }
+                res.json(common.getSuccessObject({imageID: results.insertId, url: rootFilePath}, req));
             
             });
         });
