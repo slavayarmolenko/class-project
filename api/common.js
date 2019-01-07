@@ -53,7 +53,8 @@ exports.getInsertValueString = function(columnObject, columnValue){
         return "";
     }
     if(columnObject.type == "string"){
-        return  "'"+(columnValue||"") + "', "; 
+        var dbColumnValue = _escapeString(columnValue||'');
+        return  "'"+dbColumnValue + "', "; 
     } else if ((columnObject.type == "number")||(columnObject.type == "boolean")){
         return (columnValue||'') + ", "; 
     } else {
