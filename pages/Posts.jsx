@@ -24,7 +24,7 @@ class Posts extends React.Component {
     }
 
     deletePost(postId) {
-        this.props.deleteItem(POST, postId, {userID: this.props.userID});
+        this.props.deleteItem(POST, postId);
     }
     componentWillMount() {
         this.props.getItems(POST);

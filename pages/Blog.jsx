@@ -62,6 +62,7 @@ class Blog extends React.Component {
                                 createdAt={item.createdAt} 
                                 userID={item.userID} 
                                 author={item.author} 
+                                deletePost={this.deletePost}
                             />
                             ))}
                     </div>
@@ -87,4 +88,4 @@ const mapStateToProps = state => ({
     errors: state.errors || [],
     loggedUserID: state.login.userID
 });
-export default connect(mapStateToProps, { getItems })(Blog);
+export default connect(mapStateToProps, { getItems, deleteItem })(Blog);
