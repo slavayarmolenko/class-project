@@ -35,7 +35,8 @@ class ViewPost extends React.Component {
                 <h4 className={styles.author}>{author}</h4>, <div className={styles.createdAt}>{createdAt}</div>
                 
                 <div className={styles.body}>
-                    {imageURL && <img src={imageURL} className={styles.photo} /> }
+
+                    {imageURL && <div><img src={imageURL} className={styles.photo} /></div> }
                     {body}
                 </div>
                 <div className="buttons">

@@ -89,7 +89,7 @@ class EditPost extends React.Component {
     }
     handleSubmit() {
         this.setState({ errorText: '' });
-        var post = {...this.state.post, userID: this.props.loggedUserID};
+        var post = {...this.state.post, userID: this.props.loggedUserID, type: 'post'};
         this.props.updateItem(POST, post);
     }
     
@@ -110,6 +110,9 @@ class EditPost extends React.Component {
         const isNew = this.state.isNew;
         const logged = this.props.logged && (isNew || (this.props.loggedUserID.toString() === this.props.post.userID));        
 
+        if (this.state.redirectTo) {
+            return <Redirect to={this.state.redirectTo}  />;
+        }
         if (!logged) {
             return <Redirect to={URLs.pages.LOGIN}  />;
         }
