@@ -37,7 +37,7 @@ class Blog extends React.Component {
         }
     }
     deletePost(postId) {
-        this.deleteItem(POST, postId, {userID: this.props.userID});
+        this.props.deleteItem(POST, postId, {userID: this.props.userID});
     }
     render() {
         const errorText = this.state.errorText;

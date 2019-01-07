@@ -31,7 +31,7 @@ exports.create = function(app, connection) {
             'LEFT JOIN (SELECT * FROM images) AS images ON images.id=posts.imageID WHERE posts.id = '+req.query.id+' ORDER BY posts.created DESC;';
             connection.query(SQLquery, function (err, results) {
                 if (err) {
-                    console.error('DB exception while getting posts.');
+                    console.error('DB exception while getting post by ID.');
                     res.json(common.getSqlErrorObject(err, req));
                     return;
                 }
@@ -48,7 +48,7 @@ exports.create = function(app, connection) {
             'LEFT JOIN (SELECT * FROM images) AS images ON images.id=posts.imageID WHERE users.id = '+req.query.userID+' ORDER BY posts.created DESC;';
             connection.query(SQLquery, function (err, results) {
                 if (err) {
-                    console.error('DB exception while getting posts.');
+                    console.error('DB exception while getting post for user.');
                     res.json(common.getSqlErrorObject(err, req));
                     return;
                 }

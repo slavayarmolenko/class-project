@@ -69,6 +69,7 @@ class ViewPost extends React.Component {
         }
         return (
             <div className={styles.post}>
+                {isAuthor && <Button className={styles.deleteBtn} onClick={this.deletePost}>X</Button> }
                 <h3>{subject}</h3>
                 <h4 className={styles.author}>{author}</h4>, <div className={styles.createdAt}>{createdAt}</div>
                 
@@ -81,7 +82,6 @@ class ViewPost extends React.Component {
                     <Link to={URLs.pages.BLOG + userID}>{'View author blog'}</Link>
                     <Link to={URLs.pages.USER + userID}>{'View author profile'}</Link>
                     {isAuthor && <Link to={URLs.pages.POST + id}>Edit Post</Link>}
-                    {isAuthor && <Button onClick={this.deletePost}>X</Button> }
                 </div>
             </div>
                    );

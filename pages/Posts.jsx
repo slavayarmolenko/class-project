@@ -8,6 +8,7 @@ import {getItems, deleteItem} from '../actions/itemsActions';
 import PropTypes from 'prop-types';
 import {errors} from '../api/errorTypes';
 import ViewPost from '../components/ViewPost.jsx';
+import {DELETE_ITEM, GET_ITEMS} from '../actions/types';
 
 
 class Posts extends React.Component {
@@ -23,7 +24,7 @@ class Posts extends React.Component {
     }
 
     deletePost(postId) {
-        this.deleteItem(POST, postId, {userID: this.props.userID});
+        this.props.deleteItem(POST, postId, {userID: this.props.userID});
     }
     componentWillMount() {
         this.props.getItems(POST);
@@ -35,7 +36,9 @@ class Posts extends React.Component {
                 if (lastErr.errCode === errors.UNAUTHORIZED) {
                     return (<Redirect to={URLs.pages.LOGIN} />);
                 } else {
-                    this.setState({ errorText: 'Error while retrieving team members: ' + lastErr.text });
+                    this.setState({ errorText: 'Error while ' + 
+                        (lastErr.action === DELETE_ITEM ? 'deleting' : 'retrieving') + 
+                        ' team members: ' + lastErr.text });
                 }
             }
         }
