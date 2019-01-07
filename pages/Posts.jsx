@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import {POST} from '../actions/entities';
 import {URLs} from '../utils/URLs.js';
 import {connect} from 'react-redux';
-import {getItems} from '../actions/itemsActions';
+import {getItems, deleteItem} from '../actions/itemsActions';
 import PropTypes from 'prop-types';
 import {errors} from '../api/errorTypes';
 import ViewPost from '../components/ViewPost.jsx';
@@ -19,7 +19,11 @@ class Posts extends React.Component {
             dataLoaded: false,
             errorText: ''
         };
+        this.deletePost = this.deletePost.bind(this);
+    }
 
+    deletePost(postId) {
+        this.deleteItem(POST, postId, {userID: this.props.userID});
     }
     componentWillMount() {
         this.props.getItems(POST);
@@ -27,7 +31,7 @@ class Posts extends React.Component {
     componentWillReceiveProps(nextProps) {
         if ((nextProps.errors.length > this.props.errors.length)) {
             const lastErr = nextProps.errors[nextProps.errors.length - 1];
-            if (lastErr.entity === USER) {
+            if (lastErr.entity === POST) {
                 if (lastErr.errCode === errors.UNAUTHORIZED) {
                     return (<Redirect to={URLs.pages.LOGIN} />);
                 } else {
@@ -58,7 +62,7 @@ class Posts extends React.Component {
                                 createdAt={item.createdAt} 
                                 userID={item.userID} 
                                 author={item.author} 
-                                isAuthor={this.props.logged && (this.props.userID.toString()=== item.userID)} 
+                                deletePost={this.deletePost}
                             />
                             ))}
                     </div>
@@ -69,6 +73,7 @@ class Posts extends React.Component {
 }
 Posts.propTypes = {
     getItems: PropTypes.func.isRequired,
+    deleteItem: PropTypes.func.isRequired,
 
     data: PropTypes.array.isRequired, 
     logged: PropTypes.bool.isRequired,
@@ -81,4 +86,4 @@ const mapStateToProps = state => ({
     errors: state.errors || [],
     userID: state.login.userID
 });
-export default connect(mapStateToProps, { getItems })(Posts);
+export default connect(mapStateToProps, { getItems, deleteItem })(Posts);
