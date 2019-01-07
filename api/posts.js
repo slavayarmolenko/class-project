@@ -67,7 +67,7 @@ exports.create = function(app, connection) {
             return;
         }
         var isUpdate = req.body.id ? true : false;
-        var addNewLawyerLine1 = 'INSERT INTO users (';
+        var addNewLawyerLine1 = 'INSERT INTO posts (';
         var addNewLawyerLine2 = ') VALUES (';
         var i = 0;
         var ending = ");"
@@ -98,8 +98,8 @@ exports.create = function(app, connection) {
                 required: true
             }, {
                 type: "string",
-                id: "body",
-                required: false
+                id: "type",
+                required: true
             }
         ];
         for (var i = 0; i < columnObject.length; i++) {
