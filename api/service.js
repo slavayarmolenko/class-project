@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var teamService = require('./team');
+var postService =  require('./posts');
 var lawyersService = require('./lawyers');
 var companiesService = require('./companies');
 var loginService = require('./login');
@@ -46,6 +47,7 @@ teamService.create(app, pool);
 lawyersService.create(app, pool);
 companiesService.create(app, pool);
 loginService.create(app, pool);
+postService.create(app, pool);
 var server = app.listen(8081, function () {
     var host = server.address().address;
     var port = server.address().port;
