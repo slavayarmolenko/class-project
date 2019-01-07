@@ -1,5 +1,21 @@
 var common = require('./common');
 exports.create = function(app, connection) {
+    app.delete('/api/post', function(req, res){
+        connection.query("DELETE FROM posts WHERE id = " + req.query.id + ";", function (err, results) {
+            if (err) {
+                console.error('DB exception while getting posts.');
+                res.json(common.getSqlErrorObject(err, req));
+                return;
+            }
+        });
+        if (req.query.userID){
+            getPostByUserID(req,res);
+            return;
+        } else {
+            getAllPosts(req, res);
+        }
+        
+    });
     app.get('/api/post', function (req, res) {
         if (req.query.id) {
             getPostById(req,res);
@@ -8,8 +24,13 @@ exports.create = function(app, connection) {
         if (req.query.userID){
             getPostByUserID(req,res);
             return;
+        } else {
+            getAllPosts(req,res);
+            return;
         }
         
+    });
+    var getAllPosts = function (req, res){
         SQLquery = 'SELECT posts.id, posts.subject, images.url AS imageURL, posts.body, DATE_FORMAT(posts.created, "%H:%i %M %D %Y") AS createdAt, users.id AS userID, users.name AS author FROM users ' + 
         'LEFT JOIN (SELECT * FROM posts) AS posts ON posts.userID = users.id ' + 
         'LEFT JOIN (SELECT * FROM images) AS images ON images.id=posts.imageID WHERE type <> "profile" ORDER BY posts.created DESC;';
@@ -24,7 +45,7 @@ exports.create = function(app, connection) {
             console.log('Searched succesfully.');
             res.json(send);
         });
-    });
+    }
     var getPostById = function (req, res){
         SQLquery = 'SELECT posts.id, posts.subject, images.url AS imageURL, posts.body, DATE_FORMAT(posts.created, "%H:%i %M %D %Y") AS createdAt, users.id AS userID, users.name AS author FROM users ' + 
             'LEFT JOIN (SELECT * FROM posts) AS posts ON posts.userID = users.id ' + 
@@ -95,7 +116,7 @@ exports.create = function(app, connection) {
             }, {
                 type: "number",
                 id: "imageID",
-                required: true
+                required: false
             }, {
                 type: "string",
                 id: "type",
@@ -137,6 +158,7 @@ exports.create = function(app, connection) {
 
 
     });
+    
     
 };
 
