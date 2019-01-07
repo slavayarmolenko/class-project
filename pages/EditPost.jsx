@@ -10,7 +10,7 @@ import {getLogged} from '../actions/loginActions';
 
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {USER} from '../actions/entities';
+import {POST} from '../actions/entities';
 import {UPDATE_ITEM} from '../actions/types';
 import {errors} from '../api/errorTypes';
 
@@ -18,13 +18,14 @@ class EditPost extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            user: {
+            post: {
                 id: this.props.id,
-                uzvername: '',
-                name: '',
-                email: '',
-                password: '',
-                repeatPassword: '',
+                userID: 0, 
+                subject: '', 
+                body: '', 
+                imageID: '',
+                author: '',
+                createdAt: ''
             },
             errorText: '',
             redirectTo: '',
@@ -43,40 +44,20 @@ class EditPost extends React.Component {
     componentWillMount() {
         this._isMounted = true;
         // custom rule will have name 'isPasswordMatch'
-        ValidatorForm.addValidationRule('isPasswordMatch', (value) => {
-            if (value !== this.state.user.password) {
-                return false;
-            }
-            return true;
-        });
-        ValidatorForm.addValidationRule('isZip', (value) => {
-            if (!value) {
-                return true;
-            }
-            if (/(^\d{5}$)|(^\d{5}-\d{4}$)/.test(value)) {
-                return true;
-            }
-            return false;
-        });
         if (!this.state.isNew) {
-            this.props.getItem(USER, this.props.id);
+            this.props.getItem(POST, this.props.id);
         } else {
             this.props.getLogged();
         }
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.user.id && this.props.id && (nextProps.user.id.toString() === this.props.id.toString())) {
-            var user = {
-                ...nextProps.user,
-                repeatPassword:'',
-                password: ''
-            }
-            this.setState({user: user });
+        if (nextProps.post.id && this.props.id && (nextProps.post.id.toString() === this.props.id.toString())) {
+            this.setState({post: nextProps.post });
         }
         if (nextProps.errors.length > this.props.errors.length) {
             const lastErr = nextProps.errors[nextProps.errors.length - 1];
-            if (lastErr.entity === USER) {
+            if (lastErr.entity === POST) {
                 if (lastErr.errCode === errors.UNAUTHORIZED) {
                     this.goToLogin();
                 } else {
@@ -86,20 +67,20 @@ class EditPost extends React.Component {
         }
         if ((nextProps.results.length > this.props.results.length) && nextProps.results[nextProps.results.length - 1].success) {
             var lastResult = nextProps.results[nextProps.results.length - 1];
-            if ((lastResult.entity === USER) && (lastResult.action === UPDATE_ITEM)) {
+            if ((lastResult.entity === POST) && (lastResult.action === UPDATE_ITEM)) {
                 this.goToList();
             }
         }
     }
     handleChange(event) {
-        const { user } = this.state;
+        const { post } = this.state;
         
         if (event.target.type === 'checkbox') {
-            user[event.target.name] = event.target.checked;
+            post[event.target.name] = event.target.checked;
         } else {
-            user[event.target.name] = event.target.value;
+            post[event.target.name] = event.target.value;
         }
-        this.setState({ user });
+        this.setState({ post });
     }
     
     handlePropChange(event) {
@@ -108,131 +89,56 @@ class EditPost extends React.Component {
     }
     handleSubmit() {
         this.setState({ errorText: '' });
-        this.props.updateItem(USER, this.state.user);
+        var post = {...this.state.post, userID: this.props.loggedUserID};
+        this.props.updateItem(POST, post);
     }
     
     onChangePhoto(imageID) {
-        const { user } = this.state;
-        user['imageID'] = imageID;
-        this.setState({ user });
+        const { post } = this.state;
+        post['imageID'] = imageID;
+        this.setState({ post });
     }
     goToList() {
-        this.setState({ redirectTo: URLs.pages.TEAM });
+        this.setState({ redirectTo: URLs.pages.POSTS });
     }
     goToLogin() {
         this.setState({ redirectTo: URLs.pages.LOGIN });
     }
     render() {
-        const { username, name, email, password, repeatPassword, role, subject, body, url } = this.state.user;
+        const { id, subject, body, author, imageURL, createdAt } = this.state.post;
         const errorText = this.state.errorText;
         const isNew = this.state.isNew;
-        const logged = this.props.logged && (this.props.id === this.props.userID.toString());        
+        const logged = this.props.logged && (isNew || (this.props.loggedUserID.toString() === this.props.post.userID));        
 
-        if (!logged && isNew) {
-            return <Redirect to={this.state.redirectTo}  />;
+        if (!logged) {
+            return <Redirect to={URLs.pages.LOGIN}  />;
         }
-        if (this.state.redirectTo) {
-            return <Redirect to={this.state.redirectTo}  />;
-        }
+        
         return (
           <div className="container pageContent">
-            <h1>{ isNew ? 'Create a Team member' : 'Team Member'}</h1>
+            <h1>{ isNew ? 'Create a Post' : 'Edit a Post'}</h1>
             <ValidatorForm 
                 onSubmit={this.handleSubmit}
                 onError={errors => console.log(errors)}
                 readOnly={true}
             >   
-                {logged && 
-                <div>
-                    <div>
-                    <TextValidator
-                        label="Username"
-                        onChange={this.handleChange}
-                        readOnly={true}
-                        name="username"
-                        type="text"
-                        validators={['required', 'maxStringLength:50']}
-                        errorMessages={['this field is required', 'exceeds 50 symbols in length']}
-                        value={username || ''}
-                        InputLabelProps={{}}
-                    />
-                    </div><div>   
-                    <TextValidator
-                        label="Password"
-                        onChange={this.handleChange}
-                        name="password"
-                        type="password"
-                        validators={isNew ? ['required', 'maxStringLength:50'] : []}
-                        errorMessages={['this field is required', 'exceeds 50 symbols in length']}
-                        value={password}
-                        
-                    /><TextValidator
-                        label="Repeat password"
-                        onChange={this.handleChange}
-                        name="repeatPassword"
-                        type="password"
-                        validators={isNew ? ['isPasswordMatch', 'required'] : ['isPasswordMatch']}
-                        errorMessages={isNew ? ['password mismatch', 'this field is required'] : ['password mismatch']}
-                        value={repeatPassword}
-                        style={{marginLeft: '15px'}}
-                    /></div>
-                </div> 
-                }
-                <div><UploadImageField readOnly={!logged} url={url} onChange={this.onChangePhoto}></UploadImageField></div>
+                <div><UploadImageField readOnly={!logged} url={imageURL} onChange={this.onChangePhoto}></UploadImageField></div>
+                <div>{author || ''}</div>
+                <div>{createdAt || ''}</div>
                 <div><TextValidator
-                    label="Full Name"
+                    label="Subject"
                     onChange={this.handleChange}
-                    name="name"
+                    name="subject"
                     type="text"
-                    validators={['required', 'maxStringLength:255']}
-                    errorMessages={['this field is required', 'exceeds 255 symbols in length']}
-                    value={name || ''}
+                    validators={['maxStringLength:255']}
+                    errorMessages={['exceeds 255 symbols in length']}
+                    value={subject || ''}
                     fullWidth={true}
                     inputProps={{readOnly: !logged }}
                     InputLabelProps={logged? {} :{shrink: !logged}}
                 /></div>
-                {logged && 
-                    <div><TextValidator
-                        label="E-Mail"
-                        onChange={this.handleChange}
-                        name="email"
-                        type="email"
-                        value={email || ''}
-                        fullWidth={true}
-                        validators={['isEmail', 'maxStringLength:100']}
-                        errorMessages={['email is not valid', 'exceeds 100 symbols in length']}
-                        inputProps={{readOnly: !logged }}
-                        InputLabelProps={logged? {} :{shrink: !logged}}
-                    /></div>
-                }
                 <div><TextValidator
-                    label="Role"
-                    onChange={this.handleChange}
-                    name="role"
-                    type="text"
-                    validators={['required', 'maxStringLength:255']}
-                    errorMessages={['this field is required', 'exceeds 255 symbols in length']}
-                    value={role || ''}
-                    fullWidth={true}
-                    inputProps={{readOnly: !logged }}
-                    InputLabelProps={logged? {} :{shrink: !logged}}
-                /></div>                
-                {logged &&  
-                    <div><TextValidator
-                        label="Short subject/Slogan"
-                        onChange={this.handleChange}
-                        name="subject"
-                        type="text"
-                        validators={['maxStringLength:255']}
-                        errorMessages={['exceeds 255 symbols in length']}
-                        value={subject || ''}
-                        fullWidth={true}
-                        inputProps={{readOnly: !logged }}
-                        InputLabelProps={logged? {} :{shrink: !logged}}
-                    /></div>
-                }
-                <div><TextValidator
-                    label={logged ? "About" : (subject || "About")}
+                    label="Body"
                     onChange={this.handleChange}
                     name="body"
                     type="text"
@@ -269,14 +175,14 @@ EditPost.propTypes = {
     
     post: PropTypes.object,
     logged: PropTypes.bool.isRequired,
-    userID: PropTypes.number.isRequired,
+    loggedUserID: PropTypes.number.isRequired,
     results: PropTypes.array.isRequired,
     errors: PropTypes.array.isRequired
 };
 const mapStateToProps = state => ({
-    user: state.post.item,
+    post: state.post.item,
     logged: state.login.logged,
-    userID: state.login.userID,
+    loggedUserID: state.login.userID,
     results: state.results,
     errors: state.errors
 });

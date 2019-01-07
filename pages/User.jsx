@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import Button from '@material-ui/core/Button';
 import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
 import UploadImageField from '../components/UploadImageField.jsx';
@@ -244,7 +244,7 @@ class User extends React.Component {
                     inputProps={{readOnly: !logged }}
                     InputLabelProps={logged? {} :{shrink: !logged}}
                 /></div>
-                
+            
                 
                 <div className="error">{errorText}</div>
                 <div className="buttons">
@@ -253,6 +253,7 @@ class User extends React.Component {
                         logged && 
                         <Button type="submit" color="primary" variant="contained">{isNew ? 'Create': 'Save'}</Button>
                     }
+                    <Link to={URLs.pages.BLOG + this.props.id}>{'View blog'}</Link>
                 </div>
             </ValidatorForm>
             </div>

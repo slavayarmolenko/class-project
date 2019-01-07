@@ -20,7 +20,9 @@ export const URLs = {
                 LEGALFUND: '/legalfund/',
                 SCHOLARSHIPFUND: '/scholarshipfund/',
                 BLOG: '/blog/',
+                POSTS: '/posts/',
                 POST: '/post/',
+                CREATE_POST: '/create/post',
         },
         services: {
                 LAWYER: '/api/lawyer',

@@ -4,24 +4,42 @@ $dark-burgundy: #6c1d37;
     display: block;
     h3 {
         color: $dark-burgundy;
+        margin: 10px 0px;
     }
+    h4 {
+        margin: 0px 0px 7px 0px;
+    }
+    
     .createdAt {
-        float: right;
+        display: inline-block;
+        font-size: 0.8em;
         color: #777;
+        &::before {
+            content: '\1F4C5';
+            font-size: 20px;
+            display: inline-block;
+            vertical-align: top;
+            margin-right: 3px;
+        }
     }
     .body {
         display: block;
-        min-height: 300px;
+        //min-height: 300px;
     }
     .author {
         color: $dark-burgundy;
         font-style: italic;
         font-weight: normal;
+        display: inline-block;
     }
     .photo {
         border: 1px solid #777;
         width: 30%;
-        float: left;
+    }
+    border-bottom: 1px solid #777;
+
+    &:first-child {
+        border-top: 1px solid #777;
     }
 }
 

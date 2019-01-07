@@ -46,7 +46,7 @@ class Header extends React.Component {
                                     )}
                                     { logged && (
                                     <li id="menu-item-271">
-                                        <Link to={URLs.pages.CREATE_COMPANY}>Create Company</Link>
+                                        <Link to={URLs.pages.CREATE_POST}>Create Post</Link>
                                     </li>
                                     )}
                                 </ul>
@@ -106,7 +106,7 @@ class Header extends React.Component {
                                     </li>
 
                                     <li>
-                                        <Link to={URLs.pages.TEAM}>Post</Link>
+                                        <Link to={URLs.pages.POSTS}>Post</Link>
                                     </li>
                                 </ul>
                             </div>

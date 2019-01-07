@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Link } from "react-router-dom";
 import {POST} from '../actions/entities';
-import {URLs} from './../utils/URLs.js';
+import {URLs} from '../utils/URLs.js';
 import {connect} from 'react-redux';
 import {getItems} from '../actions/itemsActions';
 import PropTypes from 'prop-types';
@@ -10,7 +10,7 @@ import {errors} from '../api/errorTypes';
 import ViewPost from '../components/ViewPost.jsx';
 
 
-class Blog extends React.Component {
+class Posts extends React.Component {
     constructor() {
         super();
 
@@ -22,7 +22,7 @@ class Blog extends React.Component {
 
     }
     componentWillMount() {
-        this.props.getItems(POST, {userID: this.props.userID});
+        this.props.getItems(POST);
     }
     componentWillReceiveProps(nextProps) {
         if ((nextProps.errors.length > this.props.errors.length)) {
@@ -38,13 +38,14 @@ class Blog extends React.Component {
     }
     render() {
         const errorText = this.state.errorText;
-        const logged = this.props.logged && (this.props.loggedUserID.toString()=== this.props.userID); 
         const items = this.props.data;
+        const logged = this.props.logged;
         
         return (
                 <div className="container pageContent">
                     <h1>Blog</h1>
                     <div className="error">{errorText}</div>
+                    {logged && <Link to={URLs.pages.CREATE_POST}>Create a new post</Link> }
                     {!items.length && <div>This user does not have any posts yet.</div>}
                     <div className="posts">
                         {items.map(item => (
@@ -57,7 +58,7 @@ class Blog extends React.Component {
                                 createdAt={item.createdAt} 
                                 userID={item.userID} 
                                 author={item.author} 
-                                isAuthor={logged}
+                                isAuthor={this.props.logged && (this.props.userID.toString()=== item.userID)} 
                             />
                             ))}
                     </div>
@@ -66,20 +67,18 @@ class Blog extends React.Component {
     }
 
 }
-Blog.propTypes = {
+Posts.propTypes = {
     getItems: PropTypes.func.isRequired,
 
     data: PropTypes.array.isRequired, 
     logged: PropTypes.bool.isRequired,
     errors: PropTypes.array.isRequired,
-    loggedUserID: PropTypes.number.isRequired,
-
-    userID: PropTypes.string.isRequired
+    userID: PropTypes.number.isRequired,
 };
 const mapStateToProps = state => ({
     data: state.post.items || [],
     logged: state.login.logged || false,
     errors: state.errors || [],
-    loggedUserID: state.login.userID
+    userID: state.login.userID
 });
-export default connect(mapStateToProps, { getItems })(Blog);
+export default connect(mapStateToProps, { getItems })(Posts);
