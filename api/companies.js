@@ -9,7 +9,7 @@ exports.create = function(app, connection) {
                 res.json(common.getSqlErrorObject(err, req));
                 return;
             }
-            res.json(common.getSuccessObject(lawyer, req));
+            res.json(common.getSuccessObject(results, req));
         });
     });
 };

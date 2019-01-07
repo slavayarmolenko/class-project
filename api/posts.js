@@ -95,7 +95,7 @@ exports.create = function(app, connection) {
             }, {
                 type: "number",
                 id: "imageID",
-                required: true
+                required: false
             }, {
                 type: "string",
                 id: "type",
