@@ -1,7 +1,7 @@
 var common = require('./common');
 exports.create = function(app, connection) {
     app.delete('/api/post', function(req, res){
-        connection.query("DELETE FROM posts WHERE id = " + req.query.id + ";", function (err, results) {
+        connection.query("DELETE FROM posts WHERE id = " + req.query.id + " AND type <> 'profile';", function (err, results) {
             if (err) {
                 console.error('DB exception while getting posts.');
                 res.json(common.getSqlErrorObject(err, req));
@@ -18,7 +18,7 @@ exports.create = function(app, connection) {
     });
     app.get('/api/post', function (req, res) {
         if (req.query.id) {
-            getPostById(req,res);
+            getPostByID(req,res);
             return;
         }
         if (req.query.userID){
@@ -46,19 +46,19 @@ exports.create = function(app, connection) {
             res.json(send);
         });
     }
-    var getPostById = function (req, res){
+    var getPostByID = function (req, res){
         SQLquery = 'SELECT posts.id, posts.subject, images.url AS imageURL, posts.body, DATE_FORMAT(posts.created, "%H:%i %M %D %Y") AS createdAt, users.id AS userID, users.name AS author FROM users ' + 
             'LEFT JOIN (SELECT * FROM posts) AS posts ON posts.userID = users.id ' + 
             'LEFT JOIN (SELECT * FROM images) AS images ON images.id=posts.imageID WHERE posts.id = '+req.query.id+' ORDER BY posts.created DESC;';
             connection.query(SQLquery, function (err, results) {
                 if (err) {
-                    console.error('DB exception while getting post by ID.');
+                    console.error('DB exception while getting posts.');
                     res.json(common.getSqlErrorObject(err, req));
                     return;
                 }
     
                 var send = common.getSuccessObject(results, req);
-                console.log('A post with id='+ req.query.id + ' is found and sent to frontend.');
+                console.log('Searched succesfully.');
                 res.json(send);
             });
     
@@ -69,7 +69,7 @@ exports.create = function(app, connection) {
             'LEFT JOIN (SELECT * FROM images) AS images ON images.id=posts.imageID WHERE users.id = '+req.query.userID+' ORDER BY posts.created DESC;';
             connection.query(SQLquery, function (err, results) {
                 if (err) {
-                    console.error('DB exception while getting post for user.');
+                    console.error('DB exception while getting posts.');
                     res.json(common.getSqlErrorObject(err, req));
                     return;
                 }
