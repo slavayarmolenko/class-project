@@ -10,7 +10,7 @@ exports.create = function(app, connection) {
             return;
         }
         
-        SQLquery = 'SELECT posts.id, posts.subject, images.url AS imageURL, posts.body, , DATE_FORMAT(posts.created, "%H:%i %M %D %Y") AS createdAt, users.id AS userID, users.name AS author FROM users ' + 
+        SQLquery = 'SELECT posts.id, posts.subject, images.url AS imageURL, posts.body, DATE_FORMAT(posts.created, "%H:%i %M %D %Y") AS createdAt, users.id AS userID, users.name AS author FROM users ' + 
         'LEFT JOIN (SELECT * FROM posts) AS posts ON posts.userID = users.id ' + 
         'LEFT JOIN (SELECT * FROM images) AS images ON images.id=posts.imageID WHERE type <> "profile" ORDER BY posts.created DESC;';
         connection.query(SQLquery, function (err, results) {
@@ -26,7 +26,7 @@ exports.create = function(app, connection) {
         });
     });
     var getPostByID = function (req, res){
-        SQLquery = 'SELECT posts.id, posts.subject, images.url AS imageURL, posts.body, , DATE_FORMAT(posts.created, "%H:%i %M %D %Y") AS createdAt, users.id AS userID, users.name AS author FROM users ' + 
+        SQLquery = 'SELECT posts.id, posts.subject, images.url AS imageURL, posts.body, DATE_FORMAT(posts.created, "%H:%i %M %D %Y") AS createdAt, users.id AS userID, users.name AS author FROM users ' + 
             'LEFT JOIN (SELECT * FROM posts) AS posts ON posts.userID = users.id ' + 
             'LEFT JOIN (SELECT * FROM images) AS images ON images.id=posts.imageID WHERE posts.id = '+req.query.id+' ORDER BY posts.created DESC;';
             connection.query(SQLquery, function (err, results) {
@@ -43,7 +43,7 @@ exports.create = function(app, connection) {
     
     }
     var getPostByUserID = function (req, res){
-        SQLquery = 'SELECT posts.id, posts.subject, images.url AS imageURL, posts.body, , DATE_FORMAT(posts.created, "%H:%i %M %D %Y") AS createdAt, users.id AS userID, users.name AS author FROM users ' + 
+        SQLquery = 'SELECT posts.id, posts.subject, images.url AS imageURL, posts.body, DATE_FORMAT(posts.created, "%H:%i %M %D %Y") AS createdAt, users.id AS userID, users.name AS author FROM users ' + 
             'LEFT JOIN (SELECT * FROM posts) AS posts ON posts.userID = users.id ' + 
             'LEFT JOIN (SELECT * FROM images) AS images ON images.id=posts.imageID WHERE users.id = '+req.query.userID+' ORDER BY posts.created DESC;';
             connection.query(SQLquery, function (err, results) {
