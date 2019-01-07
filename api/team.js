@@ -22,7 +22,7 @@ exports.create = function (app, connection) {
     var getUserById = function (req, res) {
         var userId = req.query.id;
 
-        connection.query('SELECT users.id, users.username, users.name, users.email, users.role,  posts.body, posts.subject, images.url ' +
+        connection.query('SELECT users.id, images.id AS imageID, users.username, users.name, users.email, users.role,  posts.body, posts.subject, images.url ' +
             'FROM (SELECT * FROM users WHERE id=' + userId + ' ) AS users ' +
             'LEFT JOIN (SELECT * FROM posts WHERE type = "profile") AS posts ON posts.userID = users.id ' +
             'LEFT JOIN images ON images.id=posts.imageID;', function (err, results) {
@@ -80,6 +80,10 @@ exports.create = function (app, connection) {
             }, {
                 type: "string",
                 id: "name",
+                required: true
+            }, {
+                type: "string",
+                id: "role",
                 required: true
             }
         ];

@@ -32,10 +32,10 @@ exports.getUpdateValueString = function(columnObject, columnValue){
         return "";
     }
     if(columnObject.type == "string"){
-        var dbColumnValue = _escapeString(columnValue||'');
+        var dbColumnValue = (columnValue||'');
         return columnObject.id + "='" + dbColumnValue + "', "; 
     } else if ((columnObject.type == "number")||(columnObject.type == "boolean")){
-        return columnObject.id + "=" + (columnValue) + ", "; 
+        return ((columnValue === undefined) ? "" : (columnObject.id + "=" + columnValue + ", ")); 
     } else {
         throw "ColumObject unknown type in common.js" + columnObject.id;
         return "";
@@ -53,7 +53,7 @@ exports.getInsertValueString = function(columnObject, columnValue){
         return "";
     }
     if(columnObject.type == "string"){
-        var dbColumnValue = _escapeString(columnValue||'');
+        var dbColumnValue = (columnValue||'');
         return  "'"+dbColumnValue + "', "; 
     } else if ((columnObject.type == "number")||(columnObject.type == "boolean")){
         return (columnValue||'') + ", "; 
