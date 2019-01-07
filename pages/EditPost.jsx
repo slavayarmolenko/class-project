@@ -89,7 +89,7 @@ class EditPost extends React.Component {
     }
     handleSubmit() {
         this.setState({ errorText: '' });
-        var post = {...this.state.post, userID: this.props.loggedUserID};
+        var post = {...this.state.post, userID: this.props.loggedUserID, type: 'post'};
         this.props.updateItem(POST, post);
     }
     
