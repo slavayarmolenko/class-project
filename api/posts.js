@@ -5,11 +5,14 @@ exports.create = function(app, connection) {
             getPostById(req, res);
             return;
         }
-
+        if (req.query.userID){
+            getPostByUserID(req, res);
+            return;
+        }
         
         SQLquery = 'SELECT posts.id, posts.subject, images.url AS imageURL, posts.body, posts.created AS createdAt, users.id AS userID, users.name AS author FROM users ' + 
         'LEFT JOIN (SELECT * FROM posts) AS posts ON posts.userID = users.id ' + 
-        'LEFT JOIN (SELECT * FROM images) AS images ON images.id=posts.imageID WHERE type <> "profile";';
+        'LEFT JOIN (SELECT * FROM images) AS images ON images.id=posts.imageID WHERE type <> "profile" ORDER BY posts.created DESC;';
         connection.query(SQLquery, function (err, results) {
             if (err) {
                 console.error('DB exception while getting posts.');
@@ -27,7 +30,24 @@ exports.create = function(app, connection) {
 exports.getPostByID = function (postID){
     SQLquery = 'SELECT posts.id, posts.subject, images.url AS imageURL, posts.body, posts.created AS createdAt, users.id AS userID, users.name AS author FROM users ' + 
         'LEFT JOIN (SELECT * FROM posts) AS posts ON posts.userID = users.id ' + 
-        'LEFT JOIN (SELECT * FROM images) AS images ON images.id=posts.imageID WHERE posts.id = '+postID+';';
+        'LEFT JOIN (SELECT * FROM images) AS images ON images.id=posts.imageID WHERE posts.id = '+postID+' ORDER BY posts.created DESC;';
+        connection.query(SQLquery, function (err, results) {
+            if (err) {
+                console.error('DB exception while getting posts.');
+                res.json(common.getSqlErrorObject(err, req));
+                return;
+            }
+
+            var send = common.getSuccessObject(results, req);
+            console.log('Searched succesfully.');
+            res.json(send);
+        });
+
+}
+exports.getPostByUserID = function (userID){
+    SQLquery = 'SELECT posts.id, posts.subject, images.url AS imageURL, posts.body, posts.created AS createdAt, users.id AS userID, users.name AS author FROM users ' + 
+        'LEFT JOIN (SELECT * FROM posts) AS posts ON posts.userID = users.id ' + 
+        'LEFT JOIN (SELECT * FROM images) AS images ON images.id=posts.imageID WHERE users.id = '+userID+' ORDER BY posts.created DESC;';
         connection.query(SQLquery, function (err, results) {
             if (err) {
                 console.error('DB exception while getting posts.');
