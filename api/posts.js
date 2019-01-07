@@ -1,10 +1,4 @@
 var common = require('./common');
-var getAllPosts = function(userID){
-    SQLquery = 'SELECT posts.id, posts.subject, images.url AS imageURL, posts.body, posts.created AS createdAT, users.id AS userID, users.name AS author FROM users ' + 
-        'LEFT JOIN (SELECT * FROM posts) AS posts ON posts.userID = users.id ' + 
-        'LEFT JOIN (SELECT * FROM images) AS images ON images.id=posts.imageID;';
-        return SQLquery;
-}
 exports.create = function(app, connection) {
     app.get('/api/post', function (req, res) {
         if (req.query.id) {
@@ -15,7 +9,7 @@ exports.create = function(app, connection) {
         
         SQLquery = 'SELECT posts.id, posts.subject, images.url AS imageURL, posts.body, posts.created AS createdAt, users.id AS userID, users.name AS author FROM users ' + 
         'LEFT JOIN (SELECT * FROM posts) AS posts ON posts.userID = users.id ' + 
-        'LEFT JOIN (SELECT * FROM images) AS images ON images.id=posts.imageID;';
+        'LEFT JOIN (SELECT * FROM images) AS images ON images.id=posts.imageID WHERE type <> "profile";';
         connection.query(SQLquery, function (err, results) {
             if (err) {
                 console.error('DB exception while getting posts.');
@@ -30,7 +24,23 @@ exports.create = function(app, connection) {
     });
     
 };
+exports.getPostByID = function (postID){
+    SQLquery = 'SELECT posts.id, posts.subject, images.url AS imageURL, posts.body, posts.created AS createdAt, users.id AS userID, users.name AS author FROM users ' + 
+        'LEFT JOIN (SELECT * FROM posts) AS posts ON posts.userID = users.id ' + 
+        'LEFT JOIN (SELECT * FROM images) AS images ON images.id=posts.imageID WHERE posts.id = '+postID+';';
+        connection.query(SQLquery, function (err, results) {
+            if (err) {
+                console.error('DB exception while getting posts.');
+                res.json(common.getSqlErrorObject(err, req));
+                return;
+            }
 
+            var send = common.getSuccessObject(results, req);
+            console.log('Searched succesfully.');
+            res.json(send);
+        });
+
+}
 exports.getUpdatePostsString = function (req, isUpdate, needsWhere){
     console.log("Post created!");
     console.log(req.body);
