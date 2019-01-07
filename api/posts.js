@@ -46,19 +46,19 @@ exports.create = function(app, connection) {
             res.json(send);
         });
     }
-    var getPostByID = function (req, res){
+    var getPostById = function (req, res){
         SQLquery = 'SELECT posts.id, posts.subject, images.url AS imageURL, posts.body, DATE_FORMAT(posts.created, "%H:%i %M %D %Y") AS createdAt, users.id AS userID, users.name AS author FROM users ' + 
             'LEFT JOIN (SELECT * FROM posts) AS posts ON posts.userID = users.id ' + 
             'LEFT JOIN (SELECT * FROM images) AS images ON images.id=posts.imageID WHERE posts.id = '+req.query.id+' ORDER BY posts.created DESC;';
             connection.query(SQLquery, function (err, results) {
                 if (err) {
-                    console.error('DB exception while getting posts.');
+                    console.error('DB exception while getting post by ID.');
                     res.json(common.getSqlErrorObject(err, req));
                     return;
                 }
     
                 var send = common.getSuccessObject(results, req);
-                console.log('Searched succesfully.');
+                console.log('A post with id='+ req.query.id + ' is found and sent to frontend.');
                 res.json(send);
             });
     
@@ -69,7 +69,7 @@ exports.create = function(app, connection) {
             'LEFT JOIN (SELECT * FROM images) AS images ON images.id=posts.imageID WHERE users.id = '+req.query.userID+' ORDER BY posts.created DESC;';
             connection.query(SQLquery, function (err, results) {
                 if (err) {
-                    console.error('DB exception while getting posts.');
+                    console.error('DB exception while getting post for user.');
                     res.json(common.getSqlErrorObject(err, req));
                     return;
                 }

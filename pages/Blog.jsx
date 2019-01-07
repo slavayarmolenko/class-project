@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import {POST} from '../actions/entities';
 import {URLs} from './../utils/URLs.js';
 import {connect} from 'react-redux';
-import {getItems} from '../actions/itemsActions';
+import {getItems, deleteItem} from '../actions/itemsActions';
 import PropTypes from 'prop-types';
 import {errors} from '../api/errorTypes';
 import ViewPost from '../components/ViewPost.jsx';
@@ -19,7 +19,7 @@ class Blog extends React.Component {
             dataLoaded: false,
             errorText: ''
         };
-
+        this.deletePost = this.deletePost.bind(this);
     }
     componentWillMount() {
         this.props.getItems(POST, {userID: this.props.userID});
@@ -36,6 +36,9 @@ class Blog extends React.Component {
             }
         }
     }
+    deletePost(postId) {
+        this.props.deleteItem(POST, postId, {userID: this.props.userID});
+    }
     render() {
         const errorText = this.state.errorText;
         const logged = this.props.logged && (this.props.loggedUserID.toString()=== this.props.userID); 
@@ -45,6 +48,8 @@ class Blog extends React.Component {
                 <div className="container pageContent">
                     <h1>Blog</h1>
                     <div className="error">{errorText}</div>
+                    {logged && <Link to={URLs.pages.CREATE_POST}>Create a new post</Link> }
+                    <Link to={URLs.pages.POSTS}>View All Posts</Link>
                     {!items.length && <div>This user does not have any posts yet.</div>}
                     <div className="posts">
                         {items.map(item => (
@@ -57,7 +62,7 @@ class Blog extends React.Component {
                                 createdAt={item.createdAt} 
                                 userID={item.userID} 
                                 author={item.author} 
-                                isAuthor={logged}
+                                deletePost={this.deletePost}
                             />
                             ))}
                     </div>
@@ -68,6 +73,7 @@ class Blog extends React.Component {
 }
 Blog.propTypes = {
     getItems: PropTypes.func.isRequired,
+    deleteItem: PropTypes.func.isRequired,
 
     data: PropTypes.array.isRequired, 
     logged: PropTypes.bool.isRequired,
@@ -82,4 +88,4 @@ const mapStateToProps = state => ({
     errors: state.errors || [],
     loggedUserID: state.login.userID
 });
-export default connect(mapStateToProps, { getItems })(Blog);
+export default connect(mapStateToProps, { getItems, deleteItem })(Blog);

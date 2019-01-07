@@ -45,7 +45,7 @@ export const deleteItem = (entity, id, someOtherParams) => dispatch => {
                         type: types.DELETE_ITEM,
                         payload: {
                                 success: false,
-                                errMessage: 'Error, while getting ' + entity + ': ' + (error.message || error.response.statusText),
+                                errMessage: 'Error, while deleting ' + entity + ': ' + (error.message || error.response.statusText),
                                 logged: false
                         }
                     })
