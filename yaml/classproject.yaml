@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: class-project
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    app: class-project
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: class-project
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: class-project
+  template:
+    metadata:
+      labels:
+        app: class-project
+    spec:
+      containers:
+      - name: class-project
+        image: paulbouwer/class-project:1.5
+        ports:
+        - containerPort: 8080
