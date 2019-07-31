@@ -9,7 +9,7 @@ var utilsService = require('./utils');
 var mysql = require('mysql');
 var bodyParser = require('body-parser');
 var session = require('express-session');
-var dbconfig = require("/etc/dbconfig.json")
+var dbconfig = require("/etc/app/dbconfig.json")
 
 app.use(session({ secret: 'this-is-a-secret-token', cookie: { maxAge: 1200000 }}));
 app.all('*', function (req, res, next) {
