@@ -10,6 +10,14 @@ spec:
   selector:
     app: class-project
 ---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: dbconfig
+type: Opaque
+stringData:
+  dbconfig.json: '{"login": "dbuser", "pass": "admin123", "address": "mysql-svc", "dbname": "classdb"}'
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -26,6 +34,16 @@ spec:
     spec:
       containers:
       - name: class-project
-        image: paulbouwer/class-project:1.5
+        image: iluhins/classproject:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
+        volumeMounts:
+          - name: dbconfig-vol
+            mountPath: "/etc"
+            readOnly: true
+      volumes:
+        - name: dbconfig-vol
+          secret: 
+            secretName: dbconfig
+  
