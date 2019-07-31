@@ -37,7 +37,7 @@ spec:
         image: iluhins/classproject:latest
         imagePullPolicy: Always
         ports:
-        - containerPort: 8080
+        - containerPort: 8081
         volumeMounts:
           - name: dbconfig-vol
             mountPath: "/etc/app"
@@ -46,6 +46,6 @@ spec:
         - name: dbconfig-vol
           secret: 
             secretName: dbconfig
-            
+
 
   

@@ -14,8 +14,8 @@
     "client": "npm start",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
-  "proxy": "http://localhost:8081",
-  "author": "",
+  "proxy": "kubernetes:8081",
+  "author": "Vladislav Iarmolenko slava.yarmolenko@gmail.com",
   "license": "ISC",
   "dependencies": {
     "@material-ui/core": "^3.4.0",
