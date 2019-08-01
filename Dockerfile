@@ -1,4 +1,4 @@
-FROM node:8.1.0-alpine
+FROM node:10-alpine
 
 
 
@@ -13,4 +13,4 @@ RUN npm install
 ENV FLASK_APP App.jsx
 ENV FLASK_RUN_HOST 0.0.0.0
 
-CMD [ "npm", "run", "dev" ]
+CMD [ "npm", "run", "start" ]

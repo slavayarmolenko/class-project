@@ -1,5 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const autoprefixer = require('autoprefixer');
+var path = require('path');
 const CSSModuleLoader = {
     loader: 'css-loader',
     options: {
@@ -35,7 +36,7 @@ var config = {
     entry: './main.js',
     mode: 'development',
     output: {
-        path: '/',
+        path: path.join(process.cwd(), 'dist'),
         filename: 'index.js',
         publicPath: '/'
     },
