@@ -12,15 +12,15 @@ class Home extends React.Component {
                 title: 'Attorney Database',
                 subtitle: 'Low-cost and Pro-Bono Legal Services',
                 link: URLs.pages.ATTORNEYS,
-                image: "https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/img5-5-2.jpg",
+                image: "/css/images/image1.jpeg",
                 text: 'Database of California attorneys willing to provide free or low cost legal services to undocumented students and/or their families.'
             },
             {
                 id:'legal_fund',
                 title: 'Legal Fund',
-                subtitle: '',
+                subtitle: 'Support Families in Crisis',
                 link: '#',
-                image: "https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/img5-5-2.jpg",
+                image: "/css/images/legalfund.jpeg",
                 text: 'An emergency fund to be used for legal services and fees by undocumented students and/or their families.'
             },
             {
@@ -28,13 +28,13 @@ class Home extends React.Component {
                 title: 'HIEROGLYPHS',
                 subtitle: 'Opportunities Beyond the Classroom',
                 link: URLs.pages.HIEROGLYPHS,
-                image: "https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/img5-5-2.jpg",
+                image: "/css/images/hieroglyphs.jpeg",
                 text: 'scHolarships, Internships, Externships, Research Opportunities, Grants, and Local Youth Programs for High Schoolers'
             },
             {
                 id: 'scholarship_fund',
                 title: 'Scholarship Fund',
-                subtitle: '',
+                subtitle: 'Stipends for Students',
                 link: '#',
                 image: "https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/img5-5-2.jpg",
                 text: 'A scholarship fund to award stipends to students participating in our HIEROGLYPHS program and/or other established unpaid projects, to offset opportunity cost of a paid job.'
@@ -44,7 +44,15 @@ class Home extends React.Component {
                 title: 'DREAM Talks',
                 subtitle: 'Starting a Conversation on Campus',
                 link: '#',
-                image: "https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/img5-5-2.jpg",
+                image: "/css/images/dreamtalks.jpeg",
+                text: 'Assemblies across high schools and college campuses in California to raise awareness about DREAM Act and DACA reinstatement.'
+            } 
+            {
+                id: 'dream_together',
+                title: 'DREAM Together',
+                subtitle: 'Advocacy and Activism',
+                link: '#',
+                image: "/css/images/dreamtalks.jpeg",
                 text: 'Assemblies across high schools and college campuses in California to raise awareness about DREAM Act and DACA reinstatement.'
             } 
         ];
@@ -52,7 +60,7 @@ class Home extends React.Component {
         return (
             <div className="home">
                 <div className="banner">
-                    <img width="1350" src="https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/enthusiastic-children-876543-2.jpg" className="attachment-benevolent-slider size-benevolent-slider wp-post-image" alt="" itemProp="image" srcSet="https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/enthusiastic-children-876543-2.jpg 1350w, https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/enthusiastic-children-876543-2-300x151.jpg 300w, https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/enthusiastic-children-876543-2-768x387.jpg 768w, https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/enthusiastic-children-876543-2-1024x516.jpg 1024w" sizes="(max-width: 1350px) 100vw, 1350px"></img>
+                    <img width="1350" src="/css/images/banner.jpeg" className="attachment-benevolent-slider size-benevolent-slider wp-post-image" alt="" itemProp="image" srcSet="https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/enthusiastic-children-876543-2.jpg 1350w, https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/enthusiastic-children-876543-2-300x151.jpg 300w, https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/enthusiastic-children-876543-2-768x387.jpg 768w, https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/enthusiastic-children-876543-2-1024x516.jpg 1024w" sizes="(max-width: 1350px) 100vw, 1350px"></img>
                 </div>
                 <section className={styles.intro}>
                     <div className="container">
