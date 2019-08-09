@@ -12,7 +12,7 @@ class Home extends React.Component {
                 title: 'Attorney Database',
                 subtitle: 'Low-cost and Pro-Bono Legal Services',
                 link: URLs.pages.ATTORNEYS,
-                image: "/css/images/attorneydatabase.jpeg",
+                image: "/css/images/attorneydatabase.jpg",
                 text: 'Database of California attorneys willing to provide free or low cost legal services to undocumented students and/or their families.'
             },
             {
@@ -28,7 +28,7 @@ class Home extends React.Component {
                 title: 'HIEROGLYPHS',
                 subtitle: 'Opportunities Beyond the Classroom',
                 link: URLs.pages.HIEROGLYPHS,
-                image: "/css/images/hieroglyphs.jpeg",
+                image: "/css/images/hieroglyphs.jpg",
                 text: 'scHolarships, Internships, Externships, Research Opportunities, Grants, and Local Youth Programs for High Schoolers'
             },
             {
@@ -36,7 +36,7 @@ class Home extends React.Component {
                 title: 'Scholarship Fund',
                 subtitle: 'Stipends for Students',
                 link: '#',
-                image: "scholarshipfund.jpg",
+                image: "/css/images/scholarshipfund.jpg",
                 text: 'A scholarship fund to award stipends to students participating in our HIEROGLYPHS program and/or other established unpaid projects, to offset opportunity cost of a paid job.'
             },
             {

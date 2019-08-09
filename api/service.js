@@ -19,10 +19,10 @@ app.all('*', function (req, res, next) {
 });
 var pool  = mysql.createPool({
     connectionLimit : 10,
-    host: dbconfig.address,
-    user: dbconfig.login,
-    password: dbconfig.pass,
-    database: dbconfig.dbname
+    host: 0,
+    user: 0,
+    password: 0,
+    database: 0
   });
  /*var connection = mysql.createConnection({
     host: "classdb.c1fc1qmtlpg9.us-west-1.rds.amazonaws.com",
