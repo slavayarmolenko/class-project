@@ -12,7 +12,7 @@ class Home extends React.Component {
                 title: 'Attorney Database',
                 subtitle: 'Low-cost and Pro-Bono Legal Services',
                 link: URLs.pages.ATTORNEYS,
-                image: "/css/images/image1.jpeg",
+                image: "/css/images/attorneydatabase.jpeg",
                 text: 'Database of California attorneys willing to provide free or low cost legal services to undocumented students and/or their families.'
             },
             {
@@ -20,7 +20,7 @@ class Home extends React.Component {
                 title: 'Legal Fund',
                 subtitle: 'Support Families in Crisis',
                 link: '#',
-                image: "/css/images/legalfund.jpeg",
+                image: "/css/images/legalfund.jpg",
                 text: 'An emergency fund to be used for legal services and fees by undocumented students and/or their families.'
             },
             {
@@ -36,7 +36,7 @@ class Home extends React.Component {
                 title: 'Scholarship Fund',
                 subtitle: 'Stipends for Students',
                 link: '#',
-                image: "https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/img5-5-2.jpg",
+                image: "scholarshipfund.jpg",
                 text: 'A scholarship fund to award stipends to students participating in our HIEROGLYPHS program and/or other established unpaid projects, to offset opportunity cost of a paid job.'
             },
             {
@@ -44,15 +44,15 @@ class Home extends React.Component {
                 title: 'DREAM Talks',
                 subtitle: 'Starting a Conversation on Campus',
                 link: '#',
-                image: "/css/images/dreamtalks.jpeg",
+                image: "/css/images/dreamtalks.jpg",
                 text: 'Assemblies across high schools and college campuses in California to raise awareness about DREAM Act and DACA reinstatement.'
-            } 
+            },
             {
                 id: 'dream_together',
                 title: 'DREAM Together',
                 subtitle: 'Advocacy and Activism',
                 link: '#',
-                image: "/css/images/dreamtalks.jpeg",
+                image: "/css/images/dreamtalks.jpg",
                 text: 'Assemblies across high schools and college campuses in California to raise awareness about DREAM Act and DACA reinstatement.'
             } 
         ];
@@ -60,7 +60,7 @@ class Home extends React.Component {
         return (
             <div className="home">
                 <div className="banner">
-                    <img width="1350" src="/css/images/banner.jpeg" className="attachment-benevolent-slider size-benevolent-slider wp-post-image" alt="" itemProp="image" srcSet="https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/enthusiastic-children-876543-2.jpg 1350w, https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/enthusiastic-children-876543-2-300x151.jpg 300w, https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/enthusiastic-children-876543-2-768x387.jpg 768w, https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/enthusiastic-children-876543-2-1024x516.jpg 1024w" sizes="(max-width: 1350px) 100vw, 1350px"></img>
+                    <img width="1350" src="/css/images/banner.jpeg" className="attachment-benevolent-slider size-benevolent-slider wp-post-image" alt="" itemProp="image" srcSet="/css/images/banner.jpeg" sizes="(max-width: 1350px) 100vw, 1350px"></img>
                 </div>
                 <section className={styles.intro}>
                     <div className="container">
@@ -119,7 +119,7 @@ class Home extends React.Component {
                         <li className={styles.columns2} key={project.id}>
                             <img width="960" height="450" 
                                 src={project.image} 
-                                alt="" itemProp="image" srcSet="https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/img5-5-2.jpg 960w, https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/img5-5-2-300x141.jpg 300w, https://demo.raratheme.com/benevolent/wp-content/uploads/sites/19/2016/05/img5-5-2-768x360.jpg 768w" 
+                                alt="" itemProp="image" srcSet={project.image}
                                 sizes="(max-width: 960px) 100vw, 960px" />
                             <div className={styles.textHolder}>
                                 <div className={styles.alignCenter}>
