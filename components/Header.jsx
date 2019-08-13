@@ -31,9 +31,6 @@ class Header extends React.Component {
                                     <li id="menu-item-269">
                                         <Link to={URLs.pages.ATTORNEYS}>Attorneys</Link>
                                     </li>
-                                    <li id="menu-item-270">
-                                        <Link to={URLs.pages.DONATE}>Donate</Link>
-                                    </li>
                                     {!logged && (
                                     <li id="menu-item-271">
                                         <Link to={URLs.pages.LOGIN}>Login</Link>
