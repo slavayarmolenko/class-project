@@ -112,6 +112,9 @@ exports.create = function (app, connection) {
         ];
         for (var i = 0; i < columnObject.length; i++) {
             if (isUpdate) {
+                console.log('columnObject ' + columnObject[i]);
+                console.log('field sent ', columnObject[i].id);
+                console.log('req.body' + req.body[columnObject[i].id]);
                 addNewLawyerLine1 += common.getUpdateValueString(columnObject[i], req.body[columnObject[i].id]);
 
             } else {
@@ -163,12 +166,12 @@ exports.create = function (app, connection) {
             if (services && services.length) {
                 var addServices = "INSERT INTO lawyer_service (lawyerID, serviceID) VALUES ";
                 for (var i = 0; i < services.length; i++) {
-                    addServices += "(" + IDLawyer + ", "
-                        + services[i] + ")";
+                    addServices += "(" + IDLawyer + ", "+ services[i] + ")";
                     if (i < services.length - 1) {
                         addServices += ", ";
                     } else addServices += ";";
                 }
+                console.log("\n LAWYER_SERVICE: " + addServices);
                 connection.query(addServices, function (inErr, inResults) {
                     if (inErr) {
                         console.error('Failed while insert services for the lawyer:');

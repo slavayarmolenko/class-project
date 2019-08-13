@@ -32,7 +32,7 @@ exports.getUpdateValueString = function(columnObject, columnValue){
         return "";
     }
     if(columnObject.type == "string"){
-        var dbColumnValue = _escapeString(columnValue);
+        var dbColumnValue = columnValue ? _escapeString(columnValue) : "";
         return columnObject.id + "='" + ((columnValue === undefined) ? 'NULL' : dbColumnValue) + "', "; 
     } else if ((columnObject.type == "number")||(columnObject.type == "boolean")){
         return columnObject.id + "=" + (columnValue) + ", "; 
