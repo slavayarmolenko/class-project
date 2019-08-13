@@ -43,9 +43,21 @@ spec:
             mountPath: "/etc/app"
             readOnly: true
       volumes:
-        - name: dbconfig-vol
-          secret: 
-            secretName: dbconfig
+        - name: project-persistent-storage
+          persistentVolumeClaim:
+            claimName: project-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: project-pvc
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: do-block-storage
 
 
   
