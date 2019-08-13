@@ -246,7 +246,7 @@ exports.create = function (app, connection) {
                     res.json(common.getSqlErrorObject(selectErr, req));
                     return;
                 }
-                console.log('Lawyer is retrieved succesfully.');
+                console.log('Lawyer is deleted succesfully.');
                 res.json({ data: results, success: true });
             });
 

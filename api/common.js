@@ -63,7 +63,7 @@ exports.getInsertValueString = function(columnObject, columnValue){
 };
 
 exports.getIsLogged = function(req) {
-    console.log('We logged: ' + (req.session && req.session.userID) ? true : false);
+    console.log('We logged: ' + ((req.session && req.session.userID) ? true : false));
     return (req.session && req.session.userID) ? true : false;
 };
 
