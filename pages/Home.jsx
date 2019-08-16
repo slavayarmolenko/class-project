@@ -46,21 +46,21 @@ class Home extends React.Component {
                 link: '#',
                 image: "/css/images/dreamtalks.jpg",
                 text: 'Assemblies across high schools and college campuses in California to raise awareness about DREAM Act and DACA reinstatement.'
-            },
-            {
+            },{
                 id: 'dream_together',
                 title: 'DREAM Together',
                 subtitle: 'Advocacy and Activism',
                 link: '#',
-                image: "/css/images/dreamtalks.jpg",
-                text: 'Assemblies across high schools and college campuses in California to raise awareness about DREAM Act and DACA reinstatement.'
-            } 
+                image: "/css/images/dreamtogether.jpg",
+                text: 'Petitions in support of DREAMERs and DACA recipients'
+            }
+             
         ];
         
         return (
             <div className="home">
                 <div className="banner">
-                    <img width="1350" src="/css/images/banner.jpeg" className="attachment-benevolent-slider size-benevolent-slider wp-post-image" alt="" itemProp="image" srcSet="/css/images/banner.jpeg" sizes="(max-width: 1350px) 100vw, 1350px"></img>
+                    <img width="1350" src="/css/images/banner.jpg" className="attachment-benevolent-slider size-benevolent-slider wp-post-image" alt="" itemProp="image" srcSet="/css/images/banner.jpg" sizes="(max-width: 1350px) 100vw, 1350px"></img>
                 </div>
                 <section className={styles.intro}>
                     <div className="container">
@@ -124,7 +124,7 @@ class Home extends React.Component {
                             <div className={styles.textHolder}>
                                 <div className={styles.alignCenter}>
                                     <strong className={styles.title}>{project.title}</strong>
-                                    <p>{project.subtitle}</p>
+                                    <p className={styles.subtitle}>{project.subtitle}</p>
                                 </div>
                             </div>
                             <div className={styles.hoverState}>

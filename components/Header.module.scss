@@ -10,11 +10,11 @@ $submenu-side-margin: 20px;
 }
 .siteHeader .siteBranding .siteTitle {
     margin: 0;
-    font-size: 2em;
+    font-size: 2.5em;
     font-weight: bold;
 }
 .siteHeader .siteBranding .siteTitle a {
-    color: #b591a2; //#F8B016;
+    color: #3cb44b; //#b591a2; //#F8B016;
 }
 
 .siteHeader .btnDonate {
@@ -22,14 +22,19 @@ $submenu-side-margin: 20px;
     font-size: 18px;
     line-height: 44px;
     font-weight: 600;
-    color: #b591a2; //#fcb216;
-    border: 1px solid #b591a2; // #fcb216;
+    //color: #b591a2; //#fcb216;
+    border: 1px solid #3cb44b;//#b591a2; // #fcb216;
     height: 46px;
     width: 184px;
     text-align: center;
     -webkit-transition: all 0.2s;
     -moz-transition: all 0.2s;
     transition: all 0.2s;
+    //text-shadow: 2px 2px #6c1d37;
+    //color: #b591a2;
+    //text-shadow: 1px 1px white;
+    color: #3cb44b;
+
 }
 @media only screen and (max-width: 1199px) {
     .siteHeader .btnDonate {
