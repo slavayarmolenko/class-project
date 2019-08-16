@@ -14,45 +14,13 @@ class Home extends React.Component {
                 link: URLs.pages.ATTORNEYS,
                 image: "/css/images/attorneydatabase.jpg",
                 text: 'Database of California attorneys willing to provide free or low cost legal services to undocumented students and/or their families.'
-            },
-            {
+            },{
                 id:'legal_fund',
                 title: 'Legal Fund',
                 subtitle: 'Support Families in Crisis',
                 link: '#',
                 image: "/css/images/legalfund.jpg",
                 text: 'An emergency fund to be used for legal services and fees by undocumented students and/or their families.'
-            },
-            {
-                id: 'HIEROGLYPHS',
-                title: 'HIEROGLYPHS',
-                subtitle: 'Opportunities Beyond the Classroom',
-                link: URLs.pages.HIEROGLYPHS,
-                image: "/css/images/hieroglyphs.jpg",
-                text: 'scHolarships, Internships, Externships, Research Opportunities, Grants, and Local Youth Programs for High Schoolers'
-            },
-            {
-                id: 'scholarship_fund',
-                title: 'Scholarship Fund',
-                subtitle: 'Stipends for Students',
-                link: '#',
-                image: "/css/images/scholarshipfund.jpg",
-                text: 'A scholarship fund to award stipends to students participating in our HIEROGLYPHS program and/or other established unpaid projects, to offset opportunity cost of a paid job.'
-            },
-            {
-                id: 'dream_talks',
-                title: 'DREAM Talks',
-                subtitle: 'Starting a Conversation on Campus',
-                link: '#',
-                image: "/css/images/dreamtalks.jpg",
-                text: 'Assemblies across high schools and college campuses in California to raise awareness about DREAM Act and DACA reinstatement.'
-            },{
-                id: 'dream_together',
-                title: 'DREAM Together',
-                subtitle: 'Advocacy and Activism',
-                link: '#',
-                image: "/css/images/dreamtogether.jpg",
-                text: 'Petitions in support of DREAMERs and DACA recipients'
             }
              
         ];
