@@ -1,3 +1,4 @@
+
 import React from 'react';
 import styles from './Home.module.scss';
 import {URLs} from '../utils/URLs.js';
@@ -13,21 +14,53 @@ class Home extends React.Component {
                 link: URLs.pages.ATTORNEYS,
                 image: "/css/images/attorneydatabase.jpg",
                 text: 'Database of California attorneys willing to provide free or low cost legal services to undocumented students and/or their families.'
-            },{
+            },
+            {
                 id:'legal_fund',
                 title: 'Legal Fund',
                 subtitle: 'Support Families in Crisis',
                 link: '#',
                 image: "/css/images/legalfund.jpg",
                 text: 'An emergency fund to be used for legal services and fees by undocumented students and/or their families.'
-            }
-             
+            },
+            {
+                id: 'HIEROGLYPHS',
+                title: 'HIEROGLYPHS',
+                subtitle: 'Opportunities Beyond the Classroom',
+                link: URLs.pages.HIEROGLYPHS,
+                image: "/css/images/hieroglyphs.jpg",
+                text: 'scHolarships, Internships, Externships, Research Opportunities, Grants, and Local Youth Programs for High Schoolers'
+            },
+            {
+                id: 'scholarship_fund',
+                title: 'Scholarship Fund',
+                subtitle: 'Stipends for Students',
+                link: '#',
+                image: "/css/images/scholarshipfund.jpg",
+                text: 'A scholarship fund to award stipends to students participating in our HIEROGLYPHS program and/or other established unpaid projects, to offset opportunity cost of a paid job.'
+            },
+            {
+                id: 'dream_talks',
+                title: 'DREAM Talks',
+                subtitle: 'Starting a Conversation on Campus',
+                link: '#',
+                image: "/css/images/dreamtalks.jpg",
+                text: 'Assemblies across high schools and college campuses in California to raise awareness about DREAM Act and DACA reinstatement.'
+            },
+            {
+                id: 'dream_together',
+                title: 'DREAM Together',
+                subtitle: 'Advocacy and Activism',
+                link: '#',
+                image: "/css/images/dreamtalks.jpg",
+                text: 'Assemblies across high schools and college campuses in California to raise awareness about DREAM Act and DACA reinstatement.'
+            } 
         ];
         
         return (
             <div className="home">
                 <div className="banner">
-                    <img width="1350" src="/css/images/banner.jpg" className="attachment-benevolent-slider size-benevolent-slider wp-post-image" alt="" itemProp="image" srcSet="/css/images/banner.jpg" sizes="(max-width: 1350px) 100vw, 1350px"></img>
+                    <img width="1350" src="/css/images/banner.jpeg" className="attachment-benevolent-slider size-benevolent-slider wp-post-image" alt="" itemProp="image" srcSet="/css/images/banner.jpeg" sizes="(max-width: 1350px) 100vw, 1350px"></img>
                 </div>
                 <section className={styles.intro}>
                     <div className="container">
@@ -71,7 +104,7 @@ class Home extends React.Component {
                                     <strong className={styles.title}>Join Our Cause</strong>
                                     <a className={styles.btn} href={URLs.pages.VOLONTEERS}>Volunteer &gt;</a>
                                 </div>
-                            </div>	
+                            </div>  
                         </div>
                             
                             
@@ -91,7 +124,7 @@ class Home extends React.Component {
                             <div className={styles.textHolder}>
                                 <div className={styles.alignCenter}>
                                     <strong className={styles.title}>{project.title}</strong>
-                                    <p className={styles.subtitle}>{project.subtitle}</p>
+                                    <p>{project.subtitle}</p>
                                 </div>
                             </div>
                             <div className={styles.hoverState}>
