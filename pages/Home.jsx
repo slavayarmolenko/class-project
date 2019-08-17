@@ -52,7 +52,7 @@ class Home extends React.Component {
                 title: 'DREAM Together',
                 subtitle: 'Advocacy and Activism',
                 link: '#',
-                image: "/css/images/dreamtalks.jpg",
+                image: "/css/images/dreamtogether.jpg",
                 text: 'Assemblies across high schools and college campuses in California to raise awareness about DREAM Act and DACA reinstatement.'
             } 
         ];
