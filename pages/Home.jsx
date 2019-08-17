@@ -60,7 +60,7 @@ class Home extends React.Component {
         return (
             <div className="home">
                 <div className="banner">
-                    <img width="1350" src="/css/images/banner.jpeg" className="attachment-benevolent-slider size-benevolent-slider wp-post-image" alt="" itemProp="image" srcSet="/css/images/banner.jpeg" sizes="(max-width: 1350px) 100vw, 1350px"></img>
+                    <img width="1350" src="/css/images/banner.jpg" className="attachment-benevolent-slider size-benevolent-slider wp-post-image" alt="" itemProp="image" srcSet="/css/images/banner.jpg" sizes="(max-width: 1350px) 100vw, 1350px"></img>
                 </div>
                 <section className={styles.intro}>
                     <div className="container">
