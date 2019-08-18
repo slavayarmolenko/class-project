@@ -111,7 +111,7 @@ $submenu-side-margin: 20px;
 
 .siteHeader, #app .siteHeader, .single-post .siteHeader, .error404 .siteHeader {
     position: relative;
-    background: #202020;
+    // background: #202020;
     border-bottom: 1px solid #e4e4e4;
 }
 .siteHeader {
@@ -128,7 +128,7 @@ $submenu-side-margin: 20px;
         z-index: 1;
     }
     .headerBottom {
-        background: rgba(0, 0, 0, 0.5);
+        background: rgba(0, 0, 0, 0.9);
         padding: 25px 0 10px;
     }
 }

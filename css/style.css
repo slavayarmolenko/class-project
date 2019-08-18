@@ -165,6 +165,7 @@ svg:not(:root) {
 
 .banner {
     position: relative;
+    top: -100px;
 }
 .banner img {
     width: 100%;
