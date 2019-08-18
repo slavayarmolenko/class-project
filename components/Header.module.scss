@@ -220,7 +220,7 @@ $submenu-side-margin: 20px;
                 font-style: italic;
             }
         }
-        &:hover {
+        &:hover, &:focus, &:active {
             ul {
                 display: block;
             }
