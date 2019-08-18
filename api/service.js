@@ -9,7 +9,7 @@ var utilsService = require('./utils');
 var mysql = require('mysql');
 var bodyParser = require('body-parser');
 var session = require('express-session');
-var dbconfig = require("/etc/app/dbconfig.json")
+//var dbconfig = require("/etc/app/dbconfig.json")
 
 app.use(session({ secret: 'this-is-a-secret-token', cookie: { maxAge: 1200000 }}));
 app.all('*', function (req, res, next) {
@@ -19,10 +19,10 @@ app.all('*', function (req, res, next) {
 });
 var pool  = mysql.createPool({
     connectionLimit : 10,
-    host: dbconfig.address,
-    user: dbconfig.login,
-    password: dbconfig.pass,
-    database: dbconfig.dbname
+    host: "localhost",
+    user: "root",
+    password: "aaa12345",
+    database: "classdb"
   });
  /*var connection = mysql.createConnection({
     host: "classdb.c1fc1qmtlpg9.us-west-1.rds.amazonaws.com",

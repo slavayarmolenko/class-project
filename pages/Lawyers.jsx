@@ -122,6 +122,7 @@ class Lawyers extends React.Component {
             return (
                 <div className="container pageContent">
                     <h1>Attorneys</h1>
+                    <button onClick={this.checkLogin}>Check Login</button>
                     <div className="filtered-layout">
                         <LawyerFilter onChange={this.handleChangeFilter}></LawyerFilter>
                         <div className="result">
