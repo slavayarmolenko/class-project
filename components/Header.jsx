@@ -10,9 +10,18 @@ import { URLs } from '../utils/URLs.js';
 
 import { connect } from 'react-redux';
 import { getLogged } from '../actions/loginActions';
+import { unlog } from '../actions/loginActions';
 import PropTypes from 'prop-types';
 
 class Header extends React.Component {
+    constructor() {
+        super();
+        this.handleUnlog = this.handleUnlog.bind(this);
+    }
+    handleUnlog(event) {
+        this.props.unlog({ });
+
+    }
     componentWillMount() {
         this.props.getLogged();
     }
@@ -37,13 +46,18 @@ class Header extends React.Component {
                                     </li>
                                     )}
                                     { logged && (
-                                    <li id="menu-item-271">
+                                    <li id="menu-item-272">
                                         <Link to={URLs.pages.CREATE_ATTORNEY}>Create Attorney</Link>
                                     </li>
                                     )}
                                     { logged && (
-                                    <li id="menu-item-271">
+                                    <li id="menu-item-273">
                                         <Link to={URLs.pages.CREATE_POST}>Create Post</Link>
+                                    </li>
+                                    )}
+                                    {logged && (
+                                    <li id="menu-item-274">
+                                        <Link to={URLs.pages.HOME} onClick={this.handleUnlog}>Exit</Link>
                                     </li>
                                     )}
                                 </ul>
@@ -118,6 +132,7 @@ class Header extends React.Component {
 }
 
 Header.propTypes = {
+    unlog: PropTypes.func.isRequired,
     getLogged: PropTypes.func.isRequired,
     logged: PropTypes.bool.isRequired
 };
@@ -127,4 +142,4 @@ const mapStateToProps = state => ({
     logged: state.login.logged,
     errors: state.errors
 });
-export default connect(mapStateToProps, { getLogged })(Header);
+export default connect(mapStateToProps, { getLogged, unlog })(Header);

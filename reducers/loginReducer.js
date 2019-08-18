@@ -18,6 +18,7 @@ export default function(state=initialState, action) {
             }
         case types.GET_LOGGED:
         case types.LOG_IN:
+        case types.UNLOG:
         case types.GET_ITEM:
         case types.UPDATE_ITEM:
         case types.CREATE_ITEM:

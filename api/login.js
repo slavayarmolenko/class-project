@@ -31,6 +31,16 @@ exports.create = function (app, pool) {
     app.get('/api/login', function(req,res){
         res.json(common.getSuccessObject({}, req));
     });
+    
+    app.delete('/api/login', function (req, res) {
+        var sessData = req.session;
+        sessData.destroy(function(err) {
+            if (err){
+                console.error('User failed to unlogin: DB error.');
+            } 
+            res.json(common.getSuccessObject({}, req));
+        })
+    });
 };
 
 

@@ -58,6 +58,7 @@ const AppRouter = () => (
                 <ErrorList/>
 
                 <Route path="/" exact component={home} />
+                <Route path={URLs.pages.HOME} component={home} />
                 <Route path={URLs.pages.ABOUT} component={about} />
                 <Route path={URLs.pages.ATTORNEYS} component={lawyers} />
                 <Route path={URLs.pages.DONATE} component={donate} />

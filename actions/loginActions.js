@@ -50,6 +50,27 @@ export const login = (data) => dispatch => {
                 }
             })
         });
+};
 
+export const unlog = () => dispatch => {
+    
+    axios.delete(serviceURLs.UNLOG)
+        .then(result => {
 
+            dispatch({
+                type: types.UNLOG,
+                payload: result.data
+            })
+            
+        })
+        .catch(error => {
+            dispatch({
+                type: types.UNLOG,
+                payload: {
+                        success: false,
+                        errMessage: 'Error, while unlogin: ' + error.response.statusText,
+                        logged: false
+                }
+            })
+        });
 };
