@@ -247,7 +247,7 @@ exports.create = function (app, connection) {
                     return;
                 }
                 console.log('Lawyer is deleted succesfully.');
-                res.json({ data: results, success: true });
+                res.json(common.getSuccessObject(results, req));
             });
 
         });
