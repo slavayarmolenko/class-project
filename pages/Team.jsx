@@ -39,14 +39,15 @@ class Team extends React.Component {
     
     render() {
         const errorText = this.state.errorText;
-        const logged = this.props.logged && (this.props.loggedUserID.toString()=== this.props.userID); 
         
         const items = common.isArray(this.props.data) ? this.props.data : [];
+
         
         return (
                 <div className="container pageContent">
                     <h1>Team members</h1>
                     <div className="error">{errorText}</div>
+
                     {!items.length && <div>No users found.</div>}
                     <div className="members">
                         {items.map(item => (
@@ -62,6 +63,7 @@ class Team extends React.Component {
                             />
                             ))}
                     </div>
+
                 </div>
                 )
     }

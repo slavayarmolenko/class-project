@@ -5,4 +5,5 @@ export const UPDATE_ITEM = 'UPDATE_ITEM';
 export const DELETE_ITEM = 'DELETE_ITEM';
 export const GET_LOGGED = 'GET_LOGGED';
 export const LOG_IN = 'LOG_IN';
+export const UNLOG = 'UNLOG';
 export const SAVE_IMAGE = 'SAVE_IMAGE';

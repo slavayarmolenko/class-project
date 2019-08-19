@@ -45,7 +45,7 @@ class Posts extends React.Component {
     }
     render() {
         const errorText = this.state.errorText;
-        const items = this.props.data;
+        const items = this.props.data instanceof Array ? this.props.data : [];
         const logged = this.props.logged;
         
         return (

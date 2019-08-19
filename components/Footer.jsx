@@ -48,8 +48,8 @@ const Footer = () => (
                                 <ul id="menu-privacy" className="menu">
                                     <li><a href={URLs.pages.ATTORNEYS}>Attorney Database</a></li>
                                     <li><a href={URLs.pages.LEGALFUND}>Legal Fund</a></li>
-                                    <li><a href={URLs.pages.ATTORNEYS}>Scholarships/Internshipd</a></li>
-                                    <li><a href={URLs.pages.SCHOLARSHIPFUND}>Scholarships Fund</a></li>
+                                    <li><a href={URLs.pages.ATTORNEYS}>Scholarships / Internship</a></li>
+                                    <li><a href={URLs.pages.SCHOLARSHIPFUND}>Scholarship Fund</a></li>
                             </ul></div>
                         </section>					
                     </div>

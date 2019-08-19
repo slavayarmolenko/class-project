@@ -94,6 +94,7 @@ class Lawyers extends React.Component {
     render() {
         const errorText = this.state.errorText;
         const logged = this.props.logged;
+        const data = this.props.data instanceof Array ? this.props.data : [];
 
         const columns = [
             {
@@ -132,7 +133,7 @@ class Lawyers extends React.Component {
                                 </div>
                             ) }
                             <ReactTable
-                                data={this.props.data}
+                                data={data}
                                 columns={columns}
                                 pageSize={this.state.pageSize}
                                 onPageSizeChange={this.changePageSize}

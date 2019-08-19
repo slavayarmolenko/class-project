@@ -188,9 +188,10 @@ class Lawyer extends React.Component {
                         value={repeatPassword}
                         style={{marginLeft: '15px'}}
                     /></div>
-                    <div><UploadImageField readOnly={!logged} url={imageURL} onChange={this.onChangePhoto}></UploadImageField></div>
                 </div> 
                 }
+                <div><UploadImageField readOnly={!logged} url={imageURL} onChange={this.onChangePhoto}></UploadImageField></div>
+
                 <div><TextValidator
                     label="Full Name"
                     onChange={this.handleChange}

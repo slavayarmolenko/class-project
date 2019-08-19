@@ -4,7 +4,6 @@ import styles from './Home.module.scss';
 import {URLs} from '../utils/URLs.js';
 
 class Home extends React.Component {
-    
     render() {
         const projects = [
             { 
@@ -149,4 +148,5 @@ class Home extends React.Component {
         );
     }
 }
+
 export default Home;

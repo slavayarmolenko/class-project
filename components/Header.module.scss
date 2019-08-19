@@ -43,13 +43,12 @@ $submenu-side-margin: 20px;
 }
 @media only screen and (max-width: 991px) {
     .siteHeader .btnDonate {
-        margin-right: 110px;
+        margin-right: 10px;
     }
 }
 
 @media only screen and (max-width: 767px) {
     .siteHeader .btnDonate {
-        float: none;
         display: inline-block;
         margin: 0;
     }
@@ -111,7 +110,7 @@ $submenu-side-margin: 20px;
 
 .siteHeader, #app .siteHeader, .single-post .siteHeader, .error404 .siteHeader {
     position: relative;
-    background: #202020;
+    // background: #202020;
     border-bottom: 1px solid #e4e4e4;
 }
 .siteHeader {
@@ -128,7 +127,7 @@ $submenu-side-margin: 20px;
         z-index: 1;
     }
     .headerBottom {
-        background: rgba(0, 0, 0, 0.5);
+        background: rgba(0, 0, 0, 0.9);
         padding: 25px 0 10px;
     }
 }
@@ -146,11 +145,12 @@ $submenu-side-margin: 20px;
 .siteHeader .headerTop .secondaryNavigation {
     float: left;
 }
-@media only screen and (max-width: 991px) {
+@media only screen and (max-width: 767px) {
     .siteHeader .headerTop .secondaryNavigation {
         display: none;
     }
 }
+
 
 #secondary-mobile-header {
     display: none;
@@ -220,7 +220,7 @@ $submenu-side-margin: 20px;
                 font-style: italic;
             }
         }
-        &:hover {
+        &:hover, &:focus, &:active {
             ul {
                 display: block;
             }
