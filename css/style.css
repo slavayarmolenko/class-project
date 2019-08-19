@@ -167,6 +167,11 @@ svg:not(:root) {
     position: relative;
     top: -100px;
 }
+@media only screen and (max-width: 991px) {
+    .banner{
+        top: -50px;
+    }
+}
 .banner img {
     width: 100%;
 }

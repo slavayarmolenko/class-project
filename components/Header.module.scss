@@ -43,13 +43,12 @@ $submenu-side-margin: 20px;
 }
 @media only screen and (max-width: 991px) {
     .siteHeader .btnDonate {
-        margin-right: 110px;
+        margin-right: 10px;
     }
 }
 
 @media only screen and (max-width: 767px) {
     .siteHeader .btnDonate {
-        float: none;
         display: inline-block;
         margin: 0;
     }
@@ -146,11 +145,12 @@ $submenu-side-margin: 20px;
 .siteHeader .headerTop .secondaryNavigation {
     float: left;
 }
-@media only screen and (max-width: 991px) {
+@media only screen and (max-width: 767px) {
     .siteHeader .headerTop .secondaryNavigation {
         display: none;
     }
 }
+
 
 #secondary-mobile-header {
     display: none;
