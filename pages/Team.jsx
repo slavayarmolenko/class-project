@@ -55,6 +55,8 @@ class Team extends React.Component {
                 accessor: 'id'
             },
         ];
+
+        const data = this.props.data instanceof Array ? this.props.data : [];
         
  
         return (
@@ -62,7 +64,7 @@ class Team extends React.Component {
                     <h1>CLASS Team</h1>
                     <div className="error">{errorText}</div>
                     <ReactTable
-                        data={this.props.data}
+                        data={data}
                         columns={columns}
                         pageSize="10"
                         />
