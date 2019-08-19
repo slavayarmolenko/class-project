@@ -45,7 +45,7 @@ spec:
       volumes:
         - name: project-persistent-storage
           persistentVolumeClaim:
-            claimName: project-pvc
+            claimName: csi
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
