@@ -71,7 +71,7 @@ const Footer = () => (
                 </div>
             </div>
         </div>
-        <div className={styles.siteInfo}><div className="container"><span className="copyright">© 2018 <a href="/" rel="author" target="_blank">Jenna, Slava, Hannah</a>. Powered by <a href="https://wordpress.org/" target="_blank">WordPress</a>.</span></div></div>	</footer>
+        <div className={styles.siteInfo}><div className="container"><span className="copyright">© 2018 <a href="/" rel="author" target="_blank">Jenna, Slava, Hannah</a>. </span></div></div>	</footer>
 );
 
 export default Footer;

@@ -8,7 +8,10 @@ exports.create = function (app, connection) {
             getUserById(req, res);
             return;
         }
-        connection.query("SELECT id, name, email, role FROM users", function (err, results) {
+        connection.query("SELECT users.id, users.name, users.email, users.role, images.url AS imageURL "+
+        'FROM users ' + 
+        'LEFT JOIN (SELECT * FROM posts WHERE type = "profile") AS posts ON posts.userID = users.id ' +
+        'LEFT JOIN images ON images.id=posts.imageID;', function (err, results) {
             if (err) {
 
                 res.json(common.getSqlErrorObject(err, req));

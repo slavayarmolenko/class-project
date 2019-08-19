@@ -1,7 +1,9 @@
 import { URLs } from "./URLs.js";
 
 export const common = {
-    
+    isArray:( obj ) =>  { 
+        return  obj && (typeof obj  === "object") && (obj instanceof Array);
+    },
     processError:(result, control, action) => {
         if (!control._isMounted) {
             return true;

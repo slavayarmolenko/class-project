@@ -1,12 +1,12 @@
 import React from 'react';
-import ReactTable from 'react-table';
-import { Link } from "react-router-dom";
 import {USER} from '../actions/entities';
 import {URLs} from './../utils/URLs.js';
 import {connect} from 'react-redux';
 import {getItems} from '../actions/itemsActions';
 import PropTypes from 'prop-types';
 import {errors} from '../api/errorTypes';
+import ViewMember from '../components/ViewMember.jsx';
+import {common} from './../utils/common'
 
 
 class Team extends React.Component {
@@ -20,6 +20,7 @@ class Team extends React.Component {
         };
 
     }
+    
     componentWillMount() {
         this.props.getItems(USER);
     }
@@ -35,37 +36,32 @@ class Team extends React.Component {
             }
         }
     }
+    
     render() {
         const errorText = this.state.errorText;
-        const columns = [
-            {
-                Header: 'Name',
-                accessor: 'name', // String-based value accessors!
-                Cell: (props) => <Link to={URLs.pages.USER + props.row.id}>{props.value}</Link>
-            }, {
-                Header: 'Role',
-                accessor: 'role',
-            }, {
-                Header: 'E-mail',
-                accessor: 'email',
-                show: false
-            },
-            {
-                show: false,
-                accessor: 'id'
-            },
-        ];
+        const logged = this.props.logged && (this.props.loggedUserID.toString()=== this.props.userID); 
         
- 
+        const items = common.isArray(this.props.data) ? this.props.data : [];
+        
         return (
                 <div className="container pageContent">
-                    <h1>CLASS Team</h1>
+                    <h1>Team members</h1>
                     <div className="error">{errorText}</div>
-                    <ReactTable
-                        data={this.props.data}
-                        columns={columns}
-                        pageSize="10"
-                        />
+                    {!items.length && <div>No users found.</div>}
+                    <div className="members">
+                        {items.map(item => (
+                            <ViewMember
+                                key={item.id}
+                                id={item.id}
+                                name={item.name} 
+                                imageURL={item.imageURL} 
+                                role={item.role}
+                                //body={item.body} 
+                                //createdAt={item.createdAt} 
+                                //userID={item.userID} 
+                            />
+                            ))}
+                    </div>
                 </div>
                 )
     }
