@@ -8,7 +8,7 @@ exports.create = function (app, connection) {
             getUserById(req, res);
             return;
         }
-        connection.query("SELECT users.id, users.name, users.email, users.role, images.url AS imageURL "+
+        connection.query("SELECT users.id, users.name, users.email, users.role, images.imageURL AS imageURL "+
         'FROM users ' + 
         'LEFT JOIN (SELECT * FROM posts WHERE type = "profile") AS posts ON posts.userID = users.id ' +
         'LEFT JOIN images ON images.id=posts.imageID;', function (err, results) {

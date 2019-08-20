@@ -42,10 +42,16 @@ spec:
           - name: dbconfig-vol
             mountPath: "/etc/app"
             readOnly: true
+          - name: project-pvc-vol
+            mountPath: "/app/uploadedImages"
+            readOnly: true
       volumes:
-        - name: project-persistent-storage
+        - name: dbconfig-vol
+          secret: 
+            secretName: dbconfig
+        - name: project-pvc-vol
           persistentVolumeClaim:
-            claimName: csi
+            claimName: project-pvc
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
