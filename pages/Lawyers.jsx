@@ -95,15 +95,15 @@ class Lawyers extends React.Component {
         const errorText = this.state.errorText;
         const logged = this.props.logged;
         const data = this.props.data instanceof Array ? this.props.data : [];
-
+        var distanceHeader = "Distance (" +  this.state.filter.units + ")";
         const columns = [
             {
                 Header: 'Name',
                 accessor: 'name', // String-based value accessors!
                 Cell: (props) => <Link to={URLs.pages.ATTORNEY + props.row.id}>{props.value}</Link>
             }, {
-                Header: 'Zip',
-                accessor: 'zip',
+                Header: distanceHeader,
+                accessor: 'distance',
             }, {
                 Header: 'E-mail',
                 accessor: 'email'

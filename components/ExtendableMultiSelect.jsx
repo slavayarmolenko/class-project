@@ -152,7 +152,7 @@ class ExtendableMultiSelect extends React.Component {
         const items = this.state.items;
         const readOnly = this.props.readOnly ? true : false;
         return (
-                <FormControl style={{display: 'flex', flexWrap: 'wrap'}}>
+                <FormControl style={{display: 'flex', flexWrap: 'wrap'}} className={readOnly && "readOnly-input"}>
 
                     <InputLabel htmlFor={this.props.id}>{this.props.label}</InputLabel>
                     <Select
@@ -173,6 +173,7 @@ class ExtendableMultiSelect extends React.Component {
                                     errorMessages={['this field is required']}
                                     value={this.state.newItemName}
                                     onKeyPress={this.onNewNameKeyPress}
+                                    className={readOnly && "readOnly-input"}
                                 />
                                 <Button onClick={this.handleAdd}>+</Button>
                         </MenuItem>

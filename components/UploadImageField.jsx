@@ -61,8 +61,9 @@ class UploadImageField extends React.Component {
     }
 
     render() {
+        const className = !!this.props.align && this.props.align;
         return (
-                    <div>
+                    <div className={className}>
                         <FormHelperText error={ this.state.errorText ? true : false}>{this.state.errorText}</FormHelperText>
                         {!this.props.readOnly &&
                             <TextValidator

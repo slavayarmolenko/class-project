@@ -26,6 +26,7 @@ exports.create = function (app, connection) {
         var query = filter.filterLawyers(req.query.languages, req.query.services, usersZip, usersDistance);
         console.log('Search for lawyers. Query: ' + query);
         connection.query(query, function (err, results) {
+
             if (err) {
                 console.error('DB exception while getting lawyers.');
                 res.json(common.getSqlErrorObject(err, req));
@@ -34,6 +35,17 @@ exports.create = function (app, connection) {
 
             var send = common.getSuccessObject(results, req);
             console.log('Searched succesfully.');
+            console.log(results);
+            results.forEach(function (item, index) {
+                console.log("distance between " + usersZip + " and " + item.zip);
+                item.distance = ZipCodes.distance(usersZip, item.zip);
+                if(req.query.units == "km"){
+                    item.distance = ZipCodes.toKilometers(item.distance);
+                    item.units = " km";
+                } else {
+                    item.units = " miles";
+                }
+            });
             res.json(send);
         });
     });
@@ -246,7 +258,8 @@ exports.create = function (app, connection) {
                     res.json(common.getSqlErrorObject(selectErr, req));
                     return;
                 }
-                console.log('Lawyer is deleted succesfully.');
+                console.log('Lawyer list sent ' + results);
+                
                 res.json(common.getSuccessObject(results, req));
             });
 

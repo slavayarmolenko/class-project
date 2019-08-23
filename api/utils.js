@@ -4,7 +4,7 @@ const fileUpload = require('express-fileupload');
 exports.create = function (app, connection) {
     
     app.get('/api/utils/languages', function (req, res) {
-        connection.query('SELECT * FROM languages', function (err, results) {
+        connection.query('SELECT * FROM languages ORDER BY name', function (err, results) {
             if (err) {
                 res.json(common.getSqlErrorObject(err, req));
                 return;
@@ -15,7 +15,7 @@ exports.create = function (app, connection) {
     });
 
     app.get('/api/utils/services', function (req, res) {
-        connection.query('SELECT * FROM service', function (err, results) {
+        connection.query('SELECT * FROM service ORDER BY name', function (err, results) {
             if (err) {
                 res.json(common.getSqlErrorObject(err, req));
                 return;

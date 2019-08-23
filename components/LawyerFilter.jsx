@@ -130,7 +130,7 @@ class LawyerFilter extends React.Component {
             <div>
                     <ExtendableMultiSelect
                         id="select-languages"
-                        label="Speaking languages"
+                        label="Languages Spoken"
                         helperText="Please, select/add languages attorneys support"
                         value={languages}
                         items={this.props.languages}
@@ -143,7 +143,7 @@ class LawyerFilter extends React.Component {
             <div>
                     <ExtendableMultiSelect
                         id="select-services"
-                        label="Offer Services"
+                        label="Services Offered"
                         helperText="Please, select/add services attorneys offer"
                         items={this.props.services}
                         value={services}

@@ -1,19 +1,19 @@
 import React from 'react';
 import { Redirect } from "react-router-dom";
 import Button from '@material-ui/core/Button';
-import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
+import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 import ExtendableMultiSelect from './../components/ExtendableMultiSelect.jsx';
 import UploadImageField from './../components/UploadImageField.jsx';
-import {URLs} from '../utils/URLs.js';
+import { URLs } from '../utils/URLs.js';
 
-import {getItem, updateItem} from '../actions/itemsActions';
-import {getLogged} from '../actions/loginActions';
+import { getItem, updateItem } from '../actions/itemsActions';
+import { getLogged } from '../actions/loginActions';
 
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import {LANGUAGE, SERVICE, ATTORNEY} from '../actions/entities';
-import {UPDATE_ITEM} from '../actions/types';
-import {errors} from '../api/errorTypes';
+import { LANGUAGE, SERVICE, ATTORNEY } from '../actions/entities';
+import { UPDATE_ITEM } from '../actions/types';
+import { errors } from '../api/errorTypes';
 //import { stat } from 'fs';
 
 
@@ -31,7 +31,7 @@ class Lawyer extends React.Component {
                 password: '',
                 repeatPassword: '',
                 description: '',
-                zip: '',        
+                zip: '',
                 address: '',
                 languages: [],
                 services: [],
@@ -49,7 +49,7 @@ class Lawyer extends React.Component {
     componentWillUnmount() {
         this._isMounted = false;
     }
-    
+
     componentWillMount() {
         this._isMounted = true;
         // custom rule will have name 'isPasswordMatch'
@@ -79,10 +79,10 @@ class Lawyer extends React.Component {
         if (nextProps.lawyer.id && this.props.id && (nextProps.lawyer.id.toString() === this.props.id.toString())) {
             var lawyer = {
                 ...nextProps.lawyer,
-                repeatPassword:'',
+                repeatPassword: '',
                 password: ''
             }
-            this.setState({lawyer: lawyer });
+            this.setState({ lawyer: lawyer });
         }
         if (nextProps.errors.length > this.props.errors.length) {
             const lastErr = nextProps.errors[nextProps.errors.length - 1];
@@ -103,7 +103,7 @@ class Lawyer extends React.Component {
     }
     handleChange(event) {
         const { lawyer } = this.state;
-        
+
         if (event.target.type === 'checkbox') {
             lawyer[event.target.name] = event.target.checked;
         } else {
@@ -111,7 +111,7 @@ class Lawyer extends React.Component {
         }
         this.setState({ lawyer });
     }
-    
+
     handlePropChange(event) {
         var propname = event.target.name;
         this.setState({ [propname]: event.target.value });
@@ -126,7 +126,7 @@ class Lawyer extends React.Component {
         lawyer['imageID'] = imageID;
         this.setState({ lawyer });
     }
-    
+
     goToList() {
         this.setState({ redirectTo: URLs.pages.ATTORNEYS });
     }
@@ -136,172 +136,184 @@ class Lawyer extends React.Component {
     render() {
         const { uzvername, name, email, password, repeatPassword,
             description, zip, languages, address,
-            services, imageURL} = this.state.lawyer;
+            services, imageURL } = this.state.lawyer;
         const errorText = this.state.errorText;
         const isNew = this.state.isNew;
-        const logged = this.props.logged;        
+        const logged = this.props.logged;
 
         if (!logged && isNew) {
-            return <Redirect to={URLs.pages.LOGIN}  />;
+            return <Redirect to={URLs.pages.LOGIN} />;
         }
         if (this.state.redirectTo) {
-            return <Redirect to={this.state.redirectTo}  />;
+            return <Redirect to={this.state.redirectTo} />;
         }
         return (
-          <div className="container pageContent">
-            <h1>{ isNew ? 'Create Attorney' : 'Attorney'}</h1>
-            <ValidatorForm 
-                onSubmit={this.handleSubmit}
-                onError={errors => console.log(errors)}
-                readOnly={true}
-            >   
-                {logged && 
-                <div>
-                    <div>
-                    <TextValidator
-                        label="Username"
-                        onChange={this.handleChange}
-                        readOnly={true}
-                        name="uzvername"
-                        type="text"
-                        validators={['required', 'maxStringLength:50']}
-                        errorMessages={['this field is required', 'exceeds 50 symbols in length']}
-                        value={uzvername}
-                    />
-                    </div><div>   
-                    <TextValidator
-                        label="Password"
-                        onChange={this.handleChange}
-                        name="password"
-                        type="password"
-                        validators={isNew ? ['required', 'maxStringLength:50'] : []}
-                        errorMessages={['this field is required', 'exceeds 50 symbols in length']}
-                        value={password}
-                        
-                    /><TextValidator
-                        label="Repeat password"
-                        onChange={this.handleChange}
-                        name="repeatPassword"
-                        type="password"
-                        validators={isNew ? ['isPasswordMatch', 'required'] : ['isPasswordMatch']}
-                        errorMessages={isNew ? ['password mismatch', 'this field is required'] : ['password mismatch']}
-                        value={repeatPassword}
-                        style={{marginLeft: '15px'}}
-                    /></div>
-                </div> 
-                }
-                <div><UploadImageField readOnly={!logged} url={imageURL} onChange={this.onChangePhoto}></UploadImageField></div>
+            <div className="container pageContent">
+                <h1>{isNew ? 'Create Attorney' : name}</h1>
+                <ValidatorForm
+                    onSubmit={this.handleSubmit}
+                    onError={errors => console.log(errors)}
+                    readOnly={true}
+                >
+                    
+                    
+                    
+                    {logged &&
+    
+                        <div>
+                            <div>
+                                <TextValidator
+                                    label="Username"
+                                    onChange={this.handleChange}
+                                    readOnly={true}
+                                    name="uzvername"
+                                    type="text"
+                                    validators={['required', 'maxStringLength:50']}
+                                    errorMessages={['this field is required', 'exceeds 50 symbols in length']}
+                                    value={uzvername}
+                                />
+                            </div><div>
+                                <TextValidator
+                                    label="Password"
+                                    onChange={this.handleChange}
+                                    name="password"
+                                    type="password"
+                                    validators={isNew ? ['required', 'maxStringLength:50'] : []}
+                                    errorMessages={['this field is required', 'exceeds 50 symbols in length']}
+                                    value={password}
 
-                <div><TextValidator
-                    label="Full Name"
-                    onChange={this.handleChange}
-                    name="name"
-                    type="text"
-                    validators={['required', 'maxStringLength:255']}
-                    errorMessages={['this field is required', 'exceeds 255 symbols in length']}
-                    value={name}
-                    fullWidth={true}
-                    inputProps={{readOnly: !logged }}
-                    InputLabelProps={logged? {} :{shrink: !logged}}
-                /></div>
-                <div><TextValidator
-                    label="E-Mail"
-                    onChange={this.handleChange}
-                    name="email"
-                    type="email"
-                    value={email}
-                    fullWidth={true}
-                    validators={['required', 'isEmail', 'maxStringLength:100']}
-                    errorMessages={['this field is required', 'email is not valid', 'exceeds 100 symbols in length']}
-                    inputProps={{readOnly: !logged }}
-                    InputLabelProps={logged? {} :{shrink: !logged}}
-                /></div>
-                <div><TextValidator
-                    label="Description"
-                    onChange={this.handleChange}
-                    name="description"
-                    type="text"
-                    value={description || ''}
-                    multiline={true}
-                    validators={['maxStringLength:255']}
-                    errorMessages={['Description length exceeds 255 symbols']}
-                    fullWidth={true}
-                    inputProps={{readOnly: !logged }}
-                    InputLabelProps={logged? {} :{shrink: !logged}}
-                /></div>
-                <div><TextValidator
-                    label="Zip Code"
-                    onChange={this.handleChange}
-                    name="zip"
-                    type="text"
-                    value={zip}
-                    validators={['required', 'isZip']}
-                    errorMessages={['this field is required', 'Zip Code is not valid']}
-                    inputProps={{readOnly: !logged }}
-                    InputLabelProps={logged? {} :{shrink: !logged}}
-                /></div>
-                <div><TextValidator
-                    label="Address"
-                    onChange={this.handleChange}
-                    name="address"
-                    type="text"
-                    validators={['maxStringLength:255']}
-                    errorMessages={['exceeds 255 symbols in length']}
-                    value={address || ''}
-                    fullWidth={true}
-                    inputProps={{readOnly: !logged }}
-                    InputLabelProps={logged? {} :{shrink: !logged}}
-                /></div>
-                <div>
-                    <ExtendableMultiSelect
-                        id="select-languages"
-                        label="Languages speaking"
-                        helperText="Please, select/add languages you speak"
-                        value={languages}
-                        name="languages"
-                        onChange={this.handleChange}
-                        entity={LANGUAGE}
-                        items={this.props.languages}
-                        added={this.props.newLanguage}
-                        readOnly={!logged}
-                        allowAddNew={true}
-                    />
-                </div>    
-                <div>
-                    <ExtendableMultiSelect
-                        id="select-services"
-                        label="Offer Services"
-                        helperText="Please, select/add services you offer"
-                        value={services}
-                        name="services"
-                        onChange={this.handleChange}
-                        entity={SERVICE}
-                        items={this.props.services}
-                        readOnly={!logged}
-                        allowAddNew={true}
-                    ></ExtendableMultiSelect>
-                </div>
-                <div className="error">{errorText}</div>
-                <div className="buttons">
-                    <Button type="button" variant="contained" onClick={this.goToList.bind(this)}>Back to the List</Button>
-                    {
-                        logged && 
-                        <Button type="submit" color="primary" variant="contained">{isNew ? 'Create': 'Save'}</Button>
+                                /><TextValidator
+                                    label="Repeat password"
+                                    onChange={this.handleChange}
+                                    name="repeatPassword"
+                                    type="password"
+                                    validators={isNew ? ['isPasswordMatch', 'required'] : ['isPasswordMatch']}
+                                    errorMessages={isNew ? ['password mismatch', 'this field is required'] : ['password mismatch']}
+                                    value={repeatPassword}
+                                    style={{ marginLeft: '15px' }}
+                                /></div>
+                        </div>
                     }
-                </div>
-            </ValidatorForm>
+                    <UploadImageField align="left" readOnly={!logged} url={imageURL} onChange={this.onChangePhoto} className="leftImage" ></UploadImageField>
+                    <div><TextValidator
+                        label="Full Name"
+                        onChange={this.handleChange}
+                        name="name"
+                        type="text"
+                        validators={['required', 'maxStringLength:255']}
+                        errorMessages={['this field is required', 'exceeds 255 symbols in length']}
+                        value={name}
+                        fullWidth={logged}
+                        inputProps={{ readOnly: !logged }}
+                        InputLabelProps={logged ? {} : { shrink: !logged }}
+                        className={!logged && "readOnly-input"}
+                    /></div>
+                    
+                    <div><TextValidator
+                        label="E-Mail"
+                        onChange={this.handleChange}
+                        name="email"
+                        type="email"
+                        value={email}
+                        fullWidth={logged}
+                        validators={['required', 'isEmail', 'maxStringLength:100']}
+                        errorMessages={['this field is required', 'email is not valid', 'exceeds 100 symbols in length']}
+                        inputProps={{ readOnly: !logged }}
+                        InputLabelProps={logged ? {} : { shrink: !logged }}
+                        className={!logged && "readOnly-input"}
+                    /></div>
+                    <div><TextValidator
+                        label="Description"
+                        onChange={this.handleChange}
+                        name="description"
+                        type="text"
+                        value={description || ''}
+                        multiline={true}
+                        validators={['maxStringLength:255']}
+                        errorMessages={['Description length exceeds 255 symbols']}
+                        fullWidth={logged}
+                        inputProps={{ readOnly: !logged }}
+                        InputLabelProps={logged ? {} : { shrink: !logged }}
+                        className={!logged && "readOnly-input"}
+                    /></div>
+                    <div><TextValidator
+                        label="Zip Code"
+                        onChange={this.handleChange}
+                        name="zip"
+                        type="text"
+                        value={zip}
+                        validators={['required', 'isZip']}
+                        errorMessages={['this field is required', 'Zip Code is not valid']}
+                        fullWidth={logged}
+                        inputProps={{ readOnly: !logged }}
+                        InputLabelProps={logged ? {} : { shrink: !logged }}
+                        className={!logged && "readOnly-input"}
+                    /></div>
+                    <div><TextValidator
+                        label="Address"
+                        onChange={this.handleChange}
+                        name="address"
+                        type="text"
+                        validators={['maxStringLength:255']}
+                        errorMessages={['exceeds 255 symbols in length']}
+                        value={address || ''}
+                        fullWidth={logged}
+                        inputProps={{ readOnly: !logged }}
+                        InputLabelProps={logged ? {} : { shrink: !logged }}
+                        className={!logged && "readOnly-input"}
+                    /></div>
+                    <div>
+                        <ExtendableMultiSelect
+                            id="select-languages"
+                            label="Languages speaking"
+                            helperText="Please, select/add languages you speak"
+                            value={languages}
+                            name="languages"
+                            onChange={this.handleChange}
+                            entity={LANGUAGE}
+                            items={this.props.languages}
+                            added={this.props.newLanguage}
+                            readOnly={!logged}
+                            allowAddNew={true}
+                        />
+                    </div>
+                    <div>
+                        <ExtendableMultiSelect
+                            id="select-services"
+                            label="Offer Services"
+                            helperText="Please, select/add services you offer"
+                            value={services}
+                            name="services"
+                            onChange={this.handleChange}
+                            entity={SERVICE}
+                            items={this.props.services}
+                            readOnly={!logged}
+                            allowAddNew={true}
+                        ></ExtendableMultiSelect>
+                    </div>
+                    <div className="error">{errorText}</div>
+                    <div className="buttons">
+                        <Button type="button" variant="contained" onClick={this.goToList.bind(this)}>Back to the List</Button>
+                        {
+                            logged &&
+                            <Button type="submit" color="primary" variant="contained">{isNew ? 'Create' : 'Save'}</Button>
+                        }
+                    </div>
+                   
+                    
+                </ValidatorForm>
             </div>
-                   );
-        }
+        );
+    }
     //}
 
 }
 
 Lawyer.propTypes = {
-    getItem: PropTypes.func.isRequired, 
-    updateItem: PropTypes.func.isRequired, 
-    getLogged: PropTypes.func.isRequired, 
-    
+    getItem: PropTypes.func.isRequired,
+    updateItem: PropTypes.func.isRequired,
+    getLogged: PropTypes.func.isRequired,
+
     lawyer: PropTypes.object,
     languages: PropTypes.array.isRequired,
     newLanguage: PropTypes.object.isRequired,

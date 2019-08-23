@@ -233,4 +233,18 @@ img {
 
 .home a { color: #ff0000;}
 
+.readOnly-input div[class*='MuiInput-underline']::before,
+.readOnly-input div[class*='MuiInput-underline']::after {
+    border-bottom-width: 0px;
+}
+.left {
+    float:left;
+}
+.left .photo {
+    margin-right: 10px;
+}
+.right {
+    float:right;
+}
+
 
