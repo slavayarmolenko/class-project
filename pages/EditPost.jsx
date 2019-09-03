@@ -107,8 +107,8 @@ class EditPost extends React.Component {
     render() {
         const { id, subject, body, author, imageURL, createdAt } = this.state.post;
         const errorText = this.state.errorText;
-        const isNew = this.state.isNew;
-        const logged = this.props.logged && (isNew || (this.props.loggedUserID.toString() === this.props.post.userID));        
+        const isNew = this.state.isNew || !this.props.post.id;
+        const logged = this.props.logged && (isNew || (this.props.loggedUserID === this.props.post.userID));        
 
         if (this.state.redirectTo) {
             return <Redirect to={this.state.redirectTo}  />;

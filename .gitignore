@@ -6,3 +6,4 @@ css/images/.DS_Store
 pages/.DS_Store
 yarn.lock
 uploadedImages/
+dist/

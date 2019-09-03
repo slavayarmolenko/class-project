@@ -1,6 +1,6 @@
 var common = require('./common');
-exports.create = function(app, connection) {
-    app.delete('/api/post', function(req, res){
+exports.create = function (app, connection) {
+    app.delete('/api/post', function (req, res) {
         connection.query("DELETE FROM posts WHERE id = " + req.query.id + " AND type <> 'profile';", function (err, results) {
             if (err) {
                 console.error('DB exception while getting posts.');
@@ -8,32 +8,35 @@ exports.create = function(app, connection) {
                 return;
             }
         });
-        if (req.query.userID){
-            getPostByUserID(req,res);
+        if (req.query.userID) {
+            getPostByUserID(req, res);
             return;
         } else {
             getAllPosts(req, res);
         }
-        
+
     });
     app.get('/api/post', function (req, res) {
+        console.log("Requesting post:");
+        console.log(req.query)
         if (req.query.id) {
-            getPostByID(req,res);
+            console.log("Adressing post " + req.query.id)
+            getPostByID(req, res);
             return;
         }
-        if (req.query.userID){
-            getPostByUserID(req,res);
+        if (req.query.userID) {
+            getPostByUserID(req, res);
             return;
         } else {
-            getAllPosts(req,res);
+            getAllPosts(req, res);
             return;
         }
-        
+
     });
-    var getAllPosts = function (req, res){
-        SQLquery = 'SELECT posts.id, posts.subject, images.url AS imageURL, posts.body, DATE_FORMAT(posts.created, "%H:%i %M %D %Y") AS createdAt, users.id AS userID, users.name AS author FROM users ' + 
-        'LEFT JOIN (SELECT * FROM posts) AS posts ON posts.userID = users.id ' + 
-        'LEFT JOIN (SELECT * FROM images) AS images ON images.id=posts.imageID WHERE type <> "profile" ORDER BY posts.created DESC;';
+    var getAllPosts = function (req, res) {
+        SQLquery = 'SELECT posts.id, posts.subject, images.url AS imageURL, posts.body, DATE_FORMAT(posts.created, "%H:%i %M %D %Y") AS createdAt, users.id AS userID, users.name AS author FROM users ' +
+            'LEFT JOIN (SELECT * FROM posts) AS posts ON posts.userID = users.id ' +
+            'LEFT JOIN (SELECT * FROM images) AS images ON images.id=posts.imageID WHERE type <> "profile" ORDER BY posts.created DESC;';
         connection.query(SQLquery, function (err, results) {
             if (err) {
                 console.error('DB exception while getting posts.');
@@ -46,39 +49,43 @@ exports.create = function(app, connection) {
             res.json(send);
         });
     }
-    var getPostByID = function (req, res){
-        SQLquery = 'SELECT posts.id, posts.subject, images.url AS imageURL, posts.body, DATE_FORMAT(posts.created, "%H:%i %M %D %Y") AS createdAt, users.id AS userID, users.name AS author FROM users ' + 
-            'LEFT JOIN (SELECT * FROM posts) AS posts ON posts.userID = users.id ' + 
-            'LEFT JOIN (SELECT * FROM images) AS images ON images.id=posts.imageID WHERE posts.id = '+req.query.id+' ORDER BY posts.created DESC;';
-            connection.query(SQLquery, function (err, results) {
-                if (err) {
-                    console.error('DB exception while getting posts.');
-                    res.json(common.getSqlErrorObject(err, req));
-                    return;
-                }
-    
-                var send = common.getSuccessObject(results, req);
-                console.log('Searched succesfully.');
-                res.json(send);
-            });
-    
+    var getPostByID = function (req, res) {
+        SQLquery = 'SELECT posts.id, posts.subject, images.url AS imageURL, posts.body, DATE_FORMAT(posts.created, "%H:%i %M %D %Y") AS createdAt, users.id AS userID, users.name AS author FROM users ' +
+            'LEFT JOIN (SELECT * FROM posts) AS posts ON posts.userID = users.id ' +
+            'LEFT JOIN (SELECT * FROM images) AS images ON images.id=posts.imageID WHERE posts.id = ' + req.query.id + ' ORDER BY posts.created DESC;';
+        connection.query(SQLquery, function (err, results) {
+            if (err) {
+                console.error('DB exception while getting posts.');
+                res.json(common.getSqlErrorObject(err, req));
+                return;
+            }
+            if (results.length !== 1) {
+                res.json(common.getErrorObject('Post with assigned ID is not found', req, errorCodes.errors.NOT_FOUND));
+                return;
+            }
+            var post = results[0];
+            var send = common.getSuccessObject(post, req);
+            console.log('Searched succesfully. 11');
+            res.json(send);
+        });
+
     }
-    var getPostByUserID = function (req, res){
-        SQLquery = 'SELECT posts.id, posts.subject, images.url AS imageURL, posts.body, DATE_FORMAT(posts.created, "%H:%i %M %D %Y") AS createdAt, users.id AS userID, users.name AS author FROM users ' + 
-            'LEFT JOIN (SELECT * FROM posts) AS posts ON posts.userID = users.id ' + 
-            'LEFT JOIN (SELECT * FROM images) AS images ON images.id=posts.imageID WHERE users.id = '+req.query.userID+' ORDER BY posts.created DESC;';
-            connection.query(SQLquery, function (err, results) {
-                if (err) {
-                    console.error('DB exception while getting posts.');
-                    res.json(common.getSqlErrorObject(err, req));
-                    return;
-                }
-    
-                var send = common.getSuccessObject(results, req);
-                console.log('Searched succesfully.');
-                res.json(send);
-            });
-    
+    var getPostByUserID = function (req, res) {
+        SQLquery = 'SELECT posts.id, posts.subject, images.url AS imageURL, posts.body, DATE_FORMAT(posts.created, "%H:%i %M %D %Y") AS createdAt, users.id AS userID, users.name AS author FROM users ' +
+            'LEFT JOIN (SELECT * FROM posts) AS posts ON posts.userID = users.id ' +
+            'LEFT JOIN (SELECT * FROM images) AS images ON images.id=posts.imageID WHERE users.id = ' + req.query.userID + ' ORDER BY posts.created DESC;';
+        connection.query(SQLquery, function (err, results) {
+            if (err) {
+                console.error('DB exception while getting posts.');
+                res.json(common.getSqlErrorObject(err, req));
+                return;
+            }
+
+            var send = common.getSuccessObject(results, req);
+            console.log('Searched succesfully.');
+            res.json(send);
+        });
+
     }
     app.post('/api/post', function (req, res) {
 
@@ -93,7 +100,7 @@ exports.create = function(app, connection) {
         var i = 0;
         var ending = ");"
         if (isUpdate) {
-            addNewLawyerLine1 = 'UPDATE users SET ';
+            addNewLawyerLine1 = 'UPDATE posts SET ';
             ending = " WHERE id=" + req.body.id + ";";
             addNewLawyerLine2 = ' ';
 
@@ -125,6 +132,7 @@ exports.create = function(app, connection) {
         ];
         for (var i = 0; i < columnObject.length; i++) {
             if (isUpdate) {
+                console.log("-----This is post value:" + columnObject[i].id + " = " + req.body[columnObject[i].id]);
                 addNewLawyerLine1 += common.getUpdateValueString(columnObject[i], req.body[columnObject[i].id]);
 
             } else {
@@ -154,12 +162,12 @@ exports.create = function(app, connection) {
 
 
         });
-        
+
 
 
     });
-    
-    
+
+
 };
 
 
@@ -203,18 +211,18 @@ exports.create = function(app, connection) {
 
 
 
-exports.getUpdatePostsString = function (req, isUpdate, needsWhere){
+exports.getUpdatePostsString = function (req, isUpdate, needsWhere) {
     console.log("Post created!");
     console.log(req.body);
     var addNewPost1 = 'INSERT INTO posts (';
     var addNewPost2 = ') VALUES (';
     var i = 0;
-        var ending = ");";
-        if (isUpdate) {
-            addNewPost1 = 'UPDATE posts SET ';
-            ending =needsWhere ? " WHERE id=" + req.body.id : "" ;
-            addNewPost2 = ' ';
-        }
+    var ending = ");";
+    if (isUpdate) {
+        addNewPost1 = 'UPDATE posts SET ';
+        ending = needsWhere ? " WHERE id=" + req.body.id : "";
+        addNewPost2 = ' ';
+    }
     var columnObject = [
         {
             type: "string",
@@ -236,9 +244,9 @@ exports.getUpdatePostsString = function (req, isUpdate, needsWhere){
             type: "string",
             id: "body",
             required: false
-        }, 
+        },
     ];
-    
+
     for (var i = 0; i < columnObject.length; i++) {
         if (isUpdate) {
             addNewPost1 += common.getUpdateValueString(columnObject[i], req.body[columnObject[i].id]);
