@@ -36,7 +36,8 @@ class Lawyer extends React.Component {
                 languages: [],
                 services: [],
                 company: '',
-                website: ''
+                website: '',
+                imageURL: ''
             },
             errorText: '',
             redirectTo: '',

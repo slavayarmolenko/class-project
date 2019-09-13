@@ -100,8 +100,10 @@ class Lawyers extends React.Component {
         const columns = [
             {
                 Header: 'Image',
-                accessor: 'image',
-                Cell: (props) => <img src={props.row.imageURL}></img>
+                accessor: 'url',
+                width: 50,
+        
+                Cell: (props) => <img src={props.row.url} height={20}/>
             },
             {
                 Header: 'Name',

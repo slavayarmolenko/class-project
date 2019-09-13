@@ -2,18 +2,18 @@ var ZipCodes = require('zipcodes');
 exports.filterLawyers = function (languageID, serviceID, zip, rad) {
     var SQLquery;
     if (languageID && serviceID && languageID.length && serviceID.length) {
-        SQLquery = 'SELECT lawyers.id, lawyers.name, lawyers.email, lawyers.zip lawyers.imageURL FROM lawyers ' +
+        SQLquery = 'SELECT lawyers.id, lawyers.name, lawyers.email, lawyers.zip, images.url FROM lawyers ' +
             'INNER JOIN (SELECT * FROM lawyer_language WHERE lawyer_language.languageID IN (' + languageID + ')) AS lawyer_language ON lawyers.id = lawyer_language.lawyerID ' +
-            'INNER JOIN (SELECT * FROM lawyer_service WHERE lawyer_service.serviceID IN (' + serviceID + ')) AS lawyer_service ON lawyers.id=lawyer_service.lawyerID ';
+            'INNER JOIN (SELECT * FROM lawyer_service WHERE lawyer_service.serviceID IN (' + serviceID + ')) AS lawyer_service ON lawyers.id=lawyer_service.lawyerID LEFT JOIN images ON images.id=lawyers.imageID';
     } else if (languageID && languageID.length) {
-        SQLquery = 'SELECT lawyers.id, lawyers.name, lawyers.email, lawyers.zip lawyers.imageURL FROM lawyers ' +
-            'INNER JOIN (SELECT * FROM lawyer_language WHERE lawyer_language.languageID IN (' + languageID + ")) AS lawyer_language ON lawyers.id = lawyer_language.lawyerID ";
+        SQLquery = 'SELECT lawyers.id, lawyers.name, lawyers.email, lawyers.zip, images.url FROM lawyers ' +
+            'INNER JOIN (SELECT * FROM lawyer_language WHERE lawyer_language.languageID IN (' + languageID + ")) AS lawyer_language ON lawyers.id = lawyer_language.lawyerID LEFT JOIN images ON images.id=lawyers.imageID";
     } else if (serviceID && serviceID.length) {
-        SQLquery = 'SELECT lawyers.id, lawyers.name, lawyers.email, lawyers.zip lawyers.imageURL FROM lawyers ' +
-            'INNER JOIN (SELECT * FROM lawyer_service WHERE lawyer_service.serviceID IN (' + serviceID + ")) AS lawyer_service ON lawyers.id = lawyer_service.lawyerID ";
+        SQLquery = 'SELECT lawyers.id, lawyers.name, lawyers.email, lawyers.zip, images.url FROM lawyers ' +
+            'INNER JOIN (SELECT * FROM lawyer_service WHERE lawyer_service.serviceID IN (' + serviceID + ")) AS lawyer_service ON lawyers.id = lawyer_service.lawyerID LEFT JOIN images ON images.id=lawyers.imageID";
 
     } else {
-        SQLquery = 'SELECT id, name, email, zip FROM lawyers ';
+        SQLquery = 'SELECT lawyers.id, lawyers.name, lawyers.email, lawyers.zip, images.url FROM lawyers LEFT JOIN images ON images.id=lawyers.imageID';
     }
     if (zip && rad) {
         var zips = ZipCodes.radius(zip, rad);
@@ -36,7 +36,7 @@ exports.filterLawyers = function (languageID, serviceID, zip, rad) {
     } else if (serviceID && serviceID.length) {
         SQLquery += " GROUP BY lawyers.id ORDER BY lawyers.name;";
     } else {
-        SQLquery += " ORDER BY name;";
+        SQLquery += " ORDER BY lawyers.name;";
     }
     console.log(SQLquery);
     return SQLquery;
