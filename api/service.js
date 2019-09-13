@@ -26,15 +26,15 @@ app.all('*', function (req, res, next) {
   }); */
   
   var pool  = mysql.createPool({
-    connectionLimit : 10,
+    /*connectionLimit : 10,
     host: "localhost",
     user: "root",
     password: "aaa12345",
-    database: "classdb"
-    /*host: dbconfig.address,
+    database: "classdb"*/
+    host: dbconfig.address,
     user: dbconfig.login,
     password: dbconfig.pass,
-    database: dbconfig.dbname*/
+    database: dbconfig.dbname
   });
      
 
