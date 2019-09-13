@@ -12,6 +12,7 @@ import {ATTORNEY} from '../actions/entities';
 import PropTypes from 'prop-types';
 import {DELETE_ITEM, GET_ITEMS} from '../actions/types';
 import {errors} from '../api/errorTypes';
+//import { access } from 'fs';
 
 
 class Lawyers extends React.Component {
@@ -97,6 +98,11 @@ class Lawyers extends React.Component {
         const data = this.props.data instanceof Array ? this.props.data : [];
         var distanceHeader = "Distance (" +  this.state.filter.units + ")";
         const columns = [
+            {
+                Header: 'Image',
+                accessor: 'image',
+                Cell: (props) => <img src={props.row.imageURL}></img>
+            },
             {
                 Header: 'Name',
                 accessor: 'name', // String-based value accessors!

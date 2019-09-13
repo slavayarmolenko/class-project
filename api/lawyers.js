@@ -120,6 +120,14 @@ exports.create = function (app, connection) {
                 type: "number",
                 id: "imageID",
                 required: true
+            }, {
+                type: "string",
+                id: "company",
+                required: true
+            }, {
+                type: "string",
+                id: "website",
+                required: true
             }
         ];
         for (var i = 0; i < columnObject.length; i++) {

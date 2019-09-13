@@ -44,7 +44,7 @@ spec:
             readOnly: true
           - name: project-pvc-vol
             mountPath: "/app/uploadedImages"
-            readOnly: true
+            readOnly: false
       volumes:
         - name: dbconfig-vol
           secret: 

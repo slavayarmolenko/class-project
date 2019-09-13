@@ -237,6 +237,9 @@ img {
 .readOnly-input div[class*='MuiInput-underline']::after {
     border-bottom-width: 0px;
 }
+div[class*='MuiSelect-selectMenu'] {
+    white-space: normal;
+}
 .left {
     float:left;
 }

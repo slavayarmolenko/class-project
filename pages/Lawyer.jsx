@@ -35,6 +35,8 @@ class Lawyer extends React.Component {
                 address: '',
                 languages: [],
                 services: [],
+                company: '',
+                website: ''
             },
             errorText: '',
             redirectTo: '',
@@ -136,7 +138,7 @@ class Lawyer extends React.Component {
     render() {
         const { uzvername, name, email, password, repeatPassword,
             description, zip, languages, address,
-            services, imageURL } = this.state.lawyer;
+            services, imageURL, company, website } = this.state.lawyer;
         const errorText = this.state.errorText;
         const isNew = this.state.isNew;
         const logged = this.props.logged;
@@ -150,16 +152,17 @@ class Lawyer extends React.Component {
         return (
             <div className="container pageContent">
                 <h1>{isNew ? 'Create Attorney' : name}</h1>
+                <h2>{company ? company : ''}</h2>
                 <ValidatorForm
                     onSubmit={this.handleSubmit}
                     onError={errors => console.log(errors)}
                     readOnly={true}
                 >
-                    
-                    
-                    
+
+
+
                     {logged &&
-    
+
                         <div>
                             <div>
                                 <TextValidator
@@ -172,7 +175,20 @@ class Lawyer extends React.Component {
                                     errorMessages={['this field is required', 'exceeds 50 symbols in length']}
                                     value={uzvername}
                                 />
-                            </div><div>
+                            </div><div><TextValidator
+                                label="Full Name"
+                                onChange={this.handleChange}
+                                name="name"
+                                type="text"
+                                validators={['required', 'maxStringLength:255']}
+                                errorMessages={['this field is required', 'exceeds 255 symbols in length']}
+                                value={name}
+                                fullWidth={logged}
+                                inputProps={{ readOnly: !logged }}
+                                InputLabelProps={logged ? {} : { shrink: !logged }}
+                                className={!logged && "readOnly-input"}
+                            /></div>
+                            <div>
                                 <TextValidator
                                     label="Password"
                                     onChange={this.handleChange}
@@ -196,20 +212,6 @@ class Lawyer extends React.Component {
                     }
                     <UploadImageField align="left" readOnly={!logged} url={imageURL} onChange={this.onChangePhoto} className="leftImage" ></UploadImageField>
                     <div><TextValidator
-                        label="Full Name"
-                        onChange={this.handleChange}
-                        name="name"
-                        type="text"
-                        validators={['required', 'maxStringLength:255']}
-                        errorMessages={['this field is required', 'exceeds 255 symbols in length']}
-                        value={name}
-                        fullWidth={logged}
-                        inputProps={{ readOnly: !logged }}
-                        InputLabelProps={logged ? {} : { shrink: !logged }}
-                        className={!logged && "readOnly-input"}
-                    /></div>
-                    
-                    <div><TextValidator
                         label="E-Mail"
                         onChange={this.handleChange}
                         name="email"
@@ -231,6 +233,34 @@ class Lawyer extends React.Component {
                         multiline={true}
                         validators={['maxStringLength:255']}
                         errorMessages={['Description length exceeds 255 symbols']}
+                        fullWidth={logged}
+                        inputProps={{ readOnly: !logged }}
+                        InputLabelProps={logged ? {} : { shrink: !logged }}
+                        className={!logged && "readOnly-input"}
+                    /></div>
+                    <div><TextValidator
+                        label="Company"
+                        onChange={this.handleChange}
+                        name="company"
+                        type="text"
+                        value={company || ''}
+                        multiline={true}
+                        validators={['maxStringLength:255']}
+                        errorMessages={['Company length exceeds 255 symbols']}
+                        fullWidth={logged}
+                        inputProps={{ readOnly: !logged }}
+                        InputLabelProps={logged ? {} : { shrink: !logged }}
+                        className={!logged && "readOnly-input"}
+                    /></div>
+                    <div><TextValidator
+                        label="Website"
+                        onChange={this.handleChange}
+                        name="website"
+                        type="text"
+                        value={website || ''}
+                        multiline={true}
+                        validators={['maxStringLength:255']}
+                        errorMessages={['Website length exceeds 255 symbols']}
                         fullWidth={logged}
                         inputProps={{ readOnly: !logged }}
                         InputLabelProps={logged ? {} : { shrink: !logged }}
@@ -299,8 +329,8 @@ class Lawyer extends React.Component {
                             <Button type="submit" color="primary" variant="contained">{isNew ? 'Create' : 'Save'}</Button>
                         }
                     </div>
-                   
-                    
+
+
                 </ValidatorForm>
             </div>
         );
