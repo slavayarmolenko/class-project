@@ -128,6 +128,10 @@ exports.create = function (app, connection) {
                 type: "string",
                 id: "website",
                 required: true
+            }, {
+                type: "number",
+                id: "phone",
+                required: false
             }
         ];
         for (var i = 0; i < columnObject.length; i++) {

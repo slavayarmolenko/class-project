@@ -64,9 +64,28 @@ article, aside, details, figcaption, figure, footer, header, main, menu, nav, se
     display: table;
     table-layout: fixed;
 }
-
-
-
+.flex-container{
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+}
+.full-column{
+    flex: 1 1 100%;
+}
+.flex-left{
+    flex: 1 1 40%;
+    padding: 10px;
+}
+.flex-right{
+    flex: 1 1 60%;
+    padding: 10px;
+}
+.flexrow{
+    
+    display: flex;
+    flex-flow: row wrap;
+    width: 100;
+}
 .container {
     width: 1200px;
     padding-left: 10px;
@@ -79,7 +98,7 @@ article, aside, details, figcaption, figure, footer, header, main, menu, nav, se
 .pageContent a, .pageContent a:hover, .pageContent a:active, .pageContent a:link, .pageContent a:visited {
     color: #000;
     text-decoration: underline;
-
+    
 }
 a[role="button"], a[role="button"]:hover, a[role="button"]:active, a[role="button"]:link, a[role="button"]:visited {
     text-decoration: none;
@@ -242,6 +261,11 @@ div[class*='MuiSelect-selectMenu'] {
 }
 .left {
     float:left;
+}
+.leftfirst{
+    display: flex;
+
+    
 }
 .left .photo {
     margin-right: 10px;

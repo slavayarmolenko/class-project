@@ -6,7 +6,7 @@ import ExtendableMultiSelect from './../components/ExtendableMultiSelect.jsx';
 import UploadImageField from './../components/UploadImageField.jsx';
 import { URLs } from '../utils/URLs.js';
 
-import { getItem, updateItem } from '../actions/itemsActions';
+import { getItem, updateItem, getItems } from '../actions/itemsActions';
 import { getLogged } from '../actions/loginActions';
 
 import { connect } from 'react-redux';
@@ -76,6 +76,12 @@ class Lawyer extends React.Component {
         } else {
             this.props.getLogged();
         }
+        if (!this.props.languages.length) {
+            this.props.getItems(LANGUAGE);
+        }
+        if (!this.props.services.length) {
+            this.props.getItems(SERVICE);
+        }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -139,7 +145,7 @@ class Lawyer extends React.Component {
     render() {
         const { uzvername, name, email, password, repeatPassword,
             description, zip, languages, address,
-            services, imageURL, company, website } = this.state.lawyer;
+            services, imageURL, company, website, phone } = this.state.lawyer;
         const errorText = this.state.errorText;
         const isNew = this.state.isNew;
         const logged = this.props.logged;
@@ -150,6 +156,63 @@ class Lawyer extends React.Component {
         if (this.state.redirectTo) {
             return <Redirect to={this.state.redirectTo} />;
         }
+        var allServices = this.props.services;
+        var allLanguages = this.props.languages;
+
+        var servicesLi = services.map(function(serviceId){
+            return allServices.find(function(element) {
+                if(element.id){
+                return (element.id==serviceId);
+                } else return "";
+            });
+        }).map(function (service) {
+            try{
+            return <li> 
+                {service.name}
+            </li>;
+            } catch (err){
+                console.log(err)
+            }
+        });
+        var languagesLi = languages.map(function(languageId){
+            return allLanguages.find(function(language) {
+                return (language.id==languageId);
+            });
+        }).map(function (language) {
+            try{
+            return <li> 
+                {language.name}
+            </li>;
+            }catch (err) {
+                console.log(err);
+            }
+        });
+        console.log("Services:");
+        console.log(services);
+        if(!logged){
+        return (
+            <div className="container pageContent">
+                
+                    <div><h1>{name}</h1></div>
+                    <div><h2>{company}</h2></div>
+                    <div className="flex-container">
+                        <div className="flex-left"><img src={imageURL} className="photo big" height="200" /></div>
+                        <div className="flex-right"><div>Website: <a href={"https://www." + website}>{website}</a></div>
+                            <div>Address: {address + " " + zip}</div>
+                            <div>Phone: {phone}</div>
+                            <div className="description">Description: <article>{description}</article></div>
+                        </div>
+                    </div>
+                    <div className="flex-container">
+                    <div className="flex-left">Services:<ul>{servicesLi}</ul></div>
+                    <div className="flex-right">Languages:<ul>{languagesLi}</ul></div>
+                    </div>
+
+                </div>
+
+        );
+        } else {
+       
         return (
             <div className="container pageContent">
                 <h1>{isNew ? 'Create Attorney' : name}</h1>
@@ -221,6 +284,19 @@ class Lawyer extends React.Component {
                         fullWidth={logged}
                         validators={['required', 'isEmail', 'maxStringLength:100']}
                         errorMessages={['this field is required', 'email is not valid', 'exceeds 100 symbols in length']}
+                        inputProps={{ readOnly: !logged }}
+                        InputLabelProps={logged ? {} : { shrink: !logged }}
+                        className={!logged && "readOnly-input"}
+                    /></div>
+                    <div><TextValidator
+                        label="Phone"
+                        onChange={this.handleChange}
+                        name="phone"
+                        type="phone"
+                        value={phone}
+                        fullWidth={logged}
+                        validators={['maxStringLength:20']}
+                        errorMessages={['this field is required', 'phone is not valid', 'exceeds 20 symbols in length']}
                         inputProps={{ readOnly: !logged }}
                         InputLabelProps={logged ? {} : { shrink: !logged }}
                         className={!logged && "readOnly-input"}
@@ -337,10 +413,12 @@ class Lawyer extends React.Component {
         );
     }
     //}
+}
 
 }
 
 Lawyer.propTypes = {
+    getItems: PropTypes.func.isRequired,
     getItem: PropTypes.func.isRequired,
     updateItem: PropTypes.func.isRequired,
     getLogged: PropTypes.func.isRequired,
@@ -362,7 +440,7 @@ const mapStateToProps = state => ({
     results: state.results,
     errors: state.errors
 });
-export default connect(mapStateToProps, { getItem, updateItem, getLogged })(Lawyer);
+export default connect(mapStateToProps, { getItems, getItem, updateItem, getLogged })(Lawyer);
 
 
 //export default Lawyer;

@@ -57,6 +57,15 @@ class LawyerFilter extends React.Component {
             }
             return false;
         });
+        ValidatorForm.addValidationRule('isPhone', (value) => {
+            if (!value) {
+                return true;
+            }
+            if (/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/.test(value)) {
+                return true;
+            }
+            return false;
+        });
     }
 
     handleChangeFilter(event) {
