@@ -199,14 +199,15 @@ class Lawyer extends React.Component {
                         <div className="flex-left"><img src={imageURL} className="photo" width="100%" /></div>
                         <div className="flex-right"><div>Website: <a href={"https://www." + website}>{website}</a></div>
                             <div>Address: {address + " " + zip}</div>
+                            <div>Email: {City}</div>
                             <div>Phone: {phone}</div>
                             <div>Email: {email}</div>
                         </div>
                     </div>
                     <div className="description">{description}</div>
                     <div className="flex-container">
-                    <div className="flex-left">Services:<ul>{servicesLi}</ul></div>
-                    <div className="flex-right">Languages:<ul>{languagesLi}</ul></div>
+                    <div className="flex-left"><h4>Services:</h4><ul>{servicesLi}</ul></div>
+                    <div className="flex-right"><h4>Languages:</h4><ul>{languagesLi}</ul></div>
                     </div>
 
                 </div>
@@ -365,6 +366,19 @@ class Lawyer extends React.Component {
                         validators={['maxStringLength:255']}
                         errorMessages={['exceeds 255 symbols in length']}
                         value={address || ''}
+                        fullWidth={logged}
+                        inputProps={{ readOnly: !logged }}
+                        InputLabelProps={logged ? {} : { shrink: !logged }}
+                        className={!logged && "readOnly-input"}
+                    /></div>
+                    <div><TextValidator
+                        label="City"
+                        onChange={this.handleChange}
+                        name="city"
+                        type="text"
+                        validators={['maxStringLength:255']}
+                        errorMessages={['exceeds 255 symbols in length']}
+                        value={city || ''}
                         fullWidth={logged}
                         inputProps={{ readOnly: !logged }}
                         InputLabelProps={logged ? {} : { shrink: !logged }}
