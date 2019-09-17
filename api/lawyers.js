@@ -132,6 +132,10 @@ exports.create = function (app, connection) {
                 type: "number",
                 id: "phone",
                 required: false
+            }, {
+                type: "string",
+                id: "city",
+                required: false
             }
         ];
         for (var i = 0; i < columnObject.length; i++) {

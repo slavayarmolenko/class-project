@@ -145,7 +145,7 @@ class Lawyer extends React.Component {
     render() {
         const { uzvername, name, email, password, repeatPassword,
             description, zip, languages, address,
-            services, imageURL, company, website, phone } = this.state.lawyer;
+            services, imageURL, company, website, phone, city } = this.state.lawyer;
         const errorText = this.state.errorText;
         const isNew = this.state.isNew;
         const logged = this.props.logged;
@@ -199,7 +199,7 @@ class Lawyer extends React.Component {
                         <div className="flex-left"><img src={imageURL} className="photo" width="100%" /></div>
                         <div className="flex-right"><div>Website: <a href={"https://www." + website}>{website}</a></div>
                             <div>Address: {address + " " + zip}</div>
-                            <div>Email: {City}</div>
+                            <div>City: {city}</div>
                             <div>Phone: {phone}</div>
                             <div>Email: {email}</div>
                         </div>
