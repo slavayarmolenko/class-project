@@ -200,6 +200,7 @@ class Lawyer extends React.Component {
                         <div className="flex-right"><div>Website: <a href={"https://www." + website}>{website}</a></div>
                             <div>Address: {address + " " + zip}</div>
                             <div>Phone: {phone}</div>
+                            <div>Email: {email}</div>
                         </div>
                     </div>
                     <div className="description">{description}</div>
