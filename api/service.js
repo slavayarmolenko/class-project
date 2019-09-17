@@ -26,8 +26,8 @@ app.all('*', function (req, res, next) {
   }); */
   
   var pool  = mysql.createPool({
-    /*connectionLimit : 10,
-    host: "localhost",
+    connectionLimit : 10,
+    /*host: "localhost",
     user: "root",
     password: "aaa12345",
     database: "classdb"*/
