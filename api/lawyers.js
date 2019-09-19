@@ -34,8 +34,8 @@ exports.create = function (app, connection) {
             }
 
             var send = common.getSuccessObject(results, req);
-            console.log('Searched succesfully.');
-            console.log(send);
+            //console.log('Searched succesfully.');
+            //console.log(send);
             results.forEach(function (item, index) {
                 console.log("distance between " + usersZip + " and " + item.zip);
                 item.distance = ZipCodes.distance(usersZip, item.zip);
@@ -129,7 +129,7 @@ exports.create = function (app, connection) {
                 id: "website",
                 required: true
             }, {
-                type: "number",
+                type: "string",
                 id: "phone",
                 required: false
             }, {

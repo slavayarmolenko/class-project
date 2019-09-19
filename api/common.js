@@ -63,7 +63,7 @@ exports.getInsertValueString = function(columnObject, columnValue){
 };
 
 exports.getIsLogged = function(req) {
-    console.log('We logged: ' + ((req.session && req.session.userID) ? true : false));
+    //console.log('We logged: ' + ((req.session && req.session.userID) ? true : false));
     return (req.session && req.session.userID) ? true : false;
 };
 
@@ -75,7 +75,7 @@ exports.getLoggedUserName = function(req) {
 };
 
 exports.getSuccessObject = function(data, req) {
-    console.log('Returning success.');
+    //console.log('Returning success.');
     var logged = this.getIsLogged(req);
     var userID = this.getLoggedUserID(req);
     return {

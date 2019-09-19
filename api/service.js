@@ -13,7 +13,7 @@ var dbconfig = require("/etc/app/dbconfig.json")
 
 app.use(session({ secret: 'this-is-a-secret-token', cookie: { maxAge: 1200000 }}));
 app.all('*', function (req, res, next) {
-    console.log(req.session);
+    //console.log(req.session);
 
   next(); // pass control to the next handler
 });
@@ -27,7 +27,7 @@ app.all('*', function (req, res, next) {
   
   var pool  = mysql.createPool({
     connectionLimit : 10,
-    /*host: "localhost",
+   /* host: "localhost",
     user: "root",
     password: "aaa12345",
     database: "classdb"*/

@@ -7,3 +7,4 @@ pages/.DS_Store
 yarn.lock
 uploadedImages/
 dist/
+/api/service.js
