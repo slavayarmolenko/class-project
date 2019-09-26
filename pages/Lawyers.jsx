@@ -97,6 +97,7 @@ class Lawyers extends React.Component {
         const logged = this.props.logged;
         const data = this.props.data instanceof Array ? this.props.data : [];
         var distanceHeader = "Distance (" +  this.state.filter.units + ")";
+        
         const columns = [
             {
                 Header: 'Image',

@@ -197,11 +197,11 @@ class Lawyer extends React.Component {
                     <div><h2>{company}</h2></div>
                     <div className="flex-container">
                         <div className="flex-left"><img src={imageURL} className="photo" width="100%" /></div>
-                        <div className="flex-right"><div>Website: <a href={"https://www." + website}>{website}</a></div>
-                            <div>Address: {address + " " + zip}</div>
-                            <div>City: {city}</div>
-                            <div>Phone: {phone}</div>
-                            <div>Email: {email}</div>
+                        <div className="flex-right"><div><a href={"https://www." + website}>{website}</a></div>
+                            <div>{address}</div>
+                            <div>{city + " " + zip}</div>
+                            <div>{phone}</div>
+                            <div>{email}</div>
                         </div>
                     </div>
                     <div className="description">{description}</div>
@@ -310,7 +310,6 @@ class Lawyer extends React.Component {
                         type="text"
                         value={description || ''}
                         multiline={true}
-                        validators={['maxStringLength:255']}
                         errorMessages={['Description length exceeds 255 symbols']}
                         fullWidth={logged}
                         inputProps={{ readOnly: !logged }}

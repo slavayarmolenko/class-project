@@ -59,16 +59,14 @@ class ViewMember extends React.Component {
         }
         return (
             <div className={styles.post}>
-                <h3>{name}</h3>
+                <h3><Link to={URLs.pages.USER + id}>{name}</Link></h3>
                 <h4 className={styles.author}>{role}</h4>
                 
                 <div className={styles.body}>
-
-                    {imageURL && <div><img src={imageURL} className={styles.photo} /></div> }
+                <Link to={URLs.pages.USER + id}>{imageURL && <div><img src={imageURL} className={styles.photo} /></div> }</Link>
                 </div>
                 <div className="buttons">
-                    <Link to={URLs.pages.BLOG + id}>{'View user blog'}</Link>
-                    <Link to={URLs.pages.USER + id}>{'View user profile'}</Link>
+                    <Link to={URLs.pages.BLOG + id}>{'View blog'}</Link>
                 </div>
             </div>
                    );

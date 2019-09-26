@@ -20,6 +20,7 @@ import Donate from './pages/Donate.jsx';
 import Login from './pages/Login.jsx';
 import Company from './pages/Company.jsx';
 import Lawyer from './pages/Lawyer.jsx';
+import Email from './pages/Email.jsx'
 import User from './pages/User.jsx';
 import Blog from './pages/Blog.jsx';
 import Posts from './pages/Posts.jsx';
@@ -47,6 +48,7 @@ const hierogliphs = () => <HIEROGLYPHS></HIEROGLYPHS>;
 const userPosts = (input) => <Blog userID={input.match.params.id}></Blog>;
 const posts = () => <Posts></Posts>;
 const editPost = (input) => <EditPost id={input.match.params.id}></EditPost>;
+const sendEmail = (input) => <SendEmail id={input.match.params.id}></SendEmail>;
 
 
 const AppRouter = () => (
@@ -78,6 +80,7 @@ const AppRouter = () => (
                 <Route path={URLs.pages.BLOG + ':id'} component={userPosts} />
                 <Route path={URLs.pages.POST + ':id'} component={editPost} />
                 <Route path={URLs.pages.CREATE_POST} component={editPost} />
+                <Route path={URLs.pages.EMAIL + ':id'} component={sendEmail} />
                 
                 <Footer/>
             </div>

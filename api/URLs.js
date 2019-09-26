@@ -10,5 +10,6 @@ exports.serviceURLs = {
         SERVICES: '/api/utils/services',
         COMPANY_TYPES: '/api/utils/companyTypes',
         LOGGED: '/api/login',
-        LOGIN: '/api/login'
+        LOGIN: '/api/login',
+        EMAIL: '/api/email'
 };

@@ -1,7 +1,14 @@
 var common = require('./common');
 var errorCodes = require('./errorTypes.js');
 var posts = require('./posts');
-
+var nodemailer = require('nodemailer');
+var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'slava.yarmolenko@gmail.com',
+        pass: 'ECL7flier'
+    }
+});
 exports.create = function (app, connection) {
     app.get('/api/user', function (req, res) {
         if (req.query.id) {
@@ -11,7 +18,7 @@ exports.create = function (app, connection) {
         connection.query("SELECT users.id, users.name, users.email, users.role, images.url AS imageURL "+
         'FROM users ' + 
         'LEFT JOIN (SELECT * FROM posts WHERE type = "profile") AS posts ON posts.userID = users.id ' +
-        'LEFT JOIN images ON images.id=posts.imageID;', function (err, results) {
+        'LEFT JOIN images ON images.id=posts.imageID ORDER BY users.ranking;', function (err, results) {
             if (err) {
 
                 res.json(common.getSqlErrorObject(err, req));
@@ -48,12 +55,37 @@ exports.create = function (app, connection) {
 
     };
     app.post('/api/user', function (req, res) {
-
+        if (req.body.email){
+            connection.query("SELECT email FROM users WHERE id = " + req.body.id + ";", function (err, results) {
+                if (err) {
+    
+                    res.json(common.getSqlErrorObject(err, req));
+                    return;
+                }
+                console.log(res);
+                var email = res.email;
+            });
+            var mailOptions = {
+                from: 'youremail@gmail.com',
+                to: email,
+                subject: req.body.subj,
+                text: req.body.message
+            };
+            transporter.sendMail(mailOptions, function (error, info) {
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log('Email sent: ' + info.response);
+                }
+            });
+        }
         if (!common.getIsLogged(req)) {
             res.json(common.getUnloggedError());
             console.warn('User can not update user unlogged');
             return;
         }
+        
+        
         var isUpdate = req.body.id ? true : false;
         var addNewLawyerLine1 = 'INSERT INTO users (';
         var addNewLawyerLine2 = ') VALUES (';

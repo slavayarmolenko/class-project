@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var teamService = require('./team');
+var emailService = require('./email')
 var postService =  require('./posts');
 var lawyersService = require('./lawyers');
 var companiesService = require('./companies');
@@ -10,6 +11,7 @@ var mysql = require('mysql');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var dbconfig = require("/etc/app/dbconfig.json")
+
 
 app.use(session({ secret: 'this-is-a-secret-token', cookie: { maxAge: 1200000 }}));
 app.all('*', function (req, res, next) {
@@ -27,7 +29,7 @@ app.all('*', function (req, res, next) {
   
   var pool  = mysql.createPool({
     connectionLimit : 10,
-   /* host: "localhost",
+    /*host: "localhost",
     user: "root",
     password: "aaa12345",
     database: "classdb"*/
@@ -36,7 +38,7 @@ app.all('*', function (req, res, next) {
     password: dbconfig.pass,
     database: dbconfig.dbname
   });
-     
+  
 
 console.log('Trying to create connection');
 /*pool.connect(function (err) {
