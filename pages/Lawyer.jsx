@@ -197,11 +197,12 @@ class Lawyer extends React.Component {
                     <div><h2>{company}</h2></div>
                     <div className="flex-container">
                         <div className="flex-left"><img src={imageURL} className="photo" width="100%" /></div>
-                        <div className="flex-right"><div><a href={"https://www." + website}>{website}</a></div>
+                        <div className="flex-right">
                             <div>{address}</div>
                             <div>{city + " " + zip}</div>
-                            <div>{phone}</div>
-                            <div>{email}</div>
+                            <div><p></p>{phone}<p></p></div>
+                            <div><a href= {email}>{email}</a></div>
+                            <div><p></p><a href={"https://www." + website}>{website}</a></div>
                         </div>
                     </div>
                     <div className="description">{description}</div>
